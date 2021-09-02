@@ -1,9 +1,12 @@
 import express from 'express';
+import Controlador from './src/controlador';
 
 const app = express();
 
+let controlador = new Controlador("Hola"); 
+
 app.get('/', (req, res) => {
-    res.send('Well done!');
+    res.send('Lol!');
 })
 
 app.listen(3000, () => {
