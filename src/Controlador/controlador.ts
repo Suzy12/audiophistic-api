@@ -6,11 +6,15 @@ export default class Controlador {
     constructor() {
         this.base_datos = DAO.get_instancia();
     }
-    cambiar_contrasena(id_usuario: number, contrasena: String) {
+    cambiar_contrasena(id_usuario: number, contrasena: string) {
         return bcrypt.hash(contrasena, this.salts)
-            .then((hash: String) => {
+            .then((hash: string) => {
                 return {resultado: this.base_datos.cambiar_contrasena(id_usuario, hash)};
             })
+    }
+
+    crear_token(id_usuario: number, correo: string, id_tipo: number){
+
     }
 
 }

@@ -1,7 +1,7 @@
 import { error } from 'console';
 import express from 'express';
-import Controlador from './src/Controlador/controlador';
-import Controlador_login from './src/Controlador/controlador_login';
+import Controlador from './src/Controlador/Controlador';
+import Controlador_login from './src/Controlador/Controlador_Login';
 
 const app = express();
 
@@ -18,15 +18,15 @@ app.get('/', (req, res) => {
 
 app.post('/cambio_contrasena', (req, res) => {
     try {
-        var { id_usuario, contrasena }: { id_usuario: number, contrasena: String } = req.body;
+        var { id_usuario, contrasena }: { id_usuario: number, contrasena: string } = req.body;
         if (id_usuario && contrasena) {
-            controlador_login.cambiar_contrasena(id_usuario, contrasena)
+            controlador.cambiar_contrasena(id_usuario, contrasena)
                 .then((resultado: any) => {
                     console.log(resultado);
                     if (resultado.error) {
                         return res.send({ error: resultado.error.message });
                     } else {
-                        return res.send(resultado);
+                        return res.send({resultado});
                     }
                 })
         }
@@ -37,14 +37,14 @@ app.post('/cambio_contrasena', (req, res) => {
 
 app.post('/iniciar_sesion', (req, res) => {
     try {
-        var { correo, contrasena }: { correo: String, contrasena: String } = req.body;
+        var { correo, contrasena }: { correo: string, contrasena: string } = req.body;
         if (correo && contrasena) {
             controlador_login.verificar_contrasena(correo, contrasena)
                 .then((resultado: any) => {
                     if (resultado.error) {
                         return res.send({ error: resultado.error.message });
                     } else {
-                        return res.send(resultado);
+                        return res.send({resultado});
                     }
                 })
         }

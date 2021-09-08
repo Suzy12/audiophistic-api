@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const controlador_1 = __importDefault(require("./src/Controlador/controlador"));
-const controlador_login_1 = __importDefault(require("./src/Controlador/controlador_login"));
+const Controlador_1 = __importDefault(require("./src/Controlador/Controlador"));
+const Controlador_Login_1 = __importDefault(require("./src/Controlador/Controlador_Login"));
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static(__dirname));
 app.use(express_1.default.json());
-let controlador = new controlador_1.default();
-let controlador_login = new controlador_login_1.default();
+let controlador = new Controlador_1.default();
+let controlador_login = new Controlador_Login_1.default();
 app.get('/', (req, res) => {
     res.send('Lol!');
 });
@@ -19,14 +19,14 @@ app.post('/cambio_contrasena', (req, res) => {
     try {
         var { id_usuario, contrasena } = req.body;
         if (id_usuario && contrasena) {
-            controlador_login.cambiar_contrasena(id_usuario, contrasena)
+            controlador.cambiar_contrasena(id_usuario, contrasena)
                 .then((resultado) => {
                 console.log(resultado);
                 if (resultado.error) {
                     return res.send({ error: resultado.error.message });
                 }
                 else {
-                    return res.send(resultado);
+                    return res.send({ resultado });
                 }
             });
         }
@@ -45,7 +45,7 @@ app.post('/iniciar_sesion', (req, res) => {
                     return res.send({ error: resultado.error.message });
                 }
                 else {
-                    return res.send(resultado);
+                    return res.send({ resultado });
                 }
             });
         }

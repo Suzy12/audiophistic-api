@@ -16,5 +16,7 @@ class Controlador {
             return { resultado: this.base_datos.cambiar_contrasena(id_usuario, hash) };
         });
     }
+    crear_token(id_usuario, correo, id_tipo) {
+    }
 }
 exports.default = Controlador;

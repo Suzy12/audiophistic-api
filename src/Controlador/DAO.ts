@@ -32,7 +32,7 @@ export default class DAO {
         return DAO.instancia;
     }
 
-    cambiar_contrasena(id_usuario: number, contrasena: String) {
+    cambiar_contrasena(id_usuario: number, contrasena: string) {
         return this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena])
             .then(res => {
                 if (res.rows[0].cambiar_contrasena) {
@@ -46,7 +46,7 @@ export default class DAO {
             });
     }
 
-    obtener_usuario(correo: String) {
+    obtener_usuario(correo: string) {
         return this.cliente.query('select * from obtener_usuario($1::character varying(60))', [correo])
             .then(res => {
                 if (res.rows[0]) {

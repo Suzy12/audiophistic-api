@@ -1,13 +1,15 @@
 import DAO from "./DAO";
 const bcrypt = require('bcrypt');
+var jwt = require('json-web-token') //esto
 export default class Controlador_login {
     base_datos: DAO;
     private salts = 10
+    secret = 'TOPSECRETTTTT' //esto
     constructor() {
         this.base_datos = DAO.get_instancia();
     }
 
-    async verificar_contrasena(correo: String, contrasena: String) {
+    async verificar_contrasena(correo: string, contrasena: string) {
         let datosUsuario: any = await this.base_datos.obtener_usuario(correo);
         if (datosUsuario.error) {
             return datosUsuario;
@@ -21,7 +23,7 @@ export default class Controlador_login {
         }
     }
 
-    crear_token(id_usuario: number, correo: String, id_tipo: number) {
+    crear_token(id_usuario: number, correo: string, id_tipo: number) {
         return {token:"mi token"};
     }
 

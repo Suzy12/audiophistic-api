@@ -14,9 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const DAO_1 = __importDefault(require("./DAO"));
 const bcrypt = require('bcrypt');
+var jwt = require('json-web-token'); //esto
 class Controlador_login {
     constructor() {
         this.salts = 10;
+        this.secret = 'TOPSECRETTTTT'; //esto
         this.base_datos = DAO_1.default.get_instancia();
     }
     verificar_contrasena(correo, contrasena) {
