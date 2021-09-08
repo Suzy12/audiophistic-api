@@ -27,10 +27,10 @@ class DAO {
         return DAO.instancia;
     }
     cambiar_contrasena(id_usuario, contrasena) {
-        return this.cliente.query('select cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena])
+        return this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena])
             .then(res => {
             if (res.rows[0].cambiar_contrasena) {
-                return { resultado: res.rows[0].cambiar_contrasena };
+                return res.rows[0].cambiar_contrasena;
             }
             else {
                 return { error: { message: "No se pudo cambiar la contraseña" } };
@@ -41,10 +41,10 @@ class DAO {
         });
     }
     obtener_usuario(correo) {
-        return this.cliente.query('select obtener_usuario($1::character varying(60))', [correo])
+        return this.cliente.query('select * from obtener_usuario($1::character varying(60))', [correo])
             .then(res => {
             if (res.rows[0]) {
-                return { resultado: res.rows[0] };
+                return res.rows[0];
             }
             else {
                 return { error: { message: "No se pudo cambiar la contraseña" } };

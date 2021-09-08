@@ -28,7 +28,7 @@ export default class Controlador_login {
     cambiar_contrasena(id_usuario: number, contrasena: String) {
         return bcrypt.hash(contrasena, this.salts)
             .then((hash: String) => {
-                return this.base_datos.cambiar_contrasena(id_usuario, hash);
+                return {resultado: this.base_datos.cambiar_contrasena(id_usuario, hash)};
             })
     }
 

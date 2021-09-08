@@ -41,7 +41,7 @@ class Controlador_login {
     cambiar_contrasena(id_usuario, contrasena) {
         return bcrypt.hash(contrasena, this.salts)
             .then((hash) => {
-            return this.base_datos.cambiar_contrasena(id_usuario, hash);
+            return { resultado: this.base_datos.cambiar_contrasena(id_usuario, hash) };
         });
     }
 }
