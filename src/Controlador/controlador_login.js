@@ -38,11 +38,5 @@ class Controlador_login {
     crear_token(id_usuario, correo, id_tipo) {
         return { token: "mi token" };
     }
-    cambiar_contrasena(id_usuario, contrasena) {
-        return bcrypt.hash(contrasena, this.salts)
-            .then((hash) => {
-            return { resultado: this.base_datos.cambiar_contrasena(id_usuario, hash) };
-        });
-    }
 }
 exports.default = Controlador_login;

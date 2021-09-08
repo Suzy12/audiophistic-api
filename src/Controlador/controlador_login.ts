@@ -25,12 +25,4 @@ export default class Controlador_login {
         return {token:"mi token"};
     }
 
-    cambiar_contrasena(id_usuario: number, contrasena: String) {
-        return bcrypt.hash(contrasena, this.salts)
-            .then((hash: String) => {
-                return {resultado: this.base_datos.cambiar_contrasena(id_usuario, hash)};
-            })
-    }
-
-
 }
