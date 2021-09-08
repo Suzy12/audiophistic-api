@@ -40,5 +40,19 @@ class DAO {
             return { error: err };
         });
     }
+    obtener_usuario(correo) {
+        return this.cliente.query('select obtener_usuario($1::character varying(60))', [correo])
+            .then(res => {
+            if (res.rows[0]) {
+                return { resultado: res.rows[0] };
+            }
+            else {
+                return { error: { message: "No se pudo cambiar la contraseña" } };
+            }
+        })
+            .catch(err => {
+            return { error: err };
+        });
+    }
 }
 exports.default = DAO;
