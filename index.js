@@ -54,6 +54,20 @@ app.post('/iniciar_sesion', (req, res) => {
         return res.send({ error: "Los tipos de los datos son incorrectos" });
     }
 });
+app.post('/verificar_token', (req, res) => {
+    try {
+        if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
+            return res.status(401).json({ message: 'Missing Authorization Header' });
+        }
+        var token = req.headers.authorization.split(' ')[1];
+        let resultado = controlador_login.descifrar_token(token);
+        console.log(resultado);
+        return res.send({ resultado: resultado });
+    }
+    catch (err) {
+        return res.send({ error: "Los tipos de los datos son incorrectos" });
+    }
+});
 app.listen(3000, () => {
     console.log('The application is listening on port 3000!');
 });

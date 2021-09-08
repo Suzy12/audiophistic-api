@@ -1,28 +1,31 @@
 import jwt from 'jsonwebtoken';
 require('dotenv').config();
 
-const secreto: string = process.env.TOKEN_SECRET as string;
-
 export default class Manejador_Tokens {
 
     private static instancia: Manejador_Tokens;
+    private static secreto: string = process.env.TOKEN_SECRET as string;
 
     private constructor() {
     }
 
+    static get_instancia() {
+        if (!Manejador_Tokens.instancia) {
+            Manejador_Tokens.instancia = new Manejador_Tokens();
+        }
+        return Manejador_Tokens.instancia;
+    }
+
     crear_token(id_usuario: number, correo: string, id_tipo: number) {
+        var imprime: string = jwt.sign(
+            {id_usuario, correo, id_tipo}
+        , Manejador_Tokens.secreto, { expiresIn: '1000h' });
 
-        /*var imprime: string= jwt.sign({
-            data: id_usuario, correo, id_tipo
-          }, secreto, { expiresIn: '1000h' });
-
-        return {token: imprime};*/
-
-        return {token:"mi token"};
+        return { token: imprime };
     }
 
 
-
-
-
+    descifrar_token(token: string) {
+        return jwt.verify(token, Manejador_Tokens.secreto);
+    }
 }
