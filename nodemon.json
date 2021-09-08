@@ -7,7 +7,8 @@
         "coverage/"
     ],
     "watch": [
-        "src/*.ts",
+        "src/Controlador/*.ts",
+        "src/Modelo/*.ts",
         "index.ts"
     ],
     "events": {

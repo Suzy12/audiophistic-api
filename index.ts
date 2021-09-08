@@ -1,12 +1,38 @@
+import { error } from 'console';
 import express from 'express';
-import Controlador from './src/controlador';
+import Controlador from './src/Controlador/controlador';
+import Controlador_login from './src/Controlador/controlador_login';
 
 const app = express();
 
-let controlador = new Controlador("Hola"); 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname));
+app.use(express.json());
+
+let controlador = new Controlador();
+let controlador_login = new Controlador_login();
 
 app.get('/', (req, res) => {
     res.send('Lol!');
+})
+
+app.post('/cambio_contrasena', (req, res) => {
+    try {
+        var { id_usuario, contrasena } = req.body//: { id_usuario: number, contrasena: String } = req.body;
+        if (id_usuario && contrasena) {
+            controlador_login.cambiar_contrasena(id_usuario, contrasena)
+                .then((resultado: any) => {
+                    console.log(resultado);
+                    if (resultado.error) {
+                        return res.send({ error: resultado.error.message });
+                    } else {
+                        return res.send(resultado);
+                    }
+                })
+        }
+    } catch (err) {
+        return res.send({ error: "Los tipos de los datos son incorrectos" });
+    }
 })
 
 app.listen(3000, () => {
