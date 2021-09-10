@@ -9,7 +9,7 @@
     "watch": [
         "src/Controlador/*.ts",
         "src/Modelo/*.ts",
-        "index.ts"
+        "src/index.ts"
     ],
     "events": {
         "restart": "kill-port 3000",

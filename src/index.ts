@@ -1,19 +1,19 @@
 import { error } from 'console';
 import express from 'express';
-import Controlador from './src/Controlador/Controlador';
-import Controlador_login from './src/Controlador/Controlador_Login';
+import Controlador from './Controlador/Controlador';
+import Controlador_login from './Controlador/Controlador_Login';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 let controlador = new Controlador();
 let controlador_login = new Controlador_login();
 
 app.get('/', (req, res) => {
-    res.send('Lol!');
+    res.send('Bienvenido a la api de Audiophistic!');
 })
 
 app.post('/cambio_contrasena', (req, res) => {
@@ -61,10 +61,26 @@ app.post('/verificar_token', (req, res) => {
         var token: string = req.headers.authorization.split(' ')[1] as string;
         let resultado = controlador_login.descifrar_token(token);
         console.log(resultado)
-        return res.send({resultado: resultado})
+        return res.send({ resultado: resultado })
 
     } catch (err) {
         return res.send({ error: "Los tipos de los datos son incorrectos" });
+    }
+})
+
+app.get('/productos/:id_producto', (req, res) => {
+    try {
+        let id_producto: number  = parseInt(req.params.id_producto);
+        controlador.get_producto(id_producto)
+        .then((resultado: any) => {
+            if (resultado.error) {
+                return res.send({ error: resultado.error.message });
+            } else {
+                return res.send({ resultado });
+            }
+        })
+    } catch (err: any) {
+        return res.send ({ error: err.message });
     }
 })
 

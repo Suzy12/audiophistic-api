@@ -15,6 +15,10 @@ class Controlador {
             return { resultado: this.base_datos.cambiar_contrasena(id_usuario, hash) };
         });
     }
+    get_producto(id_producto) {
+        return Promise.resolve({ resultado: "Todo bien" });
+        //return gestor_productos.get_producto(id_producto);
+    }
 }
 exports.default = Controlador;
 Controlador.salts = 10;

@@ -9,7 +9,7 @@ export default class Controlador_login {
         this.manejador_token = Manejador_Tokens.get_instancia();
     }
 
-    async verificar_contrasena(correo: string, contrasena: string) {
+    async verificar_contrasena(correo: string, contrasena: string): Promise<any> {
         let datosUsuario: any = await this.base_datos.obtener_usuario(correo);
         if (datosUsuario.error) {
             return datosUsuario;
@@ -22,11 +22,11 @@ export default class Controlador_login {
         }
     }
 
-    crear_token(id_usuario: number, correo: string, id_tipo: number) {
+    crear_token(id_usuario: number, correo: string, id_tipo: number): {token: string} {
         return this.manejador_token.crear_token(id_usuario,correo,id_tipo);
     }
 
-    descifrar_token(token: string) {
+    descifrar_token(token: string): any{
         return this.manejador_token.descifrar_token(token);
     }
 

@@ -6,11 +6,16 @@ export default class Controlador {
     constructor() {
         this.base_datos = DAO.get_instancia();
     }
-    cambiar_contrasena(id_usuario: number, contrasena: string) {
+    cambiar_contrasena(id_usuario: number, contrasena: string): Promise<any>{
         return bcrypt.hash(contrasena, Controlador.salts)
             .then((hash: string) => {
                 return { resultado: this.base_datos.cambiar_contrasena(id_usuario, hash) };
             })
+    }
+
+    get_producto(id_producto: number): Promise<any>{
+        return Promise.resolve({resultado: "Todo bien"})
+        //return gestor_productos.get_producto(id_producto);
     }
 
 }
