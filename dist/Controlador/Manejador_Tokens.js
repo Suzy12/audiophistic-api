@@ -15,7 +15,7 @@ class Manejador_Tokens {
         return Manejador_Tokens.instancia;
     }
     crear_token(id_usuario, correo, id_tipo) {
-        var token = jsonwebtoken_1.default.sign({ id_usuario, correo, id_tipo }, Manejador_Tokens.secreto, { expiresIn: '1000h' });
+        var token = jsonwebtoken_1.default.sign({ id_usuario, correo, tipo: { id_tipo } }, Manejador_Tokens.secreto, { expiresIn: '365 days' });
         return { token };
     }
     descifrar_token(token) {

@@ -23,15 +23,12 @@ class Controlador_login {
     verificar_contrasena(correo, contrasena) {
         return __awaiter(this, void 0, void 0, function* () {
             let datosUsuario = yield this.base_datos.obtener_usuario(correo);
-            if (datosUsuario.error) {
-                return datosUsuario;
-            }
             let misma_contrasena = yield bcrypt.compare(contrasena, datosUsuario.contrasena);
             if (misma_contrasena) {
                 return this.crear_token(datosUsuario.id_usuario, datosUsuario.email, datosUsuario.id_tipo);
             }
             else {
-                return { error: { message: "La contraseña es incorrecta" } };
+                throw new Error("La contraseña es incorrecta");
             }
         });
     }

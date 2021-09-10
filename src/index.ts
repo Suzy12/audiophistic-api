@@ -1,4 +1,3 @@
-import { error } from 'console';
 import express from 'express';
 import Controlador from './Controlador/Controlador';
 import Controlador_login from './Controlador/Controlador_Login';
@@ -22,16 +21,11 @@ app.post('/cambio_contrasena', (req, res) => {
         if (id_usuario && contrasena) {
             controlador.cambiar_contrasena(id_usuario, contrasena)
                 .then((resultado: any) => {
-                    console.log(resultado);
-                    if (resultado.error) {
-                        return res.send({ error: resultado.error.message });
-                    } else {
-                        return res.send({ resultado });
-                    }
+                    return res.send(resultado);
                 })
         }
-    } catch (err) {
-        return res.send({ error: "Los tipos de los datos son incorrectos" });
+    } catch (err: any) {
+        return res.send({ error: err.message });
     }
 });
 
@@ -39,48 +33,41 @@ app.post('/iniciar_sesion', (req, res) => {
     try {
         var { correo, contrasena }: { correo: string, contrasena: string } = req.body;
         if (correo && contrasena) {
-            controlador_login.verificar_contrasena(correo, contrasena)
+            return controlador_login.verificar_contrasena(correo, contrasena)
                 .then((resultado: any) => {
-                    if (resultado.error) {
-                        return res.send({ error: resultado.error.message });
-                    } else {
-                        return res.send({ resultado });
-                    }
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
                 })
         }
-    } catch (err) {
-        return res.send({ error: "Los tipos de los datos son incorrectos" });
+    } catch (err: any) {
+        return res.send({ error: err.message });
     }
 })
 
+/* Eliminar en cuanto comencemos a comprobar tokens */
 app.post('/verificar_token', (req, res) => {
     try {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
             return res.status(401).json({ message: 'Missing Authorization Header' });
         }
-        var token: string = req.headers.authorization.split(' ')[1] as string;
-        let resultado = controlador_login.descifrar_token(token);
-        console.log(resultado)
-        return res.send({ resultado: resultado })
-
-    } catch (err) {
-        return res.send({ error: "Los tipos de los datos son incorrectos" });
+        return res.send({respuesta:controlador_login.verificar_token(req.headers.authorization)});
+    } catch (err: any) {
+        return res.send({ error: err.message });
     }
 })
 
 app.get('/productos/:id_producto', (req, res) => {
     try {
-        let id_producto: number  = parseInt(req.params.id_producto);
+        let id_producto: number = parseInt(req.params.id_producto);
         controlador.get_producto(id_producto)
-        .then((resultado: any) => {
-            if (resultado.error) {
-                return res.send({ error: resultado.error.message });
-            } else {
+            .then((resultado: any) => {
                 return res.send({ resultado });
-            }
-        })
+            }).catch( (err: any) => {
+                return res.send({ error: err.message });
+            })
     } catch (err: any) {
-        return res.send ({ error: err.message });
+        return res.send({ error: err.message });
     }
 })
 

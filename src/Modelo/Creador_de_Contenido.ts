@@ -1,17 +1,10 @@
+import { Tipo_Usuario } from "./Tipo_Usuario";
 
-
-class Creador_de_Contenido extends Tipo_Usuario{
-
-    private marca: string;
-    private conexion: string;
-    private tipo: string;
-
-    constructor(){
-        super();
-        this.marca= "";
-        this.conexion= "";
-        this.tipo= "";
-    }
-
-
-}//solucionar esto
+export interface Creador_de_Contenido extends Tipo_Usuario{
+    descripcion?: string
+    sitio_web: string
+    direccion_exacta?: string
+    celular?: string
+    canton?:  string
+    provincia?: string
+}

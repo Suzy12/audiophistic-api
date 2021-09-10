@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Usuario } from "../Modelo/Usuario"
 require('dotenv').config();
 
 export default class Manejador_Tokens {
@@ -18,14 +19,15 @@ export default class Manejador_Tokens {
 
     crear_token(id_usuario: number, correo: string, id_tipo: number): {token: string} {
         var token: string = jwt.sign(
-            {id_usuario, correo, id_tipo}
-        , Manejador_Tokens.secreto, { expiresIn: '1000h' });
+            {id_usuario, correo, tipo: {id_tipo}}
+        , Manejador_Tokens.secreto, { expiresIn: '365 days' });
 
         return { token };
     }
 
 
-    descifrar_token(token: string): any{
-        return jwt.verify(token, Manejador_Tokens.secreto);
+    descifrar_token(token: string): Usuario{
+        let objeto = jwt.verify(token, Manejador_Tokens.secreto) as JwtPayload
+        return {id_usuario: objeto.id_usuario, email: objeto.correo, tipo: objeto.tipo};
     }
 }

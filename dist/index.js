@@ -21,37 +21,28 @@ app.post('/cambio_contrasena', (req, res) => {
         if (id_usuario && contrasena) {
             controlador.cambiar_contrasena(id_usuario, contrasena)
                 .then((resultado) => {
-                console.log(resultado);
-                if (resultado.error) {
-                    return res.send({ error: resultado.error.message });
-                }
-                else {
-                    return res.send({ resultado });
-                }
+                return res.send(resultado);
             });
         }
     }
     catch (err) {
-        return res.send({ error: "Los tipos de los datos son incorrectos" });
+        return res.send({ error: err.message });
     }
 });
 app.post('/iniciar_sesion', (req, res) => {
     try {
         var { correo, contrasena } = req.body;
         if (correo && contrasena) {
-            controlador_login.verificar_contrasena(correo, contrasena)
+            return controlador_login.verificar_contrasena(correo, contrasena)
                 .then((resultado) => {
-                if (resultado.error) {
-                    return res.send({ error: resultado.error.message });
-                }
-                else {
-                    return res.send({ resultado });
-                }
+                return res.send({ resultado });
+            }).catch((err) => {
+                return res.send({ error: err.message });
             });
         }
     }
     catch (err) {
-        return res.send({ error: "Los tipos de los datos son incorrectos" });
+        return res.send({ error: err.message });
     }
 });
 app.post('/verificar_token', (req, res) => {
@@ -62,10 +53,10 @@ app.post('/verificar_token', (req, res) => {
         var token = req.headers.authorization.split(' ')[1];
         let resultado = controlador_login.descifrar_token(token);
         console.log(resultado);
-        return res.send({ resultado: resultado });
+        return res.send({ resultado });
     }
     catch (err) {
-        return res.send({ error: "Los tipos de los datos son incorrectos" });
+        return res.send({ error: err.message });
     }
 });
 app.get('/productos/:id_producto', (req, res) => {
@@ -73,12 +64,9 @@ app.get('/productos/:id_producto', (req, res) => {
         let id_producto = parseInt(req.params.id_producto);
         controlador.get_producto(id_producto)
             .then((resultado) => {
-            if (resultado.error) {
-                return res.send({ error: resultado.error.message });
-            }
-            else {
-                return res.send({ resultado });
-            }
+            return res.send({ resultado });
+        }).catch((err) => {
+            return res.send({ error: err.message });
         });
     }
     catch (err) {

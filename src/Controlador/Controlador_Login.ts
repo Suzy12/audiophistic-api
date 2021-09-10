@@ -1,4 +1,5 @@
 import DAO from "./DAO";
+import { Usuario } from "../Modelo/Usuario"
 import Manejador_Tokens from "./Manejador_Tokens";
 const bcrypt = require('bcrypt');
 export default class Controlador_login {
@@ -9,16 +10,13 @@ export default class Controlador_login {
         this.manejador_token = Manejador_Tokens.get_instancia();
     }
 
-    async verificar_contrasena(correo: string, contrasena: string): Promise<any> {
+    async verificar_contrasena(correo: string, contrasena: string): Promise<{token: string}> {
         let datosUsuario: any = await this.base_datos.obtener_usuario(correo);
-        if (datosUsuario.error) {
-            return datosUsuario;
-        }
         let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena);
         if (misma_contrasena) {
             return this.crear_token(datosUsuario.id_usuario,datosUsuario.email, datosUsuario.id_tipo);
         } else {
-            return { error: { message: "La contraseña es incorrecta" } };
+            throw new Error("La contraseña es incorrecta");
         }
     }
 
@@ -26,8 +24,9 @@ export default class Controlador_login {
         return this.manejador_token.crear_token(id_usuario,correo,id_tipo);
     }
 
-    descifrar_token(token: string): any{
-        return this.manejador_token.descifrar_token(token);
+
+    verificar_token(bearer: string): Usuario{
+        return this.manejador_token.descifrar_token(bearer.split(' ')[1]);
     }
 
 }
