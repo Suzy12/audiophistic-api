@@ -1,9 +1,9 @@
 export interface Blog {
-    id_Blog:number;
-    id_Autor:number;
-    fecha_Creacion: Date;
-    fecha_Modificacion: Date;
-    id_Categoria:number;
+    id_blog:number;
+    id_autor:number;
+    fecha_creacion: Date;
+    fecha_modificacion: Date;
+    id_categoria:number;
     titulo: string
     etiquetas: string[];
     contenido: string;

@@ -1,5 +1,6 @@
 import { Client } from "pg";
-import { Usuario } from "../Modelo/Usuario"
+import { Producto } from "../Modelo/Producto";
+import { Usuario } from "../Modelo/Usuario";
 
 require('dotenv').config();
 
@@ -33,7 +34,7 @@ export default class DAO {
         return DAO.instancia;
     }
 
-    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string>{
+    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string> {
         try {
             let res = await this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena]);
             if (res.rows[0].cambiar_contrasena) {
@@ -46,13 +47,33 @@ export default class DAO {
         }
     }
 
-    async obtener_usuario(correo: string): Promise<Usuario>{
+    async obtener_usuario(correo: string): Promise<Usuario> {
         try {
             let res = await this.cliente.query('select * from obtener_usuario($1::character varying(60))', [correo]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
                 throw new Error("No se pudo cambiar la contraseña");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async get_usuario(correo: string): Promise<Producto> {
+        try {
+            let res = {
+                rows: [{
+                    id_producto: 1, id_creador: 2, titulo: "wh-1000xm4",
+                    precio: 140000, tipo: {
+                        id_tipo: 1, marca: "Sony", conexion: "Bluetooth", tipo: "Over-Ear"
+                    }
+                }]
+            };
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("El usuario no existe");
             }
         } catch (err) {
             throw err;

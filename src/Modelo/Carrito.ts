@@ -1,6 +1,6 @@
 export interface Carrito {
-    id_Consumidor:number;
-    id_Producto:number;
-    id_Estilo:number;
-    Cantidad:number;  
+    id_consumidor:number;
+    id_producto:number;
+    id_estilo:number;
+    cantidad:number;  
 } 

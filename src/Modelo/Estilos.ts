@@ -1,6 +1,6 @@
 export interface Estilos {
-    id_Producto:number;
-    id_Estilo:number;
+    id_producto:number;
+    id_estilo:number;
     existencia:number;
     nombre: string
     precio: number;

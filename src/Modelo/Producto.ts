@@ -1,11 +1,14 @@
+import { Tipo_Producto } from "./Tipo_Producto";
+
 export interface Producto {
-    id_Producto:number;
-    id_Creador?:number;
-    id_Blog?:number;
+    id_producto:number;
+    id_creador?:number;
+    id_blog?:number;
     titulo: string
     precio: number;
-    tipo_Envio?: number;
+    tipo_envio?: number;
     descripcion?: string;
-    fecha_Lanzamiento?: Date;
+    fecha_lanzamiento?: Date;
     enlace?: string;
+    tipo: Tipo_Producto;
 } 
