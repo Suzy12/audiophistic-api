@@ -53,14 +53,29 @@ export default class DAO {
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
-                throw new Error("No se pudo cambiar la contraseña");
+                throw new Error("No se pudo obtener el usuario");
             }
         } catch (err) {
             throw err;
         }
     }
 
-    async get_usuario(correo: string): Promise<Producto> {
+    async obtener_producto(id_producto: number): Promise<Producto>{
+        try{
+            let res = await this.cliente.query('select * from obtener_producto($1::character varying(60))',[id_producto]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("No se pudo obtener el producto");
+            }
+
+        }catch (err){
+            throw err;
+        }
+
+    }
+
+    async get_producto(correo: string): Promise<Producto> { //dummy de producto
         try {
             let res = {
                 rows: [{
@@ -73,11 +88,32 @@ export default class DAO {
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
-                throw new Error("El usuario no existe");
+                throw new Error("El producto no existe");
             }
         } catch (err) {
             throw err;
         }
+    }
+
+    async get_usuario(id: number): Promise<Usuario>{ //dummy de usuario
+        try{
+            let res = {
+                rows: [{
+                    id_usuario: 2, nombre: "Boaty McBoatface",
+                    email: "boats@boats.com", tipo:{
+                        id_tipo: 2, direccion_exacta: "el mar", canton:"Carillo", Provincia:"Guanacaste",celular:"88888888"
+                    }
+                }]
+            };
+            if (res.rows[0]){
+                return res.rows[0];
+            } else {
+                throw new Error("El Usuario no existe")
+            }
+        }catch(err){
+            throw err;
+        }
+
     }
 
 

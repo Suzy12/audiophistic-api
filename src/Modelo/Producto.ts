@@ -5,6 +5,7 @@ import { Parlantes } from "./Parlantes";
 export interface Producto {
     id_producto:number;
     id_creador?:number;
+    nombre_creador?: number;
     id_blog?:number;
     titulo: string
     precio: number;
