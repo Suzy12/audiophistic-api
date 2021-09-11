@@ -13,5 +13,6 @@ export interface Producto {
     descripcion?: string;
     fecha_lanzamiento?: Date;
     enlace?: string;
+    foto? : string;
     tipo: Audifonos | Albumes | Parlantes;
 } 

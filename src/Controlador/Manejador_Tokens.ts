@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Usuario } from "../Modelo/Usuario"
 require('dotenv').config();
 
+//Clase basada en el modelo de Singleton, se encarga del manejo de los tokens
 export default class Manejador_Tokens {
 
     private static instancia: Manejador_Tokens;

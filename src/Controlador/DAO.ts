@@ -1,7 +1,6 @@
 import { Client } from "pg";
 import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
-
 require('dotenv').config();
 
 const connection = {
@@ -13,6 +12,7 @@ const connection = {
     ssl: { rejectUnauthorized: false }
 };
 
+//Clase basada en el modelo de Singleton, se encarga de la conexion a la base de datos de postgres
 export default class DAO {
     cliente: Client
 
@@ -47,9 +47,9 @@ export default class DAO {
         }
     }
 
-    async obtener_usuario(correo: string): Promise<Usuario> {
+    async verificar_usuario(correo: string): Promise<Usuario> {
         try {
-            let res = await this.cliente.query('select * from obtener_usuario($1::character varying(60))', [correo]);
+            let res = await this.cliente.query('select * from verificar_usuario($1)', [correo]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
@@ -62,7 +62,7 @@ export default class DAO {
 
     async obtener_producto(id_producto: number): Promise<Producto>{
         try{
-            let res = await this.cliente.query('select * from obtener_producto($1::character varying(60))',[id_producto]);
+            let res = await this.cliente.query('select * from obtener_producto($1)',[id_producto]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
@@ -74,48 +74,6 @@ export default class DAO {
         }
 
     }
-
-    async get_producto(correo: string): Promise<Producto> { //dummy de producto
-        try {
-            let res = {
-                rows: [{
-                    id_producto: 1, id_creador: 2, titulo: "wh-1000xm4",
-                    precio: 140000, tipo: {
-                        id_tipo: 1, marca: "Sony", conexion: "Bluetooth", tipo: "Over-Ear"
-                    }
-                }]
-            };
-            if (res.rows[0]) {
-                return res.rows[0];
-            } else {
-                throw new Error("El producto no existe");
-            }
-        } catch (err) {
-            throw err;
-        }
-    }
-
-    async get_usuario(id: number): Promise<Usuario>{ //dummy de usuario
-        try{
-            let res = {
-                rows: [{
-                    id_usuario: 2, nombre: "Boaty McBoatface",
-                    email: "boats@boats.com", tipo:{
-                        id_tipo: 2, direccion_exacta: "el mar", canton:"Carillo", Provincia:"Guanacaste",celular:"88888888"
-                    }
-                }]
-            };
-            if (res.rows[0]){
-                return res.rows[0];
-            } else {
-                throw new Error("El Usuario no existe")
-            }
-        }catch(err){
-            throw err;
-        }
-
-    }
-
 
 }
 

@@ -11,7 +11,7 @@ export default class Controlador_login {
     }
 
     async verificar_contrasena(correo: string, contrasena: string): Promise<{token: string}> {
-        let datosUsuario: any = await this.base_datos.obtener_usuario(correo);
+        let datosUsuario: any = await this.base_datos.verificar_usuario(correo);
         let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena);
         if (misma_contrasena) {
             return this.crear_token(datosUsuario.id_usuario,datosUsuario.email, datosUsuario.id_tipo);

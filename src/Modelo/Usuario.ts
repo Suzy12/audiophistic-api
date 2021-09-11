@@ -6,5 +6,5 @@ export interface Usuario {
     id_usuario:number;
     nombre?: string
     email: string;
-    tipo: Administrador | Creador_de_Contenido | Consumidor;
+    tipo?: Administrador | Creador_de_Contenido | Consumidor;
 } 

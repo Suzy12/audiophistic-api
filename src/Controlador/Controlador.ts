@@ -1,26 +1,30 @@
 import DAO from "./DAO";
 import Gestor_Usuarios from "./Gestor_Usuarios";
-import Controlador_login from "./Controlador_Login";
-const bcrypt = require('bcrypt');
+import Gestor_Prodcuctos from "./Gestor_Productos";
+import { Producto } from "../Modelo/Producto";
+
 export default class Controlador {
     base_datos: DAO;
-    private static salts = 10
+    
+    gestor_productos: Gestor_Prodcuctos
+    gestor_usaurios: Gestor_Usuarios
     //private controlador_login: Controlador_login;
     //private gUsuario: Gestor_Usuarios;
 
     constructor() {
         this.base_datos = DAO.get_instancia();
-        //this.controlador_login = Controlador_login;
-        //this.gUsuario = Gestor_Usuarios.consultar_usuario();
-
+        this.gestor_productos = new Gestor_Prodcuctos();
+        this.gestor_usaurios = new Gestor_Usuarios();
     }
+    
     async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{resultado: string}> {
-        let hash: string = await bcrypt.hash(contrasena, Controlador.salts)
-        let resultado: string = await this.base_datos.cambiar_contrasena(id_usuario, hash)
-        return { resultado };
+        return this.gestor_usaurios.cambiar_contrasena(id_usuario, contrasena);
     }
-    get_producto(id_producto: number) {
-        return Promise.resolve({ resultado: "Todo bien" });
+
+    get_producto(id_producto: number): Promise<Producto> {
+        return this.base_datos.obtener_producto(id_producto).then((producto: Producto) => {
+            return producto;
+        })
     }
 
     
