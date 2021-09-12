@@ -11,6 +11,7 @@ app.use(express.json({ limit: '10mb' }));
 let controlador = new Controlador();
 let controlador_login = new Controlador_login();
 
+
 app.get('/', (req, res) => {
     res.send('Bienvenido a la api de Audiophistic!');
 })
