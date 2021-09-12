@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require('dotenv').config();
+//Clase basada en el modelo de Singleton, se encarga del manejo de los tokens
 class Manejador_Tokens {
     constructor() {
     }
@@ -19,7 +20,8 @@ class Manejador_Tokens {
         return { token };
     }
     descifrar_token(token) {
-        return jsonwebtoken_1.default.verify(token, Manejador_Tokens.secreto);
+        let objeto = jsonwebtoken_1.default.verify(token, Manejador_Tokens.secreto);
+        return { id_usuario: objeto.id_usuario, email: objeto.correo, tipo: objeto.tipo };
     }
 }
 exports.default = Manejador_Tokens;

@@ -13,30 +13,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const DAO_1 = __importDefault(require("./DAO"));
-const Gestor_Usuarios_1 = __importDefault(require("./Gestor_Usuarios"));
-const Gestor_Productos_1 = __importDefault(require("./Gestor_Productos"));
-class Controlador {
-    //private controlador_login: Controlador_login;
-    //private gUsuario: Gestor_Usuarios;
+const bcrypt = require('bcrypt');
+class Gestor_Usuarios {
     constructor() {
         this.base_datos = DAO_1.default.get_instancia();
-        this.gestor_productos = new Gestor_Productos_1.default();
-        this.gestor_usaurios = new Gestor_Usuarios_1.default();
     }
+    crear_usuario(id_usuario, nombre, email) {
+        return "usuario creado";
+    }
+    eliminar_usuario(id_usuairo) {
+        return "usuario eliminado";
+    }
+    // Crea el hash y llama a cambiar la contraseña a la base
     cambiar_contrasena(id_usuario, contrasena) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.gestor_usaurios.cambiar_contrasena(id_usuario, contrasena);
+            let hash = yield bcrypt.hash(contrasena, Gestor_Usuarios.salts);
+            let resultado = yield this.base_datos.cambiar_contrasena(id_usuario, hash);
+            return { resultado };
         });
     }
-    get_producto(id_producto) {
-        return this.base_datos.obtener_producto(id_producto).then((producto) => {
-            return producto;
-        });
-    }
-    get_usuario(id_usuario) {
+    consultar_usuario(id_usuario) {
         return this.base_datos.obtener_usuario(id_usuario).then((usuario) => {
             return usuario;
+        })
+            .catch((err) => {
+            throw err;
         });
     }
+    editar_usuario(id_usuairo) {
+        return "usuario modificado";
+    }
 }
-exports.default = Controlador;
+exports.default = Gestor_Usuarios;
+// El numero de salts para el cifrado de la contrasena
+Gestor_Usuarios.salts = 10;

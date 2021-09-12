@@ -45,15 +45,13 @@ app.post('/iniciar_sesion', (req, res) => {
         return res.send({ error: err.message });
     }
 });
+/* Eliminar en cuanto comencemos a comprobar tokens */
 app.post('/verificar_token', (req, res) => {
     try {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
             return res.status(401).json({ message: 'Missing Authorization Header' });
         }
-        var token = req.headers.authorization.split(' ')[1];
-        let resultado = controlador_login.descifrar_token(token);
-        console.log(resultado);
-        return res.send({ resultado });
+        return res.send({ respuesta: controlador_login.verificar_token(req.headers.authorization) });
     }
     catch (err) {
         return res.send({ error: err.message });
@@ -63,6 +61,20 @@ app.get('/productos/:id_producto', (req, res) => {
     try {
         let id_producto = parseInt(req.params.id_producto);
         controlador.get_producto(id_producto)
+            .then((resultado) => {
+            return res.send({ resultado });
+        }).catch((err) => {
+            return res.send({ error: err.message });
+        });
+    }
+    catch (err) {
+        return res.send({ error: err.message });
+    }
+});
+app.get('/usuarios/:id_usuario', (req, res) => {
+    try {
+        let id_usuario = parseInt(req.params.id_usuario);
+        controlador.get_usuario(id_usuario)
             .then((resultado) => {
             return res.send({ resultado });
         }).catch((err) => {

@@ -19,6 +19,7 @@ const connection = {
     port: 5432,
     ssl: { rejectUnauthorized: false }
 };
+//Clase basada en el modelo de Singleton, se encarga de la conexion a la base de datos de postgres
 class DAO {
     constructor() {
         this.cliente = new pg_1.Client(connection);
@@ -51,15 +52,47 @@ class DAO {
             }
         });
     }
-    obtener_usuario(correo) {
+    verificar_usuario(correo) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let res = yield this.cliente.query('select * from obtener_usuario($1::character varying(60))', [correo]);
+                let res = yield this.cliente.query('select * from verificar_usuario($1)', [correo]);
                 if (res.rows[0]) {
                     return res.rows[0];
                 }
                 else {
-                    throw new Error("No se pudo cambiar la contraseña");
+                    throw new Error("No se pudo obtener el usuario");
+                }
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
+    obtener_usuario(id_usuario) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let res = yield this.cliente.query('select * from obtener_usuario($1)', [id_usuario]);
+                if (res.rows[0]) {
+                    return res.rows[0];
+                }
+                else {
+                    throw new Error("No se pudo obtener el usuario");
+                }
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
+    obtener_producto(id_producto) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let res = yield this.cliente.query('select * from obtener_producto($1)', [id_producto]);
+                if (res.rows[0]) {
+                    return res.rows[0];
+                }
+                else {
+                    throw new Error("No se pudo obtener el producto");
                 }
             }
             catch (err) {

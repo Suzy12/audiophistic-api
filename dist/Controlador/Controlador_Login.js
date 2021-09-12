@@ -22,7 +22,7 @@ class Controlador_login {
     }
     verificar_contrasena(correo, contrasena) {
         return __awaiter(this, void 0, void 0, function* () {
-            let datosUsuario = yield this.base_datos.obtener_usuario(correo);
+            let datosUsuario = yield this.base_datos.verificar_usuario(correo);
             let misma_contrasena = yield bcrypt.compare(contrasena, datosUsuario.contrasena);
             if (misma_contrasena) {
                 return this.crear_token(datosUsuario.id_usuario, datosUsuario.email, datosUsuario.id_tipo);
@@ -35,8 +35,8 @@ class Controlador_login {
     crear_token(id_usuario, correo, id_tipo) {
         return this.manejador_token.crear_token(id_usuario, correo, id_tipo);
     }
-    descifrar_token(token) {
-        return this.manejador_token.descifrar_token(token);
+    verificar_token(bearer) {
+        return this.manejador_token.descifrar_token(bearer.split(' ')[1]);
     }
 }
 exports.default = Controlador_login;
