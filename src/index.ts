@@ -11,6 +11,12 @@ app.use(express.json({ limit: '10mb' }));
 let controlador = new Controlador();
 let controlador_login = new Controlador_login();
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log("LISTENING ON PORT", PORT);
+})
+
 
 app.get('/', (req, res) => {
     res.send('Bienvenido a la api de Audiophistic!');
@@ -84,8 +90,4 @@ app.get('/usuarios/:id_usuario', (req, res) =>{
     } catch(err:any){
         return res.send({ error: err.message });
     }
-})
-
-app.listen(3000, () => {
-    console.log('The application is listening on port 3000!');
 })
