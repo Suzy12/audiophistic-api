@@ -71,9 +71,9 @@ app.get('/productos/:id_producto', (req, res) => {
     }
 })
 
-/*app.get('/usuarios/:id_usuario', (req, res) =>{
+app.get('/usuarios/:id_usuario', (req, res) =>{
     try{
-        let id_usuario:  number = parseInt(req.params.id_usuario);
+        let id_usuario: number = parseInt(req.params.id_usuario);
         controlador.get_usuario(id_usuario)
         .then((resultado: any) => {
             return res.send({ resultado });
@@ -83,7 +83,7 @@ app.get('/productos/:id_producto', (req, res) => {
     } catch(err:any){
         return res.send({ error: err.message });
     }
-})*/
+})
 
 app.listen(3000, () => {
     console.log('The application is listening on port 3000!');

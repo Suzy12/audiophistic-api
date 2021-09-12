@@ -28,11 +28,18 @@ export default class Gestor_Usuarios {
         let resultado: string = await this.base_datos.cambiar_contrasena(id_usuario, hash)
         return { resultado };
     }
-    /*consultar_usuario(id_usuairo: number): any{
-        //let objeto = 
-        return Controlador.get_usuario(2);
+    
+    consultar_usuario(id_usuario: number): Promise<Usuario>{
+        return this.base_datos.obtener_usuario(id_usuario).then((usuario:any)=>{
+            return usuario
+        })
+        .catch((err:any) => {
+            throw err
+        })
 
-    }*/
+    }
+
+
 
     editar_usuario(id_usuairo: number): string {
 

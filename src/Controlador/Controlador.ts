@@ -2,6 +2,7 @@ import DAO from "./DAO";
 import Gestor_Usuarios from "./Gestor_Usuarios";
 import Gestor_Prodcuctos from "./Gestor_Productos";
 import { Producto } from "../Modelo/Producto";
+import { Usuario } from "../Modelo/Usuario";
 
 export default class Controlador {
     base_datos: DAO;
@@ -28,8 +29,10 @@ export default class Controlador {
     }
 
     
-    async get_usuario(id_usuario: number): Promise<{resultado: string}>{
-        return Promise.resolve({ resultado: "Todo normal" });
+    get_usuario(id_usuario: number): Promise<Usuario>{
+        return this.base_datos.obtener_usuario(id_usuario).then((usuario: Usuario) => {
+            return usuario;
+        })
     }
     
     /*
