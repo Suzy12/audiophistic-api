@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 })
 
 //cambio de contrasenia, se comunica con el controlador
-app.post('/cambio_contrasena', (req, res) => {
+app.post('/cambiar_contrasena', (req, res) => {
     try {
         var { id_usuario, contrasena }: { id_usuario: number, contrasena: string } = req.body;
         if (id_usuario && contrasena) {
@@ -38,6 +38,8 @@ app.post('/cambio_contrasena', (req, res) => {
                 .then((resultado: any) => {
                     return res.send(resultado);
                 })
+        } else {
+            return res.send({error: "Los datos enviados no coinciden con los esperados"})
         }
     } catch (err: any) {
         return res.send({ error: err.message });
