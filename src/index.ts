@@ -3,7 +3,7 @@ import Controlador from './Controlador/Controlador';
 import Controlador_login from './Controlador/Controlador_Login';
 
 let opciones_cors = {
-    origin: '186.176.18.72',
+    origin: ['http://186.176.18.72', 'http://localhost:4200'],
     optionsSuccessStatus: 200
 }
 
