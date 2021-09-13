@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_login from './Controlador/Controlador_Login';
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(express.json({ limit: '10mb' }));
+app.use(cors(opciones_cors))
 
 let controlador = new Controlador();
 let controlador_login = new Controlador_login();
