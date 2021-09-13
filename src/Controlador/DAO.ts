@@ -13,7 +13,8 @@ const connection = { //Se ponen todos los parametros en el archivo .env por segu
     ssl: { rejectUnauthorized: false }
 };
 
-//Clase basada en el modelo de Singleton, se encarga de la conexion a la base de datos de postgres
+/*Clase basada en el modelo de Singleton, 
+  se encarga de la conexion a la base de datos de postgres */
 export default class DAO {
     cliente: Client
 

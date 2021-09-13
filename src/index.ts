@@ -61,7 +61,9 @@ app.post('/iniciar_sesion', (req, res) => {
     }
 })
 
-/* Eliminar en cuanto comencemos a comprobar tokens */
+/* -----------------------
+    Eliminar en cuanto comencemos a comprobar tokens 
+    ------------------------*/
 app.post('/verificar_token', (req, res) => {
     try {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
@@ -72,12 +74,19 @@ app.post('/verificar_token', (req, res) => {
         return res.send({ error: err.message });
     }
 })
+/* -----------------------
+    Eliminar en cuanto comencemos a comprobar tokens 
+    ------------------------*/
 
-//Trae el consulta el producto, se comunica con el controlador
+
+
+
+
+//Devuelve todos los datos del usuario, se comunica con el controlador
 app.get('/productos/:id_producto', (req, res) => {
     try {
         let id_producto: number = parseInt(req.params.id_producto);
-        controlador.get_producto(id_producto)
+        controlador.consultar_producto(id_producto)
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -88,11 +97,11 @@ app.get('/productos/:id_producto', (req, res) => {
     }
 })
 
-//Trae el producto se comunica con el controlador
+//Devuelve todos los datos del usuario, se comunica con el controlador
 app.get('/usuarios/:id_usuario', (req, res) => {
     try {
         let id_usuario: number = parseInt(req.params.id_usuario);
-        controlador.get_usuario(id_usuario)
+        controlador.consultar_usuario(id_usuario)
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {

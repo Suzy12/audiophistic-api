@@ -4,13 +4,15 @@ import Gestor_Prodcuctos from "./Gestor_Productos";
 import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
 
+/* Se encarga de coordinar las funcionalidades 
+   De la pagina web con sus clases respectivas*/
 export default class Controlador {
-    base_datos: DAO; //Se llama a la BD por medio del DAO
+    /* Definimos como hacer las llamadas la base de datos 
+       A traves del dao */
+    base_datos: DAO;
     
     gestor_productos: Gestor_Prodcuctos
     gestor_usaurios: Gestor_Usuarios
-    //private controlador_login: Controlador_login;
-    //private gUsuario: Gestor_Usuarios;
 
     constructor() {
         this.base_datos = DAO.get_instancia();
@@ -18,29 +20,19 @@ export default class Controlador {
         this.gestor_usaurios = new Gestor_Usuarios();
     }
     
+    // Cambia la contrasena del usuario con los datos dados
     async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{resultado: string}> {
         return this.gestor_usaurios.cambiar_contrasena(id_usuario, contrasena);
     }
 
-    get_producto(id_producto: number): Promise<Producto> { //para obetener producto se llama al DAO
-        return this.base_datos.obtener_producto(id_producto)
-        .then((producto: Producto) => {
-            return producto;
-        })
+    // Consulta los datos del producto respectivo
+    consultar_producto(id_producto: number): Promise<Producto> { 
+        return this.gestor_productos.consultar_producto(id_producto);
     }
 
-    
-    get_usuario(id_usuario: number): Promise<Usuario>{ //para obtener usuario, se llama al DAO
-        return this.base_datos.obtener_usuario(id_usuario)
-        .then((usuario: Usuario) => {
-            return usuario;
-        })
+    // Consulta los datos del usuario
+    consultar_usuario(id_usuario: number): Promise<Usuario>{
+        return this.gestor_usaurios.consultar_usuario(id_usuario);
     }
-    
-    /*
-    get_usuario(id_usuario: number) {
-        //let resultado: string = await this.base_datos.get_usuario(id_usuario);
-    }*/
-
 
 }
