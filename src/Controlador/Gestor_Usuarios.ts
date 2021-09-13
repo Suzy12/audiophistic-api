@@ -32,8 +32,15 @@ export default class Gestor_Usuarios {
     
     // Consulta un usuario con su id
     consultar_usuario(id_usuario: number): Promise<Usuario>{
-        return this.base_datos.obtener_usuario(id_usuario)
+        return this.base_datos.consultar_usuario(id_usuario)
         .then((usuario: Usuario) => {
+            return usuario;
+        })
+    }
+
+    consultar_usuarios(): Promise<Usuario[]>{
+        return this.base_datos.consultar_usuarios()
+        .then((usuario: Usuario[]) => {
             return usuario;
         })
     }

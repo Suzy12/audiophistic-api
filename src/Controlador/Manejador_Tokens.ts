@@ -31,9 +31,13 @@ export default class Manejador_Tokens {
     }
 
 
-    ///Descifra el usuario y devuelve el objeto para la comprobacion de permisos
-    descifrar_token(token: string): Usuario{
-        let objeto = jwt.verify(token, Manejador_Tokens.secreto) as JwtPayload
-        return {id_usuario: objeto.id_usuario, email: objeto.correo, tipo: objeto.tipo};
+    verificar_permisos(token: string, permiso: number): boolean{
+        try{
+        let usuario = jwt.verify(token, Manejador_Tokens.secreto) as JwtPayload
+        console.log(usuario);
+        return usuario.tipo.id_tipo === permiso;
+        } catch(err){
+            return false;
+        }
     }
 }

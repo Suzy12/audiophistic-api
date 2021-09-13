@@ -30,9 +30,19 @@ export default class Controlador {
         return this.gestor_productos.consultar_producto(id_producto);
     }
 
+    // Consulta todos los productos
+    consultar_productos(): Promise<Producto[]> { 
+        return this.gestor_productos.consultar_productos();
+    }
+
     // Consulta los datos del usuario
     consultar_usuario(id_usuario: number): Promise<Usuario>{
         return this.gestor_usaurios.consultar_usuario(id_usuario);
+    }
+
+    // Consulta todos los usuarios
+    consultar_usuarios(): Promise<Usuario[]>{
+        return this.gestor_usaurios.consultar_usuarios();
     }
 
 }

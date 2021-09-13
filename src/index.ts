@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_login from './Controlador/Controlador_Login';
+import { nextTick } from 'process';
 
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
@@ -29,7 +30,46 @@ app.get('/', (req, res) => {
     res.send('Bienvenido a la api de Audiophistic!');
 })
 
-//cambio de contrasenia, se comunica con el controlador
+/* Verifica si hay un token en el request */
+
+function hay_auth(req: express.Request, res: express.Response, next: express.NextFunction) {
+    if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
+        return res.send({ error: 'Falta el header de autorización' });
+    };
+    let token: string[] = req.headers.authorization.split(' ');
+    if (token.length < 2) {
+        return res.send({ error: 'Falta el token de autorización' });
+    }
+    return token;
+}
+
+/* Verifican los diferentes tipos de autorizacion que hay */
+
+function autorizacion_admin(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let token: string[] = hay_auth(req, res, next) as string[];
+    if (!controlador_login.verificar_permisos(token[1], 1)) {
+        return res.send({ error: 'Acceso denegado' });
+    }
+    return next();
+}
+
+function autorizacion_creador_contenido(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let token: string[] = hay_auth(req, res, next) as string[];
+    if (!controlador_login.verificar_permisos(token[1], 2)) {
+        return res.send({ error: 'Acceso denegado' });
+    }
+    return next();
+}
+
+function autorizacion_consumidor(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let token: string[] = hay_auth(req, res, next) as string[];
+    if (!controlador_login.verificar_permisos(token[1], 3)) {
+        return res.send({ error: 'Acceso denegado' });
+    }
+    return next();
+}
+
+// Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {
         var { id_usuario, contrasena }: { id_usuario: number, contrasena: string } = req.body;
@@ -39,14 +79,14 @@ app.post('/cambiar_contrasena', (req, res) => {
                     return res.send(resultado);
                 })
         } else {
-            return res.send({error: "Los datos enviados no coinciden con los esperados"})
+            return res.send({ error: "Los datos enviados no coinciden con los esperados" })
         }
     } catch (err: any) {
         return res.send({ error: err.message });
     }
 });
 
-//inicio de sesion, se comunica con el controlador login
+// Inicio de sesion, se comunica con el controlador login
 app.post('/iniciar_sesion', (req, res) => {
     try {
         var { correo, contrasena }: { correo: string, contrasena: string } = req.body;
@@ -63,29 +103,54 @@ app.post('/iniciar_sesion', (req, res) => {
     }
 })
 
-/* -----------------------
-    Eliminar en cuanto comencemos a comprobar tokens 
-    ------------------------*/
-app.post('/verificar_token', (req, res) => {
+/* Devuelve todos los usuarios, se comunica con el controlador, 
+    Solo pueden accesar con permisos de administrador */
+app.get('/usuarios', autorizacion_admin, (req, res) => {
     try {
-        if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
-            return res.status(401).json({ message: 'Missing Authorization Header' });
-        }
-        return res.send({ respuesta: controlador_login.verificar_token(req.headers.authorization) });
+        controlador.consultar_usuarios()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            })
     } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
-/* -----------------------
-    Eliminar en cuanto comencemos a comprobar tokens 
-    ------------------------*/
 
+// Devuelve todos los datos del usuario, se comunica con el controlador
+app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
+    try {
+        let id_usuario: number = parseInt(req.params.id_usuario);
+        controlador.consultar_usuario(id_usuario)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            })
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 
+/* Devuelve todos los usuarios, se comunica con el controlador, 
+    Solo pueden accesar con permisos de administrador */
 
+app.get('/productos', autorizacion_admin, (req, res) => {
+    try {
+        controlador.consultar_productos()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            })
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 
-
-//Devuelve todos los datos del usuario, se comunica con el controlador
-app.get('/productos/:id_producto', (req, res) => {
+// Devuelve todos los datos del usuario, se comunica con el controlador
+app.get('/productos/:id_producto', autorizacion_admin, (req: express.Request, res) => {
     try {
         let id_producto: number = parseInt(req.params.id_producto);
         controlador.consultar_producto(id_producto)
@@ -99,17 +164,3 @@ app.get('/productos/:id_producto', (req, res) => {
     }
 })
 
-//Devuelve todos los datos del usuario, se comunica con el controlador
-app.get('/usuarios/:id_usuario', (req, res) => {
-    try {
-        let id_usuario: number = parseInt(req.params.id_usuario);
-        controlador.consultar_usuario(id_usuario)
-            .then((resultado: any) => {
-                return res.send({ resultado });
-            }).catch((err: any) => {
-                return res.send({ error: err.message });
-            })
-    } catch (err: any) {
-        return res.send({ error: err.message });
-    }
-})

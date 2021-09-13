@@ -30,9 +30,8 @@ export default class Controlador_login {
         return this.manejador_token.crear_token(id_usuario,correo,id_tipo);
     }
 
-    // Verifica la integridad del token
-    verificar_token(bearer: string): Usuario{
-        return this.manejador_token.descifrar_token(bearer.split(' ')[1]);
+    verificar_permisos(token: string, permiso: number): boolean{
+        return this.manejador_token.verificar_permisos(token, permiso);
     }
 
 }
