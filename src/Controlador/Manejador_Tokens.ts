@@ -18,7 +18,7 @@ export default class Manejador_Tokens {
         return Manejador_Tokens.instancia;
     }
 
-    crear_token(id_usuario: number, correo: string, id_tipo: number): {token: string} {
+    crear_token(id_usuario: number, correo: string, id_tipo: number): {token: string} { //crea token que ayuda a mantener sesion iniciada
         var token: string = jwt.sign(
             {id_usuario, correo, tipo: {id_tipo}}
         , Manejador_Tokens.secreto, { expiresIn: '365 days' });

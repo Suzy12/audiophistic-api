@@ -5,7 +5,7 @@ import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
 
 export default class Controlador {
-    base_datos: DAO;
+    base_datos: DAO; //Se llama a la BD por medio del DAO
     
     gestor_productos: Gestor_Prodcuctos
     gestor_usaurios: Gestor_Usuarios
@@ -22,15 +22,17 @@ export default class Controlador {
         return this.gestor_usaurios.cambiar_contrasena(id_usuario, contrasena);
     }
 
-    get_producto(id_producto: number): Promise<Producto> {
-        return this.base_datos.obtener_producto(id_producto).then((producto: Producto) => {
+    get_producto(id_producto: number): Promise<Producto> { //para obetener producto se llama al DAO
+        return this.base_datos.obtener_producto(id_producto)
+        .then((producto: Producto) => {
             return producto;
         })
     }
 
     
-    get_usuario(id_usuario: number): Promise<Usuario>{
-        return this.base_datos.obtener_usuario(id_usuario).then((usuario: Usuario) => {
+    get_usuario(id_usuario: number): Promise<Usuario>{ //para obtener usuario, se llama al DAO
+        return this.base_datos.obtener_usuario(id_usuario)
+        .then((usuario: Usuario) => {
             return usuario;
         })
     }

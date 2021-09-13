@@ -4,7 +4,7 @@ import { Usuario } from "../Modelo/Usuario";
 
 require('dotenv').config();
 
-const connection = {
+const connection = { //Se ponen todos los parametros en el archivo .env por seguridad
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
@@ -92,47 +92,12 @@ export default class DAO {
     }
 
     /*
-    async get_producto(correo: string): Promise<Producto> { //dummy de producto
-        try {
-            let res = {
-                rows: [{
-                    id_producto: 1, id_creador: 2, titulo: "wh-1000xm4",
-                    precio: 140000, tipo: {
-                        id_tipo: 1, marca: "Sony", conexion: "Bluetooth", tipo: "Over-Ear"
-                    }
-                }]
-            };
-            if (res.rows[0]) {
-                return res.rows[0];
-            } else {
-                throw new Error("El producto no existe");
-            }
-        } catch (err) {
-            throw err;
-        }
-    }
-
-    async get_usuario(id: number): Promise<Usuario>{ //dummy de usuario
-        try{
-            let res = {
-                rows: [{
-                    id_usuario: 2, nombre: "Boaty McBoatface",
-                    email: "boats@boats.com", tipo:{
-                        id_tipo: 2, direccion_exacta: "el mar", canton:"Carillo", Provincia:"Guanacaste",celular:"88888888"
-                    }
-                }]
-            };
-            if (res.rows[0]){
-                return res.rows[0];
-            } else {
-                throw new Error("El Usuario no existe")
-            }
-        }catch(err){
-            throw err;
-        }
+    async crear_usuario(id_usuario: number, nombre: string, email: string, id_tipo: number): Promise<Usuario> {
+        return 
 
     }*/
 
+    
 
 }
 

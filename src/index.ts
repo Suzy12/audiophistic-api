@@ -22,6 +22,7 @@ app.get('/', (req, res) => {
     res.send('Bienvenido a la api de Audiophistic!');
 })
 
+//cambio de contrasenia, se comunica con el controlador
 app.post('/cambio_contrasena', (req, res) => {
     try {
         var { id_usuario, contrasena }: { id_usuario: number, contrasena: string } = req.body;
@@ -36,6 +37,7 @@ app.post('/cambio_contrasena', (req, res) => {
     }
 });
 
+//inicio de sesion, se comunica con el controlador login
 app.post('/iniciar_sesion', (req, res) => {
     try {
         var { correo, contrasena }: { correo: string, contrasena: string } = req.body;
@@ -64,6 +66,7 @@ app.post('/verificar_token', (req, res) => {
     }
 })
 
+//Trae el consulta el producto, se comunica con el controlador
 app.get('/productos/:id_producto', (req, res) => {
     try {
         let id_producto: number = parseInt(req.params.id_producto);
@@ -78,6 +81,7 @@ app.get('/productos/:id_producto', (req, res) => {
     }
 })
 
+//Trae el producto se comunica con el controlador
 app.get('/usuarios/:id_usuario', (req, res) =>{
     try{
         let id_usuario: number = parseInt(req.params.id_usuario);
