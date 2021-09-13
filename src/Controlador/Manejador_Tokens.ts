@@ -38,6 +38,6 @@ export default class Manejador_Tokens {
         return usuario.tipo.id_tipo === permiso;
         } catch(err){
             return false;
-        }
+        } 
     }
 }
