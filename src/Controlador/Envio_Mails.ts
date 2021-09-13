@@ -1,14 +1,25 @@
 //import { text } from "stream/consumers";
-import nodemailer from 'nodemailer';
+import nodemailer, { SentMessageInfo } from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 
 require('dotenv').config();
 
 //Clase basada en el modelo de Singleton, se encarga del envio de mails
 export default class Envio_Mails{
+    transporter: Mail<SentMessageInfo>
 
     private static instancia: Envio_Mails;
 
-    private constructor(){ }
+    private constructor(){
+        this.transporter = nodemailer.createTransport({
+            pool: true,
+            service: process.env.EMAIL_SERVICE,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        })
+     }
 
     static get_instancia() {
         if (!Envio_Mails.instancia) {
@@ -17,15 +28,7 @@ export default class Envio_Mails{
         return Envio_Mails.instancia;
     }
 
-    static manda_correo(destinatario:string){ //la funcion con la que vamos a mandar correos
-        let transporter = nodemailer.createTransport({
-
-            service: process.env.EMAIL_SERVICE,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD
-            }
-        });
+    manda_correo(destinatario:string){ //la funcion con la que vamos a mandar correos
         
         //lo que dice el correo
         let  mailOptions = {
@@ -36,7 +39,7 @@ export default class Envio_Mails{
         };
         
         //para mandar el mail. DEBE tener la funcion anonima con (err, info)
-        transporter.sendMail(mailOptions, (err,info ) => {
+        this.transporter.sendMail(mailOptions, (err,info ) => {
             if (err){
                 throw err;
             }

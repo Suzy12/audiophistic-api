@@ -2,6 +2,11 @@ import express from 'express';
 import Controlador from './Controlador/Controlador';
 import Controlador_login from './Controlador/Controlador_Login';
 
+let opciones_cors = {
+    origin: '186.176.18.72',
+    optionsSuccessStatus: 200
+}
+
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -60,7 +65,7 @@ app.post('/verificar_token', (req, res) => {
         if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
             return res.status(401).json({ message: 'Missing Authorization Header' });
         }
-        return res.send({respuesta:controlador_login.verificar_token(req.headers.authorization)});
+        return res.send({ respuesta: controlador_login.verificar_token(req.headers.authorization) });
     } catch (err: any) {
         return res.send({ error: err.message });
     }
@@ -73,7 +78,7 @@ app.get('/productos/:id_producto', (req, res) => {
         controlador.get_producto(id_producto)
             .then((resultado: any) => {
                 return res.send({ resultado });
-            }).catch( (err: any) => {
+            }).catch((err: any) => {
                 return res.send({ error: err.message });
             })
     } catch (err: any) {
@@ -82,16 +87,16 @@ app.get('/productos/:id_producto', (req, res) => {
 })
 
 //Trae el producto se comunica con el controlador
-app.get('/usuarios/:id_usuario', (req, res) =>{
-    try{
+app.get('/usuarios/:id_usuario', (req, res) => {
+    try {
         let id_usuario: number = parseInt(req.params.id_usuario);
         controlador.get_usuario(id_usuario)
-        .then((resultado: any) => {
-            return res.send({ resultado });
-        }).catch( (err: any) => {
-            return res.send({ error: err.message });
-        })
-    } catch(err:any){
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            })
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
