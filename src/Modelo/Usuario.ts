@@ -4,7 +4,8 @@ import { Creador_de_Contenido } from "./Creador_de_Contenido";
 
 export interface Usuario {
     id_usuario:number;
-    nombre?: string
+    nombre?: string;
     email: string;
+    confirmado?: boolean;
     tipo?: Administrador | Creador_de_Contenido | Consumidor;
 } 
