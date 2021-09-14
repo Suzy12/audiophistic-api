@@ -28,17 +28,46 @@ export default class Manejador_Tokens {
         return { token };
     }
 
-    crear_token_registro(id:number): string{
+    crear_token_registro(id: number): string {
         var token: string = jwt.sign(
-            {id}
+            { id }
             , process.env.TOKEN_REGISTER_SECRET as string, { expiresIn: '1 days' });
-        return token ;
+        return token;
+    }
+
+    validar_token(token: string): boolean {
+        try {
+            let usuario = jwt.verify(token, process.env.TOKEN_SECRET as string) as JwtPayload;
+            return (usuario.tipo.id_tipo > 0);
+        } catch (err) {
+            /* Si el token recibido no tiene una firma valida, no puede ser descifrado
+               o si el token no contiene lo esperado
+               Debe retornar un permiso inexistente */
+            return false;
+        }
+    }
+
+    descifrar_token(token: string): Usuario {
+        let usuario;
+        try {
+            usuario = jwt.verify(token, process.env.TOKEN_SECRET as string) as Usuario;
+        } catch (err) {
+            /* Si el token recibido no tiene una firma valida, no puede ser descifrado
+               o si el token no contiene lo esperado
+               Debe retornar un error */
+            throw new Error('El token es inválido');
+        }
+        if (usuario) {
+            return usuario;
+        } else {
+            throw new Error('El token es inválido');
+        }
     }
 
     //Verifica que el token sea valido y regresa el id del tipo
     verificar_permisos(token: string): number {
         try {
-            let usuario = jwt.verify(token, process.env.TOKEN_SECRET as string) as JwtPayload
+            let usuario = jwt.verify(token, process.env.TOKEN_SECRET as string) as JwtPayload;
             return usuario.tipo.id_tipo;
         } catch (err) {
             /* Si el token recibido no tiene una firma valida, no puede ser descifrado
@@ -51,7 +80,7 @@ export default class Manejador_Tokens {
     //Verifica que el token sea valido y regresa el id del usuario a activar
     verificar_token_registro(token: string): number {
         try {
-            let usuario = jwt.verify(token, process.env.TOKEN_REGISTER_SECRET as string) as JwtPayload
+            let usuario = jwt.verify(token, process.env.TOKEN_REGISTER_SECRET as string) as JwtPayload;
             return usuario.id;
         } catch (err) {
             /* Si el token recibido no tiene una firma valida, no puede ser descifrado

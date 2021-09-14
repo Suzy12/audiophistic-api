@@ -37,6 +37,14 @@ export default class Controlador_login {
         return this.manejador_token.crear_token(id_usuario, correo, id_tipo);
     }
 
+    validar_token(token: string): boolean{
+        return this.manejador_token.validar_token(token)
+    }
+
+    descifrar_token(token: string): Usuario{
+        return this.manejador_token.descifrar_token(token)
+    }
+
     verificar_permisos(token: string, permiso: number): boolean {
         return this.manejador_token.verificar_permisos(token) === permiso;
     }

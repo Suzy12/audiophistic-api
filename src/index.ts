@@ -3,6 +3,7 @@ import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_login from './Controlador/Controlador_Login';
 import bcrypt from 'bcrypt';
+import { Usuario } from './Modelo/Usuario';
 
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
@@ -41,6 +42,16 @@ function hay_auth(req: express.Request, res: express.Response) {
         return res.send({ error: 'Falta el token de autorización' });
     }
     return token;
+}
+
+/* Verifica que el token sea valido */
+
+function token_valido(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let token: string[] = hay_auth(req, res) as string[];
+    if (!controlador_login.validar_token(token[1])) {
+        return res.send({ error: 'Token inválido' });
+    }
+    return next();
 }
 
 /* Verifican los diferentes tipos de autorizacion que hay */
@@ -126,6 +137,12 @@ app.post('/iniciar_sesion', (req, res) => {
     }
 })
 
+
+// Inicio de sesion, se comunica con el controlador login
+app.get('/validar_token', token_valido, (req, res) => {
+    return res.send({resultado: 'El token es válido'});
+})
+
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
 app.get('/usuarios', autorizacion_admin, (req, res) => {
@@ -191,9 +208,10 @@ app.get('/productos/:id_producto', autorizacion_admin, (req: express.Request, re
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {
-        var { id_usuario, contrasena }: { id_usuario: number, contrasena: string } = req.body;
-        if (id_usuario && contrasena) {
-            controlador.cambiar_contrasena(id_usuario, contrasena)
+        var { token, contrasena }: { token: string, contrasena: string } = req.body;
+        if (token && contrasena) {
+            let descifrado: Usuario = controlador_login.descifrar_token(token);
+            controlador.cambiar_contrasena(descifrado.id_usuario, contrasena)
                 .then((resultado: any) => {
                     return res.send(resultado);
                 })
