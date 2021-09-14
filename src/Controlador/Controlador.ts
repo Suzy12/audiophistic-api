@@ -85,7 +85,7 @@ export default class Controlador {
         let hash: string = bcrypt.hashSync(contrasena_temporal, this.salts);
         await this.gestor_usuarios.cambiar_contrasena_con_correo(correo, hash);
         // Integra la nueva contrasena al correo y lo envia
-        var cuerpo_correo : string = fs.readFileSync('./assets/correo_recuperar.html',
+        var cuerpo_correo : string = fs.readFileSync('./assets/html/correo_recuperar.html',
         { encoding: 'utf8', flag: 'r' });
         cuerpo_correo = util.format(cuerpo_correo, contrasena_temporal);
         return this.envio_correos.enviar_correo(correo, "AudioPhistic: PASSWPORD TEMPORAL", cuerpo_correo);
