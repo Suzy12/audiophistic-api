@@ -14,7 +14,8 @@ export default class Controlador_login {
         this.manejador_token = Manejador_Tokens.get_instancia();
     }
 
-    // Verifica la combinación del correo con la contraseña
+    /* Verifica la combinación del correo con la contraseña
+       Devuelve un token y el id del tipo del usuario en caso de ser correctos los datos*/
     async verificar_contrasena(correo: string, contrasena: string): Promise<{id_tipo: number, token: string}> { //Metodo de verificacion de contrasena
         let datosUsuario: any = await this.base_datos.verificar_usuario(correo);
         let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena);

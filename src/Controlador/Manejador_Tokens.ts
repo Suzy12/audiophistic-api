@@ -29,7 +29,7 @@ export default class Manejador_Tokens {
         return { token };
     }
 
-    //Verifica el permiso que tiene el usuario segun el rol enviado
+    //Verifica que el token sea valido y regresa el id del tipo
     verificar_permisos(token: string, permiso: number): number{
         try{
         let usuario = jwt.verify(token, Manejador_Tokens.secreto) as JwtPayload
