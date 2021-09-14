@@ -14,12 +14,15 @@ export default class Controlador_login {
         this.manejador_token = Manejador_Tokens.get_instancia();
     }
 
-    // Verifica la combinación del correo con la contraseña
-    async verificar_contrasena(correo: string, contrasena: string): Promise<{token: string}> { //Metodo de verificacion de contrasena
+    /* Verifica la combinación del correo con la contraseña
+       Devuelve un token y el id del tipo del usuario en caso de ser correctos los datos*/
+    async verificar_contrasena(correo: string, contrasena: string): Promise<{id_tipo: number, token: string}> { //Metodo de verificacion de contrasena
         let datosUsuario: any = await this.base_datos.verificar_usuario(correo);
         let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena);
+        console.log(datosUsuario);
         if (misma_contrasena) {
-            return this.crear_token(datosUsuario.id_usuario,datosUsuario.email, datosUsuario.id_tipo);
+            return { id_tipo:datosUsuario.id_tipo,
+                ...this.crear_token(datosUsuario.id_usuario,datosUsuario.email, datosUsuario.id_tipo)};
         } else {
             throw new Error("La contraseña es incorrecta");
         }
@@ -30,9 +33,8 @@ export default class Controlador_login {
         return this.manejador_token.crear_token(id_usuario,correo,id_tipo);
     }
 
-    // Verifica la integridad del token
-    verificar_token(bearer: string): Usuario{
-        return this.manejador_token.descifrar_token(bearer.split(' ')[1]);
+    verificar_permisos(token: string, permiso: number): boolean{
+        return this.manejador_token.verificar_permisos(token, permiso) === permiso;
     }
 
     // Funcion para generar un string aleatorio para la recuperacion de contrasenias

@@ -26,14 +26,19 @@ export default class Manejador_Tokens {
         var token: string = jwt.sign(
             {id_usuario, correo, tipo: {id_tipo}}
         , Manejador_Tokens.secreto, { expiresIn: '365 days' });
-
         return { token };
     }
 
-
-    ///Descifra el usuario y devuelve el objeto para la comprobacion de permisos
-    descifrar_token(token: string): Usuario{
-        let objeto = jwt.verify(token, Manejador_Tokens.secreto) as JwtPayload
-        return {id_usuario: objeto.id_usuario, email: objeto.correo, tipo: objeto.tipo};
+    //Verifica que el token sea valido y regresa el id del tipo
+    verificar_permisos(token: string, permiso: number): number{
+        try{
+        let usuario = jwt.verify(token, Manejador_Tokens.secreto) as JwtPayload
+        console.log(usuario);
+        return usuario.tipo.id_tipo;
+        } catch(err){
+            /* Si el token recibido no tiene una firma valida, no puede ser descifrado
+               Debe retornar un permiso inexistente */
+            return -1;
+        } 
     }
 }
