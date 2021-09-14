@@ -39,13 +39,4 @@ export default class Controlador_login {
         return this.manejador_token.verificar_permisos(token, permiso) === permiso;
     }
 
-    // Funcion para generar un string aleatorio para la recuperacion de contrasenias
-    generacion_password(): string {
-        var randomstring = Math.random() //genera un numero aleatorio
-            .toString(36) //lo comnvierte a base -36
-            .slice(-8); //corta los ultimos 8 caracteres
-        return randomstring;
-
-    }
-
 }

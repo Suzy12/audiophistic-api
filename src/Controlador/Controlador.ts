@@ -19,10 +19,10 @@ export default class Controlador {
         this.gestor_productos = new Gestor_Prodcuctos();
         this.gestor_usaurios = new Gestor_Usuarios();
     }
-    
-    // Cambia la contrasena del usuario con los datos dados
-    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{resultado: string}> {
-        return this.gestor_usaurios.cambiar_contrasena(id_usuario, contrasena);
+
+    // Consulta todos los productos
+    consultar_productos(): Promise<Producto[]> { 
+        return this.gestor_productos.consultar_productos();
     }
 
     // Consulta los datos del producto respectivo
@@ -30,19 +30,27 @@ export default class Controlador {
         return this.gestor_productos.consultar_producto(id_producto);
     }
 
-    // Consulta todos los productos
-    consultar_productos(): Promise<Producto[]> { 
-        return this.gestor_productos.consultar_productos();
+    // Consulta todos los usuarios
+    consultar_usuarios(): Promise<Usuario[]>{
+        return this.gestor_usaurios.consultar_usuarios();
     }
-
+    
     // Consulta los datos del usuario
     consultar_usuario(id_usuario: number): Promise<Usuario>{
         return this.gestor_usaurios.consultar_usuario(id_usuario);
     }
 
-    // Consulta todos los usuarios
-    consultar_usuarios(): Promise<Usuario[]>{
-        return this.gestor_usaurios.consultar_usuarios();
+    // Cambia la contrasena del usuario con los datos dados
+    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{resultado: string}> {
+        return this.gestor_usaurios.cambiar_contrasena(id_usuario, contrasena);
     }
 
+    // Funcion para generar un string aleatorio para la recuperacion de contrasenias
+    generacion_contrasena(): string {
+        var randomstring = Math.random() //genera un numero aleatorio
+            .toString(36) //lo comnvierte a base -36
+            .slice(-8); //corta los ultimos 8 caracteres
+        return randomstring;
+
+    }
 }
