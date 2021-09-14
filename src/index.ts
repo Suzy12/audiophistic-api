@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 /* Verifica si hay un token en el request */
 
-function hay_auth(req: express.Request, res: express.Response, next: express.NextFunction) {
+function hay_auth(req: express.Request, res: express.Response) {
     if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
         return res.send({ error: 'Falta el header de autorización' });
     };
@@ -46,7 +46,7 @@ function hay_auth(req: express.Request, res: express.Response, next: express.Nex
 /* Verifican los diferentes tipos de autorizacion que hay */
 
 function autorizacion_admin(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let token: string[] = hay_auth(req, res, next) as string[];
+    let token: string[] = hay_auth(req, res) as string[];
     if (!controlador_login.verificar_permisos(token[1], 1)) {
         return res.send({ error: 'Acceso denegado' });
     }
@@ -54,7 +54,7 @@ function autorizacion_admin(req: express.Request, res: express.Response, next: e
 }
 
 function autorizacion_creador_contenido(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let token: string[] = hay_auth(req, res, next) as string[];
+    let token: string[] = hay_auth(req, res) as string[];
     if (!controlador_login.verificar_permisos(token[1], 2)) {
         return res.send({ error: 'Acceso denegado' });
     }
@@ -62,29 +62,12 @@ function autorizacion_creador_contenido(req: express.Request, res: express.Respo
 }
 
 function autorizacion_consumidor(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let token: string[] = hay_auth(req, res, next) as string[];
+    let token: string[] = hay_auth(req, res) as string[];
     if (!controlador_login.verificar_permisos(token[1], 3)) {
         return res.send({ error: 'Acceso denegado' });
     }
     return next();
 }
-
-// Cambio de contrasena, se comunica con el controlador
-app.post('/cambiar_contrasena', (req, res) => {
-    try {
-        var { id_usuario, contrasena }: { id_usuario: number, contrasena: string } = req.body;
-        if (id_usuario && contrasena) {
-            controlador.cambiar_contrasena(id_usuario, contrasena)
-                .then((resultado: any) => {
-                    return res.send(resultado);
-                })
-        } else {
-            return res.send({ error: "Los datos enviados no coinciden con los esperados" })
-        }
-    } catch (err: any) {
-        return res.send({ error: err.message });
-    }
-});
 
 // Inicio de sesion, se comunica con el controlador login
 app.post('/iniciar_sesion', (req, res) => {
@@ -164,3 +147,20 @@ app.get('/productos/:id_producto', autorizacion_admin, (req: express.Request, re
     }
 })
 
+
+// Cambio de contrasena, se comunica con el controlador
+app.post('/cambiar_contrasena', (req, res) => {
+    try {
+        var { id_usuario, contrasena }: { id_usuario: number, contrasena: string } = req.body;
+        if (id_usuario && contrasena) {
+            controlador.cambiar_contrasena(id_usuario, contrasena)
+                .then((resultado: any) => {
+                    return res.send(resultado);
+                })
+        } else {
+            return res.send({ error: "Los datos enviados no coinciden con los esperados" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+});

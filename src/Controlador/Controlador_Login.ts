@@ -15,11 +15,13 @@ export default class Controlador_login {
     }
 
     // Verifica la combinación del correo con la contraseña
-    async verificar_contrasena(correo: string, contrasena: string): Promise<{token: string}> { //Metodo de verificacion de contrasena
+    async verificar_contrasena(correo: string, contrasena: string): Promise<{id_tipo: number, token: string}> { //Metodo de verificacion de contrasena
         let datosUsuario: any = await this.base_datos.verificar_usuario(correo);
         let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena);
+        console.log(datosUsuario);
         if (misma_contrasena) {
-            return this.crear_token(datosUsuario.id_usuario,datosUsuario.email, datosUsuario.id_tipo);
+            return { id_tipo:datosUsuario.id_tipo,
+                ...this.crear_token(datosUsuario.id_usuario,datosUsuario.email, datosUsuario.id_tipo)};
         } else {
             throw new Error("La contraseña es incorrecta");
         }
@@ -31,7 +33,7 @@ export default class Controlador_login {
     }
 
     verificar_permisos(token: string, permiso: number): boolean{
-        return this.manejador_token.verificar_permisos(token, permiso);
+        return this.manejador_token.verificar_permisos(token, permiso) === permiso;
     }
 
 }
