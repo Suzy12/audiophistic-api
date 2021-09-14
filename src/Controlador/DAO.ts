@@ -39,7 +39,21 @@ export default class DAO {
     // Reemplaza la contrasena de un usuario
     async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string> {
         try {
-            let res = await this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena]);
+            let res = await this.cliente.query('select * from cambiar_contrasena($1,$2)', [id_usuario, contrasena]);
+            if (res.rows[0].cambiar_contrasena) {
+                return res.rows[0].cambiar_contrasena;
+            } else {
+                throw new Error("La contraseña no pudo ser cambiada");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Reemplaza la contrasena de un usuario pero con mail en lugar de ID
+    async cambiar_contrasena_con_mail(correo: string, contrasena: string): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from cambiar_contrasena($1,$2)', [correo, contrasena]);
             if (res.rows[0].cambiar_contrasena) {
                 return res.rows[0].cambiar_contrasena;
             } else {

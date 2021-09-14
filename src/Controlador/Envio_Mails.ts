@@ -10,7 +10,7 @@ export default class Envio_Mails {
 
     private static instancia: Envio_Mails;
 
-    private constructor() {
+    constructor() {
         //Genera el servicio de mensajeria
         this.transporter = nodemailer.createTransport({
             pool: true,
@@ -30,7 +30,7 @@ export default class Envio_Mails {
     }
 
     //Envia el correo segun los datos que reciva
-    manda_correo(destinatario: string, asunto: string, cuerpo: string) { //la funcion con la que vamos a mandar correos
+    enviar_correo(destinatario: string, asunto: string, cuerpo: string): Promise<string> { //la funcion con la que vamos a mandar correos
 
         //Se crea un objeto con los datos del objeto
         let mailOptions = {
@@ -41,13 +41,10 @@ export default class Envio_Mails {
         };
 
         // Y se envia el correo
-        this.transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                throw err;
-            }
-            console.log(info);
+        return this.transporter.sendMail(mailOptions)
+         .then((info) => {
+            return 'El correo se envió exitosamente a '+ destinatario;
         });
-
 
     }
 

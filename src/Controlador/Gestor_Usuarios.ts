@@ -30,6 +30,14 @@ export default class Gestor_Usuarios {
         return { resultado };
     }
 
+    // Crea el hash y llama a cambiar la contraseña a la base
+    async cambiar_contrasena_con_mail(correo: string, contrasena: string): Promise<{ resultado: string }> {
+        let hash: string = await bcrypt.hash(contrasena, Gestor_Usuarios.salts)
+        let resultado: string = await this.base_datos.cambiar_contrasena_con_mail(correo, hash)
+        console.log(hash);
+        return { resultado };
+    }
+
     // Consulta un usuario con su id
     consultar_usuario(id_usuario: number): Promise<Usuario> {
         return this.base_datos.consultar_usuario(id_usuario)
@@ -38,6 +46,8 @@ export default class Gestor_Usuarios {
             })
     }
 
+
+    //Trae la informacion del grupo de usuarios
     consultar_usuarios(): Promise<Usuario[]> {
         return this.base_datos.consultar_usuarios()
             .then((usuario: Usuario[]) => {

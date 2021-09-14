@@ -164,3 +164,22 @@ app.post('/cambiar_contrasena', (req, res) => {
         return res.send({ error: err.message });
     }
 });
+
+// Envio de correo con contrasena temporal
+app.post('/Envio_Password_Temporal', (req, res)=>{
+    try {
+        var{correo}: {correo: string} = req.body;
+        if(correo){
+            controlador.enviar_contrasena_temporal(correo)
+                .then((resultado: any) => {
+                    return res.send({resultado});
+                }).catch((err:any)=> {
+                    return res.send({error:err.message});})
+        } else {
+            return res.send({ error: "Hubo un error" })
+        }
+
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
