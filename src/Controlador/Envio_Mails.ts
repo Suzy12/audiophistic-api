@@ -6,7 +6,7 @@ require('dotenv').config();
 
 //Clase basada en el modelo de Singleton, se encarga del envio de correos
 export default class Envio_Mails {
-    transporter: Mail<SentMessageInfo>
+    private transporter: Mail<SentMessageInfo>
 
     private static instancia: Envio_Mails;
 

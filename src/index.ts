@@ -70,6 +70,44 @@ function autorizacion_consumidor(req: express.Request, res: express.Response, ne
 }
 
 // Inicio de sesion, se comunica con el controlador login
+app.post('/registrar_usuario', (req, res) => {
+    try {
+        var { nombre, correo, contrasena }: { nombre: string, correo: string, contrasena: string } = req.body;
+        if (nombre && correo && contrasena) {
+            return controlador.registrar_usuario(nombre, correo, contrasena)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                })
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+app.post('/confirmar_usuario', (req, res) => {
+    try {
+        var { token }: { token: string } = req.body;
+        if (token) {
+            return controlador.confirmar_usuario(token)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                })
+        } else {
+            return res.send({ error: "El token no fue enviado" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+
+// Inicio de sesion, se comunica con el controlador login
 app.post('/iniciar_sesion', (req, res) => {
     try {
         var { correo, contrasena }: { correo: string, contrasena: string } = req.body;
@@ -80,6 +118,8 @@ app.post('/iniciar_sesion', (req, res) => {
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 })
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
         }
     } catch (err: any) {
         return res.send({ error: err.message });
@@ -158,7 +198,7 @@ app.post('/cambiar_contrasena', (req, res) => {
                     return res.send(resultado);
                 })
         } else {
-            return res.send({ error: "Los datos enviados no coinciden con los esperados" })
+            return res.send({ error: "Los datos están incompletos" })
         }
     } catch (err: any) {
         return res.send({ error: err.message });
