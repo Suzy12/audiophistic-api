@@ -112,7 +112,7 @@ export default class DAO {
     // Recupera un usuario y sus datos segun su id
     async consultar_usuario(id_usuario: number): Promise<Usuario> {
         try {
-            let res = await this.cliente.query('select * from obtener_usuario($1)', [id_usuario]);
+            let res = await this.cliente.query('select * from consultar_usuario($1)', [id_usuario]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
