@@ -37,7 +37,7 @@ export default class Envio_Mails{
             from: 'Equipo de Audiophistic <' + process.env.EMAIL_USER + '>',
             to:    destinatario,
             subject: asunto,
-            text: cuerpo
+            html: cuerpo
         };
 
         // Y se envia el correo
