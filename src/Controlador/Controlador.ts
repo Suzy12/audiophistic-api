@@ -27,12 +27,12 @@ export default class Controlador {
         this.gestor_usuarios = new Gestor_Usuarios();
     }
 
- 
+
     // Registra a un consumidor
     async registrar_usuario(nombre: string, correo: string, contrasena: string): Promise<string> {
         //Genera el hash y guarda al usuario en la base de datos
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
-        let id: number = await this.gestor_usuarios.registrar_usuario(nombre,correo,hash);
+        let id: number = await this.gestor_usuarios.registrar_usuario(nombre, correo, hash);
 
         //Genera el token y lo adjunta al correo
         let token = this.manejador_tokens.crear_token_registro(id);
@@ -46,7 +46,7 @@ export default class Controlador {
 
 
     //Genera la confirmacion del correo
-    confirmar_usuario(token: string): Promise<string>{
+    confirmar_usuario(token: string): Promise<string> {
         let id_usuario = this.manejador_tokens.verificar_token_registro(token);
         return this.gestor_usuarios.confirmar_usuario(id_usuario);
     }
@@ -78,18 +78,17 @@ export default class Controlador {
     }
 
     // Crea una nueva contrasena, la guarda y envia un correo con la contrasena
-    async crear_contrasena_temporal(correo: string): Promise<string>{
-        var contrasena_temporal : string = this.generacion_contrasena();
-        console.log(contrasena_temporal);
+    async crear_contrasena_temporal(correo: string): Promise<string> {
+        var contrasena_temporal: string = this.generacion_contrasena();
         // Guarda la contrasena temporal en la base
         let hash: string = bcrypt.hashSync(contrasena_temporal, this.salts);
         await this.gestor_usuarios.cambiar_contrasena_con_correo(correo, hash);
         // Integra la nueva contrasena al correo y lo envia
-        var cuerpo_correo : string = fs.readFileSync('./assets/html/correo_recuperar.html',
-        { encoding: 'utf8', flag: 'r' });
+        var cuerpo_correo: string = fs.readFileSync('./assets/html/correo_recuperar.html',
+            { encoding: 'utf8', flag: 'r' });
         cuerpo_correo = util.format(cuerpo_correo, contrasena_temporal);
         return this.envio_correos.enviar_correo(correo, "Contraseña Temporal — Audiophistic", cuerpo_correo);
-        
+
     }
 
     // Funcion para generar un string aleatorio para la recuperacion de contrasenias
