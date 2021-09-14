@@ -11,7 +11,7 @@ export default class Gestor_Usuarios {
 
     // Registra el usuario con los datos ingresados
     registrar_usuario(nombre: string, correo: string, contrasena: string): Promise<number> {
-        return this.base_datos.registrar_usuario(nombre, correo, contrasena)
+        return this.base_datos.registrar_usuario(correo, nombre, contrasena)
             .then((id_tipo: number) => {
                 return id_tipo;
             });
