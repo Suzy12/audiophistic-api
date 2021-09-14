@@ -38,7 +38,7 @@ export default class Gestor_Prodcuctos {
             })
     }
 
-    // Edita producto dado
+    // Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
     editar_producto(id_producto: number): string {
 
         return "producto modificado";
