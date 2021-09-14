@@ -38,10 +38,10 @@ export default class Controlador {
         let token = this.manejador_tokens.crear_token_registro(id);
         let link = `http://localhost:4200/cuenta?token=${token}`
         console.log(token, link);
-        let html: string = fs.readFileSync('assets/html/correo_activar.html',
+        let cuerpo_correo: string = fs.readFileSync('assets/html/correo_activar.html',
             { encoding: 'utf8', flag: 'r' });
-        html = util.format(html, link, link, link);
-        return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta — Audiophistic', html);
+        cuerpo_correo = util.format(cuerpo_correo, link, link, link);
+        return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta — Audiophistic', cuerpo_correo);
     }
 
 
@@ -80,7 +80,7 @@ export default class Controlador {
     // Crea una nueva contrasena, la guarda y envia un correo con la contrasena
     async crear_contrasena_temporal(correo: string): Promise<string>{
         var contrasena_temporal : string = this.generacion_contrasena();
-
+        console.log(contrasena_temporal);
         // Guarda la contrasena temporal en la base
         let hash: string = bcrypt.hashSync(contrasena_temporal, this.salts);
         await this.gestor_usuarios.cambiar_contrasena_con_correo(correo, hash);
@@ -88,7 +88,7 @@ export default class Controlador {
         var cuerpo_correo : string = fs.readFileSync('./assets/html/correo_recuperar.html',
         { encoding: 'utf8', flag: 'r' });
         cuerpo_correo = util.format(cuerpo_correo, contrasena_temporal);
-        return this.envio_correos.enviar_correo(correo, "AudioPhistic: PASSWPORD TEMPORAL", cuerpo_correo);
+        return this.envio_correos.enviar_correo(correo, "Contraseña Temporal — Audiophistic", cuerpo_correo);
         
     }
 
