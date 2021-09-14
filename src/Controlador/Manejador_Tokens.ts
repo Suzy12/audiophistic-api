@@ -86,7 +86,7 @@ export default class Manejador_Tokens {
             /* Si el token recibido no tiene una firma valida, no puede ser descifrado
                o si el token no contiene lo esperado
                Debe retornar un error */
-            throw new Error('El token dado es invalido');
+            throw new Error('El token dado es inválido');
         }
     }
 }

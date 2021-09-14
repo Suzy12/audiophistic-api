@@ -83,9 +83,9 @@ function autorizacion_consumidor(req: express.Request, res: express.Response, ne
 // Inicio de sesion, se comunica con el controlador login
 app.post('/registrar_usuario', (req, res) => {
     try {
-        var { nombre, correo, contrasena }: { nombre: string, correo: string, contrasena: string } = req.body;
+        var { correo, nombre, contrasena }: { correo: string, nombre: string, contrasena: string } = req.body;
         if (nombre && correo && contrasena) {
-            return controlador.registrar_usuario(nombre, correo, contrasena)
+            return controlador.registrar_usuario(correo, nombre, contrasena)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
