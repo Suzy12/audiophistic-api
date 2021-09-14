@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_login from './Controlador/Controlador_Login';
-import { nextTick } from 'process';
+import bcrypt from 'bcrypt';
 
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
@@ -206,11 +206,11 @@ app.post('/cambiar_contrasena', (req, res) => {
 });
 
 // Envio de correo con contrasena temporal
-app.post('/Envio_Password_Temporal', (req, res)=>{
+app.post('/recuperar_contrasena', (req, res)=>{
     try {
         var{correo}: {correo: string} = req.body;
         if(correo){
-            controlador.enviar_contrasena_temporal(correo)
+            controlador.crear_contrasena_temporal(correo)
                 .then((resultado: any) => {
                     return res.send({resultado});
                 }).catch((err:any)=> {

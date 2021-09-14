@@ -5,10 +5,10 @@ import Mail from 'nodemailer/lib/mailer';
 require('dotenv').config();
 
 //Clase basada en el modelo de Singleton, se encarga del envio de correos
-export default class Envio_Mails {
+export default class Enviador_Correos {
     private transporter: Mail<SentMessageInfo>
 
-    private static instancia: Envio_Mails;
+    private static instancia: Enviador_Correos;
 
     constructor() {
         //Genera el servicio de mensajeria
@@ -23,10 +23,10 @@ export default class Envio_Mails {
     }
 
     static get_instancia() {
-        if (!Envio_Mails.instancia) {
-            Envio_Mails.instancia = new Envio_Mails();
+        if (!Enviador_Correos.instancia) {
+            Enviador_Correos.instancia = new Enviador_Correos();
         }
-        return Envio_Mails.instancia;
+        return Enviador_Correos.instancia;
     }
 
     //Envia el correo segun los datos que reciva

@@ -1,18 +1,18 @@
 import { Usuario } from "../Modelo/Usuario"
 import Manejador_Tokens from "./Manejador_Tokens";
-import Envio_Mails from "./Envio_Mails";
+import Enviador_Correos from "./Enviador_Correos";
 import Gestor_Usuarios from "./Gestor_Usuarios";
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
 /* Se encarga de verificar el inicio de sesion y los
    Y los permisos que tiene un usuario para ciertas acciones */
 export default class Controlador_login {
     // Definimos como hacer las llamadas la base de datos a traves del dao
-    private envio_correos: Envio_Mails;
+    private envio_correos: Enviador_Correos;
     private manejador_token: Manejador_Tokens;
     private gestor_usuarios: Gestor_Usuarios;
     constructor() {
-        this.envio_correos = Envio_Mails.get_instancia();
+        this.envio_correos = Enviador_Correos.get_instancia();
         this.manejador_token = Manejador_Tokens.get_instancia();
         this. gestor_usuarios = new Gestor_Usuarios();
     }
@@ -21,7 +21,7 @@ export default class Controlador_login {
        Devuelve un token y el id del tipo del usuario en caso de ser correctos los datos*/
     async verificar_contrasena(correo: string, contrasena: string): Promise<{ id_tipo: number, token: string }> { //Metodo de verificacion de contrasena
         let datosUsuario: Usuario = await this.gestor_usuarios.verificar_usuario(correo);
-        let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena);
+        let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena as string);
         if (misma_contrasena) {
             return {
                 id_tipo: datosUsuario.tipo!.id_tipo,

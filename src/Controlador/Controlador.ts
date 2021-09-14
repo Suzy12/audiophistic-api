@@ -1,29 +1,41 @@
 import fs from 'fs';
 import util from 'util'
+import generator, { generate } from 'generate-password'
 import Gestor_Usuarios from "./Gestor_Usuarios";
 import Gestor_Prodcuctos from "./Gestor_Productos";
-import Envio_Mails from "./Envio_Mails";
+import Enviador_Correos from "./Enviador_Correos";
+import bcrypt from 'bcrypt';
 import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
+import Manejador_Tokens from './Manejador_Tokens';
+import { strict } from 'assert/strict';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
 export default class Controlador {
-    private envio_correos: Envio_Mails;
+    private envio_correos: Enviador_Correos;
     private gestor_productos: Gestor_Prodcuctos;
     private gestor_usuarios: Gestor_Usuarios;
     private manejador_tokens: Manejador_Tokens
+    //El numero de salts para el hash
+    private salts = 10;
 
     constructor() {
-        this.envio_correos = Envio_Mails.get_instancia();
+        this.envio_correos = Enviador_Correos.get_instancia();
         this.manejador_tokens = Manejador_Tokens.get_instancia();
         this.gestor_productos = new Gestor_Prodcuctos();
         this.gestor_usuarios = new Gestor_Usuarios();
     }
 
+ 
+    // Registra a un consumidor
     async registrar_usuario(nombre: string, correo: string, contrasena: string): Promise<string> {
-        //let id: number = await this.gestor_usuarios.registrar_usuario(nombre,correo,contrasena);
-        let token = this.manejador_tokens.crear_token_registro(3);
+        //Genera el hash y guarda al usuario en la base de datos
+        let hash: string = bcrypt.hashSync(contrasena, this.salts);
+        let id: number = await this.gestor_usuarios.registrar_usuario(nombre,correo,hash);
+
+        //Genera el token y lo adjunta al correo
+        let token = this.manejador_tokens.crear_token_registro(id);
         let link = `http://localhost:4200/cuenta?token=${token}`
         console.log(token, link);
         let html: string = fs.readFileSync('assets/html/correo_activar.html',
@@ -32,6 +44,8 @@ export default class Controlador {
         return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta — Audiophistic', html);
     }
 
+
+    //Genera la confirmacion del correo
     confirmar_usuario(token: string): Promise<string>{
         let id_usuario = this.manejador_tokens.verificar_token_registro(token);
         return this.gestor_usuarios.confirmar_usuario(id_usuario);
@@ -59,46 +73,33 @@ export default class Controlador {
 
     // Cambia la contrasena del usuario con los datos dados
     async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
-        return this.gestor_usuarios.cambiar_contrasena(id_usuario, contrasena);
+        let hash: string = bcrypt.hashSync(contrasena, this.salts);
+        return this.gestor_usuarios.cambiar_contrasena(id_usuario, hash);
     }
 
-    //le asigna la contrasenia temporal al usuario y la guarda en la DB
-    /*async enviar_contrasena_temporal(correo: string): Promise<{ resultado: string }>{
-        //var correo= (await this.gestor_usaurios.consultar_usuario(id_usuario)).email;
-        var password_temporal= this.generacion_contrasena();
-        //se lee el archivo HTML
-        var cuerpo_correo = fs.readFileSync('./assets/correo_recuperar.html',
-        { encoding: 'utf8', flag: 'r' });
-        //se agrega el password temporal al archivo HTML, para enviar el correo
-        cuerpo_correo.replace('$1',util.format('%s:%s', password_temporal));
-        this.envio_mails.enviar_correo(correo, "AudioPhistic: PASSWPORD TEMPORAL", cuerpo_correo);
-        //cambia el password temporal en la BD
-        return this.gestor_usaurios.cambiar_contrasena_con_mail(correo, cuerpo_correo);
-        
-    }*/
+    // Crea una nueva contrasena, la guarda y envia un correo con la contrasena
+    async crear_contrasena_temporal(correo: string): Promise<string>{
+        var contrasena_temporal : string = this.generacion_contrasena();
 
-    //de prueba donde no mete la nueva contrasena a la BD
-    async enviar_contrasena_temporal(correo: string): Promise<string>{
-        var password_temporal : string = this.generacion_contrasena();
-        //se lee el archivo HTML
+        // Guarda la contrasena temporal en la base
+        let hash: string = bcrypt.hashSync(contrasena_temporal, this.salts);
+        await this.gestor_usuarios.cambiar_contrasena_con_correo(correo, hash);
+        // Integra la nueva contrasena al correo y lo envia
         var cuerpo_correo : string = fs.readFileSync('./assets/correo_recuperar.html',
         { encoding: 'utf8', flag: 'r' });
-        //se agrega el password temporal al archivo HTML, para enviar el correo
-        cuerpo_correo = util.format(cuerpo_correo, password_temporal);
-        console.log(password_temporal);
-        //cambia el password temporal en la BD
-        await this.gestor_usaurios.cambiar_contrasena_con_mail(correo, cuerpo_correo);
-        return this.envio_mails.enviar_correo(correo, "AudioPhistic: PASSWPORD TEMPORAL", cuerpo_correo);
+        cuerpo_correo = util.format(cuerpo_correo, contrasena_temporal);
+        return this.envio_correos.enviar_correo(correo, "AudioPhistic: PASSWPORD TEMPORAL", cuerpo_correo);
         
     }
 
     // Funcion para generar un string aleatorio para la recuperacion de contrasenias
     generacion_contrasena(): string {
-        var randomstring = Math.random() //genera un numero aleatorio
-            .toString(36) //lo comnvierte a base -36
-            .slice(-10); //corta los ultimos 10 caracteres
-        console.log(randomstring);
-        return randomstring;
+        return generator.generate({
+            length: 10,
+            symbols: true,
+            numbers: true,
+            strict: true
+        })
 
     }
 }
