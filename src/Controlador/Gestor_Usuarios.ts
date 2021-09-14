@@ -7,14 +7,14 @@ export default class Gestor_Usuarios {
     // El numero de salts para el cifrado de la contrasena
     private static salts = 10
 
-    constructor(){
+    constructor() {
         this.base_datos = DAO.get_instancia();
     }
 
 
     // Registra el usuario con los datos ingresados
     registrar_usuario(id_usuario: number, nombre: string, email: string, id_tipo: string): string {
-        let nuevo_usuario = {id_usuario, nombre, email, id_tipo};
+        let nuevo_usuario = { id_usuario, nombre, email, id_tipo };
         return "usuario creado";
     }
 
@@ -29,20 +29,20 @@ export default class Gestor_Usuarios {
         let resultado: string = await this.base_datos.cambiar_contrasena(id_usuario, hash)
         return { resultado };
     }
-    
+
     // Consulta un usuario con su id
-    consultar_usuario(id_usuario: number): Promise<Usuario>{
+    consultar_usuario(id_usuario: number): Promise<Usuario> {
         return this.base_datos.consultar_usuario(id_usuario)
-        .then((usuario: Usuario) => {
-            return usuario;
-        })
+            .then((usuario: Usuario) => {
+                return usuario;
+            })
     }
 
-    consultar_usuarios(): Promise<Usuario[]>{
+    consultar_usuarios(): Promise<Usuario[]> {
         return this.base_datos.consultar_usuarios()
-        .then((usuario: Usuario[]) => {
-            return usuario;
-        })
+            .then((usuario: Usuario[]) => {
+                return usuario;
+            })
     }
 
 

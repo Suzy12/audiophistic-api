@@ -63,7 +63,7 @@ export default class DAO {
             throw err;
         }
     }
-    
+
     // Recupera todos los usuarios confirmados y activos
     async consultar_usuarios(): Promise<Usuario[]> {
         try {

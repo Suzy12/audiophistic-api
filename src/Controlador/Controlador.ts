@@ -10,7 +10,7 @@ export default class Controlador {
     /* Definimos como hacer las llamadas la base de datos 
        A traves del dao */
     base_datos: DAO;
-    
+
     gestor_productos: Gestor_Prodcuctos
     gestor_usaurios: Gestor_Usuarios
 
@@ -21,27 +21,27 @@ export default class Controlador {
     }
 
     // Consulta todos los productos
-    consultar_productos(): Promise<Producto[]> { 
+    consultar_productos(): Promise<Producto[]> {
         return this.gestor_productos.consultar_productos();
     }
 
     // Consulta los datos del producto respectivo
-    consultar_producto(id_producto: number): Promise<Producto> { 
+    consultar_producto(id_producto: number): Promise<Producto> {
         return this.gestor_productos.consultar_producto(id_producto);
     }
 
     // Consulta todos los usuarios
-    consultar_usuarios(): Promise<Usuario[]>{
+    consultar_usuarios(): Promise<Usuario[]> {
         return this.gestor_usaurios.consultar_usuarios();
     }
-    
+
     // Consulta los datos del usuario
-    consultar_usuario(id_usuario: number): Promise<Usuario>{
+    consultar_usuario(id_usuario: number): Promise<Usuario> {
         return this.gestor_usaurios.consultar_usuario(id_usuario);
     }
 
     // Cambia la contrasena del usuario con los datos dados
-    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{resultado: string}> {
+    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
         return this.gestor_usaurios.cambiar_contrasena(id_usuario, contrasena);
     }
 

@@ -5,12 +5,12 @@ import Mail from 'nodemailer/lib/mailer';
 require('dotenv').config();
 
 //Clase basada en el modelo de Singleton, se encarga del envio de correos
-export default class Envio_Mails{
+export default class Envio_Mails {
     transporter: Mail<SentMessageInfo>
 
     private static instancia: Envio_Mails;
 
-    private constructor(){
+    private constructor() {
         //Genera el servicio de mensajeria
         this.transporter = nodemailer.createTransport({
             pool: true,
@@ -20,7 +20,7 @@ export default class Envio_Mails{
                 pass: process.env.EMAIL_PASSWORD
             }
         })
-     }
+    }
 
     static get_instancia() {
         if (!Envio_Mails.instancia) {
@@ -30,24 +30,24 @@ export default class Envio_Mails{
     }
 
     //Envia el correo segun los datos que reciva
-    manda_correo(destinatario: string, asunto: string, cuerpo: string){ //la funcion con la que vamos a mandar correos
-        
+    manda_correo(destinatario: string, asunto: string, cuerpo: string) { //la funcion con la que vamos a mandar correos
+
         //Se crea un objeto con los datos del objeto
-        let  mailOptions = {
+        let mailOptions = {
             from: 'Equipo de Audiophistic <' + process.env.EMAIL_USER + '>',
-            to:    destinatario,
+            to: destinatario,
             subject: asunto,
             html: cuerpo
         };
 
         // Y se envia el correo
-        this.transporter.sendMail(mailOptions, (err,info ) => {
-            if (err){
+        this.transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
                 throw err;
             }
             console.log(info);
         });
-    
+
 
     }
 
