@@ -7,5 +7,6 @@ export interface Usuario {
     nombre?: string;
     email: string;
     confirmado?: boolean;
+    contrasena?: string
     tipo?: Administrador | Creador_de_Contenido | Consumidor;
 } 

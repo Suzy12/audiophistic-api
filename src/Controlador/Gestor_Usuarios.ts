@@ -1,6 +1,6 @@
 import { Usuario } from "../Modelo/Usuario"
 import DAO from "./DAO";
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 export default class Gestor_Usuarios {
     // Definimos como hacer las llamadas al DAO
     base_datos: DAO;
@@ -13,9 +13,20 @@ export default class Gestor_Usuarios {
 
 
     // Registra el usuario con los datos ingresados
-    registrar_usuario(id_usuario: number, nombre: string, email: string, id_tipo: string): string {
-        let nuevo_usuario = { id_usuario, nombre, email, id_tipo };
-        return "usuario creado";
+    registrar_usuario(nombre: string, correo: string, contrasena: string): Promise<number> {
+        let hash: string = bcrypt.hashSync(contrasena, Gestor_Usuarios.salts);
+        return this.base_datos.registrar_usuario(nombre, correo, hash)
+            .then((id_tipo: number) => {
+                return id_tipo;
+            });
+    }
+
+    confirmar_usuario(id_usuario: number): Promise<string>{
+        return this.base_datos.confirmar_usuario(id_usuario);
+    }
+
+    verificar_usuario(correo: string): Promise<Usuario>{
+        return this.base_datos.verificar_usuario(correo);
     }
 
     // Elimina el usuario dados
@@ -24,10 +35,12 @@ export default class Gestor_Usuarios {
     }
 
     // Crea el hash y llama a cambiar la contraseña a la base
-    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
-        let hash: string = await bcrypt.hash(contrasena, Gestor_Usuarios.salts)
-        let resultado: string = await this.base_datos.cambiar_contrasena(id_usuario, hash)
-        return { resultado };
+    cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
+        let hash: string = bcrypt.hashSync(contrasena, Gestor_Usuarios.salts);
+        return this.base_datos.cambiar_contrasena(id_usuario, hash)
+            .then((resultado: string) => {
+                return { resultado };
+            })
     }
 
     // Consulta un usuario con su id
@@ -46,7 +59,7 @@ export default class Gestor_Usuarios {
     }
 
 
-    //edita a un usuario
+    // Modifica los datos del usuario enviado
     editar_usuario(id_usuairo: number): string {
 
         return "usuario modificado";

@@ -40,7 +40,6 @@ export default class Gestor_Prodcuctos {
 
     // Edita producto dado
     editar_producto(id_producto: number): string {
-
         return "producto modificado";
     }
 

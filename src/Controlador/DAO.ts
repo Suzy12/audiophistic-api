@@ -36,14 +36,30 @@ export default class DAO {
         return DAO.instancia;
     }
 
-    // Reemplaza la contrasena de un usuario
-    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string> {
+    // Registra a un usuario CONSUMIDOR
+    async registrar_usuario(correo: string, nombre: string, contrasena: string): Promise<number> {
         try {
-            let res = await this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena]);
-            if (res.rows[0].cambiar_contrasena) {
-                return res.rows[0].cambiar_contrasena;
+            let res = await this.cliente.query('select * from registrar_usuario($1,$2,$3)',
+                [correo, nombre, contrasena]);
+            if (res) {
+                return res.rows[0].registrar_usuario;
             } else {
-                throw new Error("La contraseña no pudo ser cambiada");
+                throw new Error("No se pudo resgistrar al usuario");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Confirma un usuario CONSUMIDOR
+    async confirmar_usuario(id_usuario: number): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from confirmar_usuario($1)',
+                [id_usuario]);
+            if (res) {
+                return res.rows[0].confirmar_usuario;
+            } else {
+                throw new Error("No se pudo confirmar al usuario");
             }
         } catch (err) {
             throw err;
@@ -58,6 +74,20 @@ export default class DAO {
                 return res.rows[0];
             } else {
                 throw new Error("No se pudo obtener el usuario");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Reemplaza la contrasena de un usuario
+    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena]);
+            if (res.rows[0].cambiar_contrasena) {
+                return res.rows[0].cambiar_contrasena;
+            } else {
+                throw new Error("La contraseña no pudo ser cambiada");
             }
         } catch (err) {
             throw err;
@@ -86,7 +116,7 @@ export default class DAO {
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
-                throw new Error("No se pudo obtener el usuario");
+                throw new Error("El usuario no existe, no ha sido confirmado o fue eliminado");
             }
 
         } catch (err) {
@@ -116,7 +146,7 @@ export default class DAO {
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
-                throw new Error("No se pudo obtener el producto");
+                throw new Error("El producto no existe o fue eliminado");
             }
 
         } catch (err) {
