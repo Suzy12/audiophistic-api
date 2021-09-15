@@ -239,6 +239,21 @@ app.get('/estilos/:id_producto', (req: express.Request, res) => {
     }
 })
 
+//Devuelve todos los productos registrados a un Creador de Contenido
+app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, res) =>{
+    try{
+        let id_usuario: number = parseInt(req.params.id_creador_contenido);
+        controlador.consultar_productos_creador(id_usuario)
+            .then((resultado:any) => {
+                return res.send({resultado});
+            }).catch((err:any) => {
+                return res.send({ error: err.message});
+            })
+
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {

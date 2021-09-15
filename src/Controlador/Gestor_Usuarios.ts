@@ -54,6 +54,7 @@ export default class Gestor_Usuarios {
     }
 
 
+
     //Trae la informacion del grupo de usuarios
     consultar_usuarios(): Promise<Usuario[]> {
         return this.base_datos.consultar_usuarios()

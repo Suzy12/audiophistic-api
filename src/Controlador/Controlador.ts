@@ -80,6 +80,11 @@ export default class Controlador {
         return this.gestor_usuarios.consultar_usuario(id_usuario);
     }
 
+    //Consulta los productos de un Creador de Contenido segun su ID
+    consultar_productos_creador(id_creador_contenido:number): Promise<Producto[]>{
+        return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
+    }
+
     // Cambia la contrasena del usuario con los datos dados
     async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
         let hash: string = bcrypt.hashSync(contrasena, this.salts);

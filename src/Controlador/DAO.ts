@@ -169,6 +169,20 @@ export default class DAO {
         }
     }
 
+    //Consulta los productos de un Creador de Contenido segun su ID
+    async consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]>{
+        try{
+            let res = await this.cliente.query('select * from consultar_productos_por_creador($1)', [id_creador_contenido]);
+            if (res.rows[0]){
+                return res.rows;
+            } else{
+                throw new Error("El cliente no se puede acceder");
+            }
+        } catch (err) {
+            throw err;
+        }
+    } 
+
     // Recupera un producto y sus datos segun su id
     async consultar_estilos(id_producto: number): Promise<Estilo[]> {
         try {
