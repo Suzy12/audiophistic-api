@@ -1,4 +1,5 @@
 import { Client } from "pg";
+import { Estilo } from "../Modelo/Estilo";
 import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
 
@@ -163,6 +164,20 @@ export default class DAO {
                 throw new Error("El producto no existe o fue eliminado");
             }
 
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Recupera un producto y sus datos segun su id
+    async consultar_estilos(id_producto: number): Promise<Estilo[]> {
+        try {
+            let res = await this.cliente.query('select * from consultar_estilos_producto($1)', [id_producto]);
+            if (res.rows[0]) {
+                return res.rows;
+            } else {
+                throw new Error("El producto no existe o fue eliminado");
+            }
         } catch (err) {
             throw err;
         }

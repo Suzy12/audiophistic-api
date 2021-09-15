@@ -1,4 +1,4 @@
-export interface Estilos {
+export interface Estilo {
     id_producto:number;
     id_estilo:number;
     existencia:number;

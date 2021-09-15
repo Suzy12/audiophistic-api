@@ -9,14 +9,17 @@ import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
 import Manejador_Tokens from './Manejador_Tokens';
 import { strict } from 'assert/strict';
+import Gestor_Estilos from './Gestor_Estilos';
+import { Estilo } from '../Modelo/Estilo';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
 export default class Controlador {
     private envio_correos: Enviador_Correos;
+    private manejador_tokens: Manejador_Tokens;
     private gestor_productos: Gestor_Prodcuctos;
     private gestor_usuarios: Gestor_Usuarios;
-    private manejador_tokens: Manejador_Tokens
+    private gestor_estilos: Gestor_Estilos;
     //El numero de salts para el hash
     private salts = 10;
 
@@ -25,14 +28,15 @@ export default class Controlador {
         this.manejador_tokens = Manejador_Tokens.get_instancia();
         this.gestor_productos = new Gestor_Prodcuctos();
         this.gestor_usuarios = new Gestor_Usuarios();
+        this.gestor_estilos = new Gestor_Estilos();
     }
 
 
     // Registra a un consumidor
-    async registrar_usuario(nombre: string, correo: string, contrasena: string): Promise<string> {
+    async registrar_usuario(correo: string, nombre: string, contrasena: string): Promise<string> {
         //Genera el hash y guarda al usuario en la base de datos
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
-        let id: number = await this.gestor_usuarios.registrar_usuario(nombre, correo, hash);
+        let id: number = await this.gestor_usuarios.registrar_usuario(correo, nombre, hash);
 
         //Genera el token y lo adjunta al correo
         let token = this.manejador_tokens.crear_token_registro(id);
@@ -59,6 +63,11 @@ export default class Controlador {
     // Consulta los datos del producto respectivo
     consultar_producto(id_producto: number): Promise<Producto> {
         return this.gestor_productos.consultar_producto(id_producto);
+    }
+
+    // Consulta los estilos de un producto dado
+    consultar_estilos(id_producto: number): Promise<Estilo[]>{
+        return this.gestor_estilos.consultar_estilos(id_producto);
     }
 
     // Consulta todos los usuarios
@@ -92,7 +101,7 @@ export default class Controlador {
     }
 
     // Funcion para generar un string aleatorio para la recuperacion de contrasenias
-    generacion_contrasena(): string {
+    private generacion_contrasena(): string {
         return generator.generate({
             length: 10,
             symbols: true,

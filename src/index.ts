@@ -35,11 +35,11 @@ app.get('/', (req, res) => {
 
 function hay_auth(req: express.Request, res: express.Response) {
     if (!req.headers.authorization || req.headers.authorization.indexOf('Bearer ') === -1) {
-        return res.send({ error: 'Falta el header de autorización' });
+        throw new Error('Falta el header de autorización');
     };
     let token: string[] = req.headers.authorization.split(' ');
     if (token.length < 2) {
-        return res.send({ error: 'Falta el token de autorización' });
+        throw new Error('Falta el token de autorización');
     }
     return token;
 }
@@ -47,37 +47,57 @@ function hay_auth(req: express.Request, res: express.Response) {
 /* Verifica que el token sea valido */
 
 function token_valido(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let token: string[] = hay_auth(req, res) as string[];
-    if (!controlador_login.validar_token(token[1])) {
-        return res.send({ error: 'Token inválido' });
+    try {
+        let token: string[] = hay_auth(req, res) as string[];
+        if (!controlador_login.validar_token(token[1])) {
+            return res.send({ error: 'Token inválido' });
+        } else {
+            return next();
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message })
     }
-    return next();
 }
 
 /* Verifican los diferentes tipos de autorizacion que hay */
 
 function autorizacion_admin(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let token: string[] = hay_auth(req, res) as string[];
-    if (!controlador_login.verificar_permisos(token[1], 1)) {
-        return res.send({ error: 'Acceso denegado' });
+    try {
+        let token: string[] = hay_auth(req, res) as string[];
+        if (!controlador_login.verificar_permisos(token[1], 1)) {
+            return res.send({ error: 'Acceso denegado' });
+        } else {
+            return next();
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message })
     }
-    return next();
 }
 
 function autorizacion_creador_contenido(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let token: string[] = hay_auth(req, res) as string[];
-    if (!controlador_login.verificar_permisos(token[1], 2)) {
-        return res.send({ error: 'Acceso denegado' });
+    try {
+        let token: string[] = hay_auth(req, res) as string[];
+        if (!controlador_login.verificar_permisos(token[1], 2)) {
+            return res.send({ error: 'Acceso denegado' });
+        } else {
+            return next();
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message })
     }
-    return next();
 }
 
 function autorizacion_consumidor(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let token: string[] = hay_auth(req, res) as string[];
-    if (!controlador_login.verificar_permisos(token[1], 3)) {
-        return res.send({ error: 'Acceso denegado' });
+    try {
+        let token: string[] = hay_auth(req, res) as string[];
+        if (!controlador_login.verificar_permisos(token[1], 3)) {
+            return res.send({ error: 'Acceso denegado' });
+        } else {
+            return next();
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message })
     }
-    return next();
 }
 
 // Inicio de sesion, se comunica con el controlador login
@@ -140,7 +160,7 @@ app.post('/iniciar_sesion', (req, res) => {
 
 // Inicio de sesion, se comunica con el controlador login
 app.get('/validar_token', token_valido, (req, res) => {
-    return res.send({resultado: 'El token es válido'});
+    return res.send({ resultado: 'El token es válido' });
 })
 
 /* Devuelve todos los usuarios, se comunica con el controlador, 
@@ -190,10 +210,25 @@ app.get('/productos', autorizacion_admin, (req, res) => {
 })
 
 // Devuelve todos los datos del usuario, se comunica con el controlador
-app.get('/productos/:id_producto', autorizacion_admin, (req: express.Request, res) => {
+app.get('/productos/:id_producto', (req: express.Request, res) => {
     try {
         let id_producto: number = parseInt(req.params.id_producto);
         controlador.consultar_producto(id_producto)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            })
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Devuelve todos los datos del usuario, se comunica con el controlador
+app.get('/estilos/:id_producto', (req: express.Request, res) => {
+    try {
+        let id_producto: number = parseInt(req.params.id_producto);
+        controlador.consultar_estilos(id_producto)
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -224,20 +259,21 @@ app.post('/cambiar_contrasena', (req, res) => {
 });
 
 // Envio de correo con contrasena temporal
-app.post('/recuperar_contrasena', (req, res)=>{
+app.post('/recuperar_contrasena', (req, res) => {
     try {
-        var{correo}: {correo: string} = req.body;
-        if(correo){
+        var { correo }: { correo: string } = req.body;
+        if (correo) {
             controlador.crear_contrasena_temporal(correo)
                 .then((resultado: any) => {
-                    return res.send({resultado});
-                }).catch((err:any)=> {
-                    return res.send({error:err.message});})
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                })
         } else {
             return res.send({ error: "Hubo un error" })
         }
 
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
