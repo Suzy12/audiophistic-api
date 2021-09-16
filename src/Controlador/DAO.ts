@@ -183,6 +183,20 @@ export default class DAO {
         }
     } 
 
+    // Eliminación de usuario. Este es un borrado lógico y NO físico. 
+    async eliminar_usuario(id_usuario: number): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from eliminar_usuario($1)', [id_usuario]);
+            if (res.rows[0]){
+                return ("El usuario ha sido desactivado");
+            } else{
+                throw new Error("el usuario no se ha podido eliminar");
+            }
+        } catch (err){
+            throw err;
+        }
+    }
+
     // Recupera un producto y sus datos segun su id
     async consultar_estilos(id_producto: number): Promise<Estilo[]> {
         try {
@@ -196,6 +210,7 @@ export default class DAO {
             throw err;
         }
     }
+
 
 }
 

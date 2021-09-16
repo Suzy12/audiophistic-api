@@ -85,6 +85,11 @@ export default class Controlador {
         return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
     }
 
+    //Elimina de forma logica el usuario dado
+    eliminar_usuario(id_usuario: number): Promise<string>{
+        return this.gestor_usuarios.eliminar_usuario(id_usuario);
+    }
+
     // Cambia la contrasena del usuario con los datos dados
     async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
         let hash: string = bcrypt.hashSync(contrasena, this.salts);

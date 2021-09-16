@@ -25,9 +25,9 @@ export default class Gestor_Usuarios {
         return this.base_datos.verificar_usuario(correo);
     }
 
-    // Elimina el usuario dados
-    eliminar_usuario(id_usuairo: number): string {
-        return "usuario eliminado";
+    // Elimina el usuario dado usando el método del DAO
+    eliminar_usuario(id_usuairo: number): Promise<string>{
+        return this.base_datos.eliminar_usuario(id_usuairo);        
     }
 
     // Crea el hash y llama a cambiar la contraseña a la base

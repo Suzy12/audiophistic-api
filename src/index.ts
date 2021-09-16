@@ -255,6 +255,21 @@ app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, r
     }
 })
 
+//Elimina un usuario
+app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) =>{
+    try {
+        let id_usuario: number = parseInt(req.params.id_usuario);
+        controlador.eliminar_usuario(id_usuario)
+            .then((resultado:any) => {
+                return res.send({resultado});
+            }).catch((err:any) => {
+                return res.send({ error: err.message});
+            })
+    }catch (err:any){
+        return res.send({error: err.message})
+    }
+})
+
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {
