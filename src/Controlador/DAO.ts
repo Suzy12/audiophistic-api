@@ -37,6 +37,21 @@ export default class DAO {
         return DAO.instancia;
     }
 
+    // Comprueba que el tipo de usuario exista
+    async existe_tipo_usuario(id_tipo: number): Promise<number> {
+        try {
+            let res = await this.cliente.query('select * from existe_tipo_usuario($1)',
+                [id_tipo]);
+            if (res) {
+                return res.rows[0].existe_tipo_usuario;
+            } else {
+                throw new Error("No se pudo verificar el tipo");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Registra a un usuario CONSUMIDOR
     async registrar_usuario(correo: string, nombre: string, contrasena: string): Promise<number> {
         try {
@@ -164,6 +179,20 @@ export default class DAO {
                 throw new Error("El producto no existe o fue eliminado");
             }
 
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Cambia el estado de un usuario a inactivo
+    async eliminar_producto(id_usuario: number): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from eliminar_producto($1)', [id_usuario]);
+            if (res.rows[0]) {
+                return res.rows[0].eliminar_producto;
+            } else {
+                throw new Error("El producto no pudo ser eliminado");
+            }
         } catch (err) {
             throw err;
         }

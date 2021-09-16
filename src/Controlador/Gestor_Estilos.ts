@@ -2,8 +2,7 @@ import { Estilo } from "../Modelo/Estilo";
 import DAO from "./DAO";
 export default class Gestor_Estilos {
 
-    // Definimos como hacer las llamadas la base de datos a traves del dao
-    base_datos: DAO;
+    private base_datos: DAO;
 
     constructor() {
         this.base_datos = DAO.get_instancia();

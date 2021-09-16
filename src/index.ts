@@ -1,9 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
-import Controlador_login from './Controlador/Controlador_Login';
-import bcrypt from 'bcrypt';
-import { Usuario } from './Modelo/Usuario';
+import Controlador_Acceso from './Controlador/Controlador_Acceso';
 
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
@@ -18,7 +16,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(cors(opciones_cors))
 
 let controlador = new Controlador();
-let controlador_login = new Controlador_login();
+let controlador_login = new Controlador_Acceso();
 
 const PORT = process.env.PORT || 3000;
 
@@ -58,6 +56,7 @@ function token_valido(req: express.Request, res: express.Response, next: express
         return res.send({ error: err.message })
     }
 }
+
 
 /* Verifican los diferentes tipos de autorizacion que hay */
 
@@ -159,10 +158,23 @@ app.post('/iniciar_sesion', (req, res) => {
 
 
 // Inicio de sesion, se comunica con el controlador login
-app.get('/validar_token', token_valido, (req, res) => {
-    return res.send({ resultado: 'El token es válido' });
+app.post('/validar_tipo_token', (req, res) => {
+    try {
+        var { token, id_tipo }: { token: string, id_tipo: number } = req.body;
+        if (token) {
+            return controlador_login.validar_tipo(token, id_tipo)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                })
+        } else {
+            return res.send({ error: "El token no fue enviado" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
 })
-
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
 app.get('/usuarios', autorizacion_admin, (req, res) => {
@@ -239,14 +251,27 @@ app.get('/estilos/:id_producto', (req: express.Request, res) => {
     }
 })
 
+// Devuelve todos los datos del usuario, se comunica con el controlador
+app.get('/eliminar_producto/:id_producto', autorizacion_admin, (req: express.Request, res) => {
+    try {
+        let id_producto: number = parseInt(req.params.id_producto);
+        controlador.eliminar_producto(id_producto)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            })
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {
         var { token, contrasena }: { token: string, contrasena: string } = req.body;
         if (token && contrasena) {
-            let descifrado: Usuario = controlador_login.descifrar_token(token);
-            controlador.cambiar_contrasena(descifrado.id_usuario, contrasena)
+            controlador.cambiar_contrasena(token, contrasena)
                 .then((resultado: any) => {
                     return res.send(resultado);
                 })
