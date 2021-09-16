@@ -23,7 +23,7 @@ export default class Manejador_Tokens {
        y seguridad del usuario */
     crear_token(id_usuario: number, correo: string, id_tipo: number): { token: string } {
         var token: string = jwt.sign(
-            { id_usuario, correo, tipo: { id_tipo } }
+            { id_usuario, correo, caracteristicas: { id_tipo } }
             , process.env.TOKEN_SECRET as string);
         return { token };
     }
