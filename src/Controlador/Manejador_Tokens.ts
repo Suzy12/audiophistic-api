@@ -28,6 +28,9 @@ export default class Manejador_Tokens {
         return { token };
     }
 
+
+    /* Crea el token del usuario para poder comprobar el correo
+        del usuario */
     crear_token_registro(id: number): string {
         var token: string = jwt.sign(
             { id }
@@ -47,6 +50,8 @@ export default class Manejador_Tokens {
         }
     }
 
+
+    // Obtiene los datos del token dado
     descifrar_token(token: string): Usuario {
         let usuario;
         try {

@@ -3,18 +3,19 @@ import Manejador_Tokens from "./Manejador_Tokens";
 import Enviador_Correos from "./Enviador_Correos";
 import Gestor_Usuarios from "./Gestor_Usuarios";
 import bcrypt from 'bcrypt';
+import DAO from "./DAO";
 
 /* Se encarga de verificar el inicio de sesion y los
    Y los permisos que tiene un usuario para ciertas acciones */
-export default class Controlador_login {
-    // Definimos como hacer las llamadas la base de datos a traves del dao
-    private envio_correos: Enviador_Correos;
+export default class Controlador_Acceso {
+    private base_datos: DAO;
     private manejador_token: Manejador_Tokens;
     private gestor_usuarios: Gestor_Usuarios;
+
     constructor() {
-        this.envio_correos = Enviador_Correos.get_instancia();
         this.manejador_token = Manejador_Tokens.get_instancia();
-        this. gestor_usuarios = new Gestor_Usuarios();
+        this.gestor_usuarios = new Gestor_Usuarios();
+        this.base_datos = DAO.get_instancia();
     }
 
     /* Verifica la combinación del correo con la contraseña
@@ -37,14 +38,26 @@ export default class Controlador_login {
         return this.manejador_token.crear_token(id_usuario, correo, id_tipo);
     }
 
-    validar_token(token: string): boolean{
+    validar_token(token: string): boolean {
         return this.manejador_token.validar_token(token)
     }
 
-    descifrar_token(token: string): Usuario{
-        return this.manejador_token.descifrar_token(token)
+
+    /* Comprueba que permiso enviado exista 
+       Y que el token tenga el mismo permiso que el enviado*/
+    validar_tipo(token: string, permiso: number): Promise<string> {
+        return this.base_datos.existe_tipo_usuario(permiso)
+            .then(() => {
+                if (this.verificar_permisos(token, permiso)) {
+                    return 'El usuario tiene los permisos dados'
+                    
+                }
+                throw new Error('El usuario no tiene los permisos dados')
+            })
+
     }
 
+    // Comprueba que el token tenga el mismo permiso que el enviado
     verificar_permisos(token: string, permiso: number): boolean {
         return this.manejador_token.verificar_permisos(token) === permiso;
     }

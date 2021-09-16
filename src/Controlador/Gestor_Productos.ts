@@ -16,11 +16,13 @@ export default class Gestor_Prodcuctos {
 
     }
 
-    // Elimina el producto dado
-    eliminar_producto(id_producto: number): string {
 
-        return "producto eliminado";
-
+    // Consulta todos los productos activos
+    consultar_productos(): Promise<Producto[]> {
+        return this.base_datos.consultar_productos()
+            .then((producto: Producto[]) => {
+                return producto;
+            })
     }
 
     // Obtiene los datos del producto
@@ -31,11 +33,10 @@ export default class Gestor_Prodcuctos {
             })
     }
 
-    consultar_productos(): Promise<Producto[]> {
-        return this.base_datos.consultar_productos()
-            .then((producto: Producto[]) => {
-                return producto;
-            })
+    // Elimina el producto dado
+    eliminar_producto(id_producto: number): Promise<string> {
+        return this.base_datos.eliminar_producto(id_producto);
+
     }
 
     //Obtiene productos de un creador de contenido segun su ID

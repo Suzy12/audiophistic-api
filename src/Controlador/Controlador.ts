@@ -1,6 +1,6 @@
 import fs from 'fs';
 import util from 'util'
-import generator, { generate } from 'generate-password'
+import generator from 'generate-password'
 import Gestor_Usuarios from "./Gestor_Usuarios";
 import Gestor_Prodcuctos from "./Gestor_Productos";
 import Enviador_Correos from "./Enviador_Correos";
@@ -8,7 +8,6 @@ import bcrypt from 'bcrypt';
 import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
 import Manejador_Tokens from './Manejador_Tokens';
-import { strict } from 'assert/strict';
 import Gestor_Estilos from './Gestor_Estilos';
 import { Estilo } from '../Modelo/Estilo';
 
@@ -16,7 +15,7 @@ import { Estilo } from '../Modelo/Estilo';
    De la pagina web con sus clases respectivas*/
 export default class Controlador {
     private envio_correos: Enviador_Correos;
-    private manejador_tokens: Manejador_Tokens;
+    private manejador_token: Manejador_Tokens;
     private gestor_productos: Gestor_Prodcuctos;
     private gestor_usuarios: Gestor_Usuarios;
     private gestor_estilos: Gestor_Estilos;
@@ -25,7 +24,7 @@ export default class Controlador {
 
     constructor() {
         this.envio_correos = Enviador_Correos.get_instancia();
-        this.manejador_tokens = Manejador_Tokens.get_instancia();
+        this.manejador_token = Manejador_Tokens.get_instancia();
         this.gestor_productos = new Gestor_Prodcuctos();
         this.gestor_usuarios = new Gestor_Usuarios();
         this.gestor_estilos = new Gestor_Estilos();
@@ -39,7 +38,7 @@ export default class Controlador {
         let id: number = await this.gestor_usuarios.registrar_usuario(correo, nombre, hash);
 
         //Genera el token y lo adjunta al correo
-        let token = this.manejador_tokens.crear_token_registro(id);
+        let token = this.manejador_token.crear_token_registro(id);
         let link = `http://localhost:4200/cuenta?token=${token}`
         console.log(token, link);
         let cuerpo_correo: string = fs.readFileSync('assets/html/correo_activar.html',
@@ -48,10 +47,13 @@ export default class Controlador {
         return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta — Audiophistic', cuerpo_correo);
     }
 
+    private descifrar_token(token: string): Usuario{
+        return this.manejador_token.descifrar_token(token)
+    }
 
     //Genera la confirmacion del correo
     confirmar_usuario(token: string): Promise<string> {
-        let id_usuario = this.manejador_tokens.verificar_token_registro(token);
+        let id_usuario = this.manejador_token.verificar_token_registro(token);
         return this.gestor_usuarios.confirmar_usuario(id_usuario);
     }
 
@@ -63,6 +65,11 @@ export default class Controlador {
     // Consulta los datos del producto respectivo
     consultar_producto(id_producto: number): Promise<Producto> {
         return this.gestor_productos.consultar_producto(id_producto);
+    }
+
+    // Consulta los datos del producto respectivo
+    eliminar_producto(id_producto: number): Promise<string> {
+        return this.gestor_productos.eliminar_producto(id_producto);
     }
 
     // Consulta los estilos de un producto dado
@@ -91,9 +98,10 @@ export default class Controlador {
     }
 
     // Cambia la contrasena del usuario con los datos dados
-    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
+    async cambiar_contrasena(token: string, contrasena: string): Promise<{ resultado: string }> {
+        let descifrado: Usuario = this.descifrar_token(token);
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
-        return this.gestor_usuarios.cambiar_contrasena(id_usuario, hash);
+        return this.gestor_usuarios.cambiar_contrasena(descifrado.id_usuario, hash);
     }
 
     // Crea una nueva contrasena, la guarda y envia un correo con la contrasena
