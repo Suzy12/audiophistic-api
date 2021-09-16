@@ -2,11 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_Acceso from './Controlador/Controlador_Acceso';
+import jwt from 'jsonwebtoken'
+import { StringDecoder } from 'string_decoder';
 
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
     optionsSuccessStatus: 200
 }
+
+let prueba = jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJjb3JyZW8iOiJhdWRpb3BoaXN0aWNAZ21haWwuY29tIiwidGlwbyI6eyJpZF90aXBvIjoxfSwiaWF0IjoxNjMxNzU2NjIyfQ.PXeQBM8NK1CG8jp5GEpPVfqCkuEnPewoMHtfLwtBQDc', '25f9e794323b453885f5181f1b624d0b')
+console.log(prueba);
 
 const app = express();
 
@@ -40,21 +45,6 @@ function hay_auth(req: express.Request, res: express.Response) {
         throw new Error('Falta el token de autorización');
     }
     return token;
-}
-
-/* Verifica que el token sea valido */
-
-function token_valido(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-        let token: string[] = hay_auth(req, res) as string[];
-        if (!controlador_login.validar_token(token[1])) {
-            return res.send({ error: 'Token inválido' });
-        } else {
-            return next();
-        }
-    } catch (err: any) {
-        return res.send({ error: err.message })
-    }
 }
 
 
@@ -160,9 +150,10 @@ app.post('/iniciar_sesion', (req, res) => {
 // Inicio de sesion, se comunica con el controlador login
 app.post('/validar_tipo_token', (req, res) => {
     try {
-        var { token, id_tipo }: { token: string, id_tipo: number } = req.body;
-        if (token) {
-            return controlador_login.validar_tipo(token, id_tipo)
+        var { token, id_tipo }: { token: string, id_tipo: string } = req.body;
+
+        if (token && id_tipo) {
+            return controlador_login.validar_tipo(token, parseInt(id_tipo))
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {

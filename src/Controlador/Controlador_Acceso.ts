@@ -59,6 +59,8 @@ export default class Controlador_Acceso {
 
     // Comprueba que el token tenga el mismo permiso que el enviado
     verificar_permisos(token: string, permiso: number): boolean {
+        console.log(this.manejador_token.verificar_permisos(token) );
+        console.log(typeof permiso);
         return this.manejador_token.verificar_permisos(token) === permiso;
     }
 
