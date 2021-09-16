@@ -2,17 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_Acceso from './Controlador/Controlador_Acceso';
-import jwt from 'jsonwebtoken'
-import { StringDecoder } from 'string_decoder';
-
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
     optionsSuccessStatus: 200
 }
-
-let prueba = jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJjb3JyZW8iOiJhdWRpb3BoaXN0aWNAZ21haWwuY29tIiwidGlwbyI6eyJpZF90aXBvIjoxfSwiaWF0IjoxNjMxNzU2NjIyfQ.PXeQBM8NK1CG8jp5GEpPVfqCkuEnPewoMHtfLwtBQDc', '25f9e794323b453885f5181f1b624d0b')
-console.log(prueba);
-
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -151,7 +144,6 @@ app.post('/iniciar_sesion', (req, res) => {
 app.post('/validar_tipo_token', (req, res) => {
     try {
         var { token, id_tipo }: { token: string, id_tipo: string } = req.body;
-
         if (token && id_tipo) {
             return controlador_login.validar_tipo(token, parseInt(id_tipo))
                 .then((resultado: any) => {

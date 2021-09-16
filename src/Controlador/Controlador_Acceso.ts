@@ -25,8 +25,9 @@ export default class Controlador_Acceso {
         let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena as string);
         if (misma_contrasena) {
             return {
-                id_tipo: datosUsuario.tipo!.id_tipo,
-                ...this.crear_token(datosUsuario.id_usuario, datosUsuario.email, datosUsuario.tipo!.id_tipo)
+                id_tipo: datosUsuario.caracteristicas!.id_tipo,
+                ...this.crear_token(datosUsuario.id_usuario, datosUsuario.correo
+                    , datosUsuario.caracteristicas!.id_tipo)
             };
         } else {
             throw new Error("La contraseña es incorrecta");

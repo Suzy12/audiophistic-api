@@ -41,7 +41,7 @@ export default class Manejador_Tokens {
     validar_token(token: string): boolean {
         try {
             let usuario = jwt.verify(token, process.env.TOKEN_SECRET as string) as JwtPayload;
-            return (usuario.tipo.id_tipo > 0);
+            return (usuario.caracteristicas.id_tipo > 0);
         } catch (err) {
             /* Si el token recibido no tiene una firma valida, no puede ser descifrado
                o si el token no contiene lo esperado
@@ -73,7 +73,7 @@ export default class Manejador_Tokens {
     verificar_permisos(token: string): number {
         try {
             let usuario = jwt.verify(token, process.env.TOKEN_SECRET as string) as JwtPayload;
-            return usuario.tipo.id_tipo;
+            return usuario.caracteristicas.id_tipo;
         } catch (err) {
             /* Si el token recibido no tiene una firma valida, no puede ser descifrado
                o si el token no contiene lo esperado
