@@ -193,6 +193,22 @@ app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
     }
 })
 
+
+//Elimina un usuario
+app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) =>{
+    try {
+        let id_usuario: number = parseInt(req.params.id_usuario);
+        controlador.eliminar_usuario(id_usuario)
+            .then((resultado:any) => {
+                return res.send({resultado});
+            }).catch((err:any) => {
+                return res.send({ error: err.message});
+            })
+    }catch (err:any){
+        return res.send({error: err.message})
+    }
+})
+
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
 
@@ -252,21 +268,6 @@ app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, r
 
     }catch (err: any) {
         return res.send({ error: err.message });
-    }
-})
-
-//Elimina un usuario
-app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) =>{
-    try {
-        let id_usuario: number = parseInt(req.params.id_usuario);
-        controlador.eliminar_usuario(id_usuario)
-            .then((resultado:any) => {
-                return res.send({resultado});
-            }).catch((err:any) => {
-                return res.send({ error: err.message});
-            })
-    }catch (err:any){
-        return res.send({error: err.message})
     }
 })
 
