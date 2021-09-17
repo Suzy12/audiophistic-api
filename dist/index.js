@@ -83,7 +83,7 @@ function autorizacion_consumidor(req, res, next) {
 // Inicio de sesion, se comunica con el controlador login
 app.post('/registrar_usuario', (req, res) => {
     try {
-        var { correo, nombre, contrasena } = req.body;
+        let { correo, nombre, contrasena } = req.body;
         if (nombre && correo && contrasena) {
             return controlador.registrar_usuario(correo, nombre, contrasena)
                 .then((resultado) => {
@@ -100,6 +100,7 @@ app.post('/registrar_usuario', (req, res) => {
         return res.send({ error: err.message });
     }
 });
+
 //Crear usuario, creador de contenido
 app.post('/crear_usuario', autorizacion_admin, (req, res) => {
     try {
@@ -122,7 +123,7 @@ app.post('/crear_usuario', autorizacion_admin, (req, res) => {
 });
 app.post('/confirmar_usuario', (req, res) => {
     try {
-        var { token } = req.body;
+        let { token } = req.body;
         if (token) {
             return controlador.confirmar_usuario(token)
                 .then((resultado) => {
@@ -142,7 +143,7 @@ app.post('/confirmar_usuario', (req, res) => {
 // Inicio de sesion, se comunica con el controlador login
 app.post('/iniciar_sesion', (req, res) => {
     try {
-        var { correo, contrasena } = req.body;
+        let { correo, contrasena } = req.body;
         if (correo && contrasena) {
             return controlador_login.verificar_contrasena(correo, contrasena)
                 .then((resultado) => {
@@ -162,7 +163,7 @@ app.post('/iniciar_sesion', (req, res) => {
 // Inicio de sesion, se comunica con el controlador login
 app.post('/validar_tipo_token', (req, res) => {
     try {
-        var { token, id_tipo } = req.body;
+        let { token, id_tipo } = req.body;
         if (token && id_tipo) {
             return controlador_login.validar_tipo(token, parseInt(id_tipo))
                 .then((resultado) => {
@@ -179,6 +180,7 @@ app.post('/validar_tipo_token', (req, res) => {
         return res.send({ error: err.message });
     }
 });
+
 /* Devuelve todos los usuarios, se comunica con el controlador,
     Solo pueden accesar con permisos de administrador */
 app.get('/usuarios', autorizacion_admin, (req, res) => {
@@ -194,6 +196,23 @@ app.get('/usuarios', autorizacion_admin, (req, res) => {
         return res.send({ error: err.message });
     }
 });
+
+/* Devuelve todos los usuarios, se comunica con el controlador,
+    Solo pueden accesar con permisos de administrador */
+app.get('/usuarios', autorizacion_admin, (req, res) => {
+    try {
+        controlador.consultar_usuarios()
+            .then((resultado) => {
+            return res.send({ resultado });
+        }).catch((err) => {
+            return res.send({ error: err.message });
+        });
+    }
+    catch (err) {
+        return res.send({ error: err.message });
+    }
+});
+
 // Devuelve todos los datos del usuario, se comunica con el controlador
 app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
     try {
@@ -224,6 +243,28 @@ app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req, res) => {
         return res.send({ error: err.message });
     }
 });
+
+// Inserta un producto y todos sus datos a la base de datos
+app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
+    try {
+        let { producto, estilos } = req.body;
+        if (producto && estilos) {
+            controlador.crear_producto(producto, estilos)
+                .then((resultado) => {
+                return res.send({ resultado });
+            }).catch((err) => {
+                return res.send({ error: err.message });
+            });
+        }
+        else {
+            return res.send({ error: "Los datos están incompletos" });
+        }
+    }
+    catch (err) {
+        return res.send({ error: err.message });
+    }
+});
+
 /* Devuelve todos los usuarios, se comunica con el controlador,
     Solo pueden accesar con permisos de administrador */
 app.get('/productos', autorizacion_admin, (req, res) => {
@@ -302,11 +343,14 @@ app.get('/eliminar_producto/:id_producto', autorizacion_admin, (req, res) => {
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {
-        var { token, contrasena } = req.body;
+        let { token, contrasena } = req.body;
         if (token && contrasena) {
             controlador.cambiar_contrasena(token, contrasena)
                 .then((resultado) => {
-                return res.send(resultado);
+                return res.send({ resultado });
+            })
+                .catch((err) => {
+                return res.send({ error: err.message });
             });
         }
         else {
@@ -320,7 +364,7 @@ app.post('/cambiar_contrasena', (req, res) => {
 // Envio de correo con contrasena temporal
 app.post('/recuperar_contrasena', (req, res) => {
     try {
-        var { correo } = req.body;
+        let { correo } = req.body;
         if (correo) {
             controlador.crear_contrasena_temporal(correo)
                 .then((resultado) => {

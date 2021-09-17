@@ -70,6 +70,10 @@ class Controlador {
         let id_usuario = this.manejador_token.verificar_token_registro(token);
         return this.gestor_usuarios.confirmar_usuario(id_usuario);
     }
+    // Crea el producto con los datos enviados
+    crear_producto(producto, estilos) {
+        return this.gestor_productos.crear_producto(producto, estilos);
+    }
     // Consulta todos los productos
     consultar_productos() {
         return this.gestor_productos.consultar_productos();

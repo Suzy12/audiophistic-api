@@ -151,7 +151,6 @@ export default class DAO {
             } else {
                 throw new Error("No se pudieron obtener los usuarios");
             }
-
         } catch (err) {
             throw err;
         }
@@ -166,7 +165,26 @@ export default class DAO {
             } else {
                 throw new Error("El usuario no existe, no ha sido confirmado o fue eliminado");
             }
+        } catch (err) {
+            throw err;
+        }
+    }
 
+    // Crea un producto con los datos dados
+    async crear_producto(id_creador: number, id_tipo: number, fecha_lanzamiento: Date,
+        titulo: string, precio: number, tiempo_envio: number, descripcion: string, 
+            caracteristicas: Tipos_Producto,
+        estilos: Estilo[]): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from crear_producto($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+                [id_creador, id_tipo, fecha_lanzamiento, titulo, precio, tiempo_envio, 
+                    descripcion, caracteristicas, estilos]);
+            console.log(res);
+            if (res.rows[0]) {
+                return res.rows[0].crear_producto;
+            } else {
+                throw new Error("No se pudo insertar el producto");
+            }
         } catch (err) {
             throw err;
         }
@@ -181,7 +199,6 @@ export default class DAO {
             } else {
                 throw new Error("No se pudieron obtener los productos");
             }
-
         } catch (err) {
             throw err;
         }
@@ -196,7 +213,6 @@ export default class DAO {
             } else {
                 throw new Error("El producto no existe o fue eliminado");
             }
-
         } catch (err) {
             throw err;
         }
@@ -256,7 +272,6 @@ export default class DAO {
             throw err;
         }
     }
-
 
 }
 

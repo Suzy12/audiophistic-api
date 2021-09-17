@@ -60,7 +60,7 @@ class DAO {
             try {
                 let res = yield this.cliente.query('select * from registrar_usuario($1,$2,$3)', [correo, nombre, contrasena]);
                 if (res.rows[0]) {
-                    return res.rows[0].registrar_usuario;
+                   return res.rows[0].registrar_usuario;
                 }
                 else {
                     throw new Error("No se pudo resgistrar al usuario");
@@ -183,6 +183,24 @@ class DAO {
                 }
                 else {
                     throw new Error("El usuario no existe, no ha sido confirmado o fue eliminado");
+                }
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
+    // Crea un producto con los datos dados
+    crear_producto(id_creador, id_tipo, fecha_lanzamiento, titulo, precio, tiempo_envio, descripcion, estilos) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let res = yield this.cliente.query('select * from crear_producto($1, $2, $3, $4, $5, $6, $7, $8)', [id_creador, id_tipo, fecha_lanzamiento, titulo, precio, tiempo_envio, descripcion, estilos]);
+                console.log(res);
+                if (res.rows[0]) {
+                    return res.rows[0].crear_producto;
+                }
+                else {
+                    throw new Error("No se pudo insertar el producto");
                 }
             }
             catch (err) {

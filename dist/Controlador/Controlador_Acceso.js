@@ -58,8 +58,6 @@ class Controlador_Acceso {
     }
     // Comprueba que el token tenga el mismo permiso que el enviado
     verificar_permisos(token, permiso) {
-        console.log(this.manejador_token.verificar_permisos(token));
-        console.log(typeof permiso);
         return this.manejador_token.verificar_permisos(token) === permiso;
     }
 }

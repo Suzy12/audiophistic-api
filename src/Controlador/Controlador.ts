@@ -74,6 +74,11 @@ export default class Controlador {
         return this.gestor_usuarios.confirmar_usuario(id_usuario);
     }
 
+    // Crea el producto con los datos enviados
+    crear_producto(producto: Producto, estilos: Estilo[]): Promise<string> {
+        return this.gestor_productos.crear_producto(producto, estilos);
+    }
+
     // Consulta todos los productos
     consultar_productos(): Promise<Producto[]> {
         return this.gestor_productos.consultar_productos();
@@ -90,7 +95,7 @@ export default class Controlador {
     }
 
     // Consulta los estilos de un producto dado
-    consultar_estilos(id_producto: number): Promise<Estilo[]>{
+    consultar_estilos(id_producto: number): Promise<Estilo[]> {
         return this.gestor_estilos.consultar_estilos(id_producto);
     }
 
@@ -105,12 +110,12 @@ export default class Controlador {
     }
 
     //Consulta los productos de un Creador de Contenido segun su ID
-    consultar_productos_creador(id_creador_contenido:number): Promise<Producto[]>{
+    consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
     }
 
     //Elimina de forma logica el usuario dado
-    eliminar_usuario(id_usuario: number): Promise<string>{
+    eliminar_usuario(id_usuario: number): Promise<string> {
         return this.gestor_usuarios.eliminar_usuario(id_usuario);
     }
 

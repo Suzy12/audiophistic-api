@@ -9,8 +9,17 @@ class Gestor_Prodcuctos {
         this.base_datos = DAO_1.default.get_instancia();
     }
     // Crea el producto con los datos enviados
-    crear_producto(producto) {
-        return "producto creado";
+
+    crear_producto(producto, estilos) {
+        // Revisa si los datos opcionales están completos
+        if (producto.fecha_lanzamiento && producto.tiempo_envio && producto.descripcion)
+            return this.base_datos.crear_producto(producto.id_creador, producto.caracteristicas.id_tipo, producto.fecha_lanzamiento, producto.titulo, producto.precio, producto.tiempo_envio, producto.descripcion, estilos)
+                .then((resultado) => {
+                return resultado;
+            });
+        else {
+            throw new Error("Los datos están incompletos");
+        }
     }
     // Consulta todos los productos activos
     consultar_productos() {
