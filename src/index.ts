@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_Acceso from './Controlador/Controlador_Acceso';
+import { Producto } from './Modelo/Producto';
+import { Estilo } from './Modelo/Estilo';
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
     optionsSuccessStatus: 200
@@ -85,14 +87,14 @@ function autorizacion_consumidor(req: express.Request, res: express.Response, ne
 // Inicio de sesion, se comunica con el controlador login
 app.post('/registrar_usuario', (req, res) => {
     try {
-        var { correo, nombre, contrasena }: { correo: string, nombre: string, contrasena: string } = req.body;
+        let { correo, nombre, contrasena }: { correo: string, nombre: string, contrasena: string } = req.body;
         if (nombre && correo && contrasena) {
             return controlador.registrar_usuario(correo, nombre, contrasena)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
-                })
+                });
         } else {
             return res.send({ error: "Los datos están incompletos" })
         }
@@ -103,14 +105,14 @@ app.post('/registrar_usuario', (req, res) => {
 
 app.post('/confirmar_usuario', (req, res) => {
     try {
-        var { token }: { token: string } = req.body;
+        let { token }: { token: string } = req.body;
         if (token) {
             return controlador.confirmar_usuario(token)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
-                })
+                });
         } else {
             return res.send({ error: "El token no fue enviado" })
         }
@@ -123,14 +125,14 @@ app.post('/confirmar_usuario', (req, res) => {
 // Inicio de sesion, se comunica con el controlador login
 app.post('/iniciar_sesion', (req, res) => {
     try {
-        var { correo, contrasena }: { correo: string, contrasena: string } = req.body;
+        let { correo, contrasena }: { correo: string, contrasena: string } = req.body;
         if (correo && contrasena) {
             return controlador_login.verificar_contrasena(correo, contrasena)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
-                })
+                });
         } else {
             return res.send({ error: "Los datos están incompletos" })
         }
@@ -143,14 +145,14 @@ app.post('/iniciar_sesion', (req, res) => {
 // Inicio de sesion, se comunica con el controlador login
 app.post('/validar_tipo_token', (req, res) => {
     try {
-        var { token, id_tipo }: { token: string, id_tipo: string } = req.body;
+        let { token, id_tipo }: { token: string, id_tipo: string } = req.body;
         if (token && id_tipo) {
             return controlador_login.validar_tipo(token, parseInt(id_tipo))
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
-                })
+                });
         } else {
             return res.send({ error: "El token no fue enviado" })
         }
@@ -167,7 +169,7 @@ app.get('/usuarios', autorizacion_admin, (req, res) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
-            })
+            });
     } catch (err: any) {
         return res.send({ error: err.message });
     }
@@ -182,7 +184,7 @@ app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
-            })
+            });
     } catch (err: any) {
         return res.send({ error: err.message });
     }
@@ -190,19 +192,39 @@ app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
 
 
 //Elimina un usuario
-app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) =>{
+app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) => {
     try {
         let id_usuario: number = parseInt(req.params.id_usuario);
         controlador.eliminar_usuario(id_usuario)
-            .then((resultado:any) => {
-                return res.send({resultado});
-            }).catch((err:any) => {
-                return res.send({ error: err.message});
-            })
-    }catch (err:any){
-        return res.send({error: err.message})
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message })
     }
 })
+
+
+// Inserta un producto y todos sus datos a la base de datos
+app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
+    try {
+        let { producto, estilos }: { producto: Producto, estilos: Estilo[] } = req.body;
+        if (producto && estilos) {
+            controlador.crear_producto(producto, estilos)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+});
 
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
@@ -214,24 +236,23 @@ app.get('/productos', autorizacion_admin, (req, res) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
-            })
+            });
     } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 //Devuelve todos los productos registrados a un Creador de Contenido
-app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, res) =>{
-    try{
+app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, res) => {
+    try {
         let id_usuario: number = parseInt(req.params.id_creador_contenido);
         controlador.consultar_productos_creador(id_usuario)
-            .then((resultado:any) => {
-                return res.send({resultado});
-            }).catch((err:any) => {
-                return res.send({ error: err.message});
-            })
-
-    }catch (err: any) {
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
@@ -245,7 +266,7 @@ app.get('/productos/:id_producto', (req: express.Request, res) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
-            })
+            });
     } catch (err: any) {
         return res.send({ error: err.message });
     }
@@ -260,7 +281,7 @@ app.get('/estilos/:id_producto', (req: express.Request, res) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
-            })
+            });
     } catch (err: any) {
         return res.send({ error: err.message });
     }
@@ -275,7 +296,7 @@ app.get('/eliminar_producto/:id_producto', autorizacion_admin, (req: express.Req
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
-            })
+            });
     } catch (err: any) {
         return res.send({ error: err.message });
     }
@@ -284,12 +305,15 @@ app.get('/eliminar_producto/:id_producto', autorizacion_admin, (req: express.Req
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {
-        var { token, contrasena }: { token: string, contrasena: string } = req.body;
+        let { token, contrasena }: { token: string, contrasena: string } = req.body;
         if (token && contrasena) {
             controlador.cambiar_contrasena(token, contrasena)
                 .then((resultado: any) => {
-                    return res.send(resultado);
+                    return res.send({ resultado });
                 })
+                .catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
         } else {
             return res.send({ error: "Los datos están incompletos" })
         }
@@ -301,18 +325,17 @@ app.post('/cambiar_contrasena', (req, res) => {
 // Envio de correo con contrasena temporal
 app.post('/recuperar_contrasena', (req, res) => {
     try {
-        var { correo }: { correo: string } = req.body;
+        let { correo }: { correo: string } = req.body;
         if (correo) {
             controlador.crear_contrasena_temporal(correo)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
-                })
+                });
         } else {
             return res.send({ error: "Hubo un error" })
         }
-
     } catch (err: any) {
         return res.send({ error: err.message });
     }

@@ -1,3 +1,4 @@
+import { Estilo } from "../Modelo/Estilo";
 import { Producto } from "../Modelo/Producto"
 import DAO from "./DAO";
 export default class Gestor_Prodcuctos {
@@ -10,10 +11,18 @@ export default class Gestor_Prodcuctos {
     }
 
     // Crea el producto con los datos enviados
-    crear_producto(producto: Producto): string {
-
-        return "producto creado";
-
+    crear_producto(producto: Producto, estilos: Estilo[]): Promise<string> {
+        // Revisa si los datos opcionales están completos
+        if (producto.fecha_lanzamiento && producto.tiempo_envio && producto.descripcion)
+            return this.base_datos.crear_producto(producto.id_creador, producto.caracteristicas.id_tipo,
+                producto.fecha_lanzamiento, producto.titulo, producto.precio, producto.tiempo_envio,
+                producto.descripcion, producto.caracteristicas, estilos)
+                .then((resultado: string) => {
+                    return resultado;
+                });
+        else {
+            throw new Error("Los datos están incompletos");
+        }
     }
 
 
@@ -40,11 +49,11 @@ export default class Gestor_Prodcuctos {
     }
 
     //Obtiene productos de un creador de contenido segun su ID
-    consultar_productos_creador(id_creador_contenido:number): Promise<Producto[]>{
+    consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.base_datos.consultar_productos_creador(id_creador_contenido)
-            .then((producto: Producto[]) =>{
+            .then((producto: Producto[]) => {
                 return producto;
-            } )
+            })
     }
 
     // Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
