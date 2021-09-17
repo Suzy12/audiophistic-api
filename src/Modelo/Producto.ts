@@ -1,7 +1,4 @@
-import { Album } from "./Album";
-import { Audifonos } from "./Audifonos";
-import { Parlante } from "./Parlante";
-import { Tipo_Producto } from "./Tipo_Producto";
+import { Tipos_Producto } from "./Tipos_Producto";
 
 export interface Producto {
     id_producto:number;
@@ -15,5 +12,5 @@ export interface Producto {
     fecha_lanzamiento?: Date;
     enlace?: string;
     foto? : string;
-    caracteristicas: Tipo_Producto | Audifonos | Album | Parlante;
+    caracteristicas: Tipos_Producto;
 } 

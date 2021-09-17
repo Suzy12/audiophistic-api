@@ -1,7 +1,8 @@
 import { Client } from "pg";
-import { Creador_de_Contenido } from "../Modelo/Creador_de_Contenido";
 import { Estilo } from "../Modelo/Estilo";
 import { Producto } from "../Modelo/Producto";
+import { Tipos_Producto } from "../Modelo/Tipos_Producto";
+import { Tipos_Usuario } from "../Modelo/Tipos_Usuario";
 import { Usuario } from "../Modelo/Usuario";
 
 require('dotenv').config();
@@ -69,7 +70,7 @@ export default class DAO {
     }
 
     //se crea un usuario consumidor
-    async crear_usuario(tipo_usuario: number, correo: string, nombre: string, contrasena: string, caracteristicas: Creador_de_Contenido): Promise<string>{
+    async crear_usuario(tipo_usuario: number, correo: string, nombre: string, contrasena: string, caracteristicas: Tipos_Usuario): Promise<string>{
         try{
             let res = await this.cliente.query('select * from crear_usuario($1,$2,$3,$4,$5)',
                 [tipo_usuario, correo, nombre, contrasena, caracteristicas]);

@@ -10,8 +10,7 @@ import { Usuario } from "../Modelo/Usuario";
 import Manejador_Tokens from './Manejador_Tokens';
 import Gestor_Estilos from './Gestor_Estilos';
 import { Estilo } from '../Modelo/Estilo';
-import { Tipo_Usuario } from '../Modelo/Tipo_Usuario';
-import { Creador_de_Contenido } from '../Modelo/Creador_de_Contenido';
+import { Tipos_Usuario } from '../Modelo/Tipos_Usuario';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -50,7 +49,7 @@ export default class Controlador {
     }
 
     //crear usuario Creador de Contenido
-    async crear_usuario(correo: string, nombre: string, caracteristicas: Creador_de_Contenido): Promise<string>{
+    async crear_usuario(correo: string, nombre: string, caracteristicas: Tipos_Usuario): Promise<string>{
         //genera una constrasenia, hash y registra al usuario en una BD
         let contrasena: string= this.generacion_contrasena();
         let hash: string = bcrypt.hashSync(contrasena, this.salts);

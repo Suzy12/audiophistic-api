@@ -1,4 +1,4 @@
-import { Creador_de_Contenido } from "../Modelo/Creador_de_Contenido";
+import { Tipos_Usuario } from "../Modelo/Tipos_Usuario";
 import { Usuario } from "../Modelo/Usuario"
 import DAO from "./DAO";
 export default class Gestor_Usuarios {
@@ -27,7 +27,7 @@ export default class Gestor_Usuarios {
     }
 
     // Crear Usuario Creador de Contenido
-    crear_usuario(correo: string, nombre: string, contrasena: string, caracteristicas: Creador_de_Contenido): Promise<string>{
+    crear_usuario(correo: string, nombre: string, contrasena: string, caracteristicas: Tipos_Usuario): Promise<string>{
         return this.base_datos.crear_usuario(caracteristicas.id_tipo, correo, nombre, contrasena, caracteristicas)
             .then((id_tipo: string) => {
                 return id_tipo;

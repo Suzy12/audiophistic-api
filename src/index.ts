@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_Acceso from './Controlador/Controlador_Acceso';
-import { Creador_de_Contenido } from './Modelo/Creador_de_Contenido';
+import { Tipos_Usuario } from './Modelo/Tipos_Usuario';
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
     optionsSuccessStatus: 200
@@ -103,23 +103,23 @@ app.post('/registrar_usuario', (req, res) => {
 })
 
 //Crear usuario, creador de contenido
-app.post('/crear_usuario', autorizacion_admin, (req, res) =>{
-    try{
-        var{ correo, nombre, caracteristicas}: {correo:string, nombre:string, caracteristicas: Creador_de_Contenido} =req.body;
-        if (correo && nombre && caracteristicas){
-                return controlador.crear_usuario(correo, nombre, caracteristicas)
-                    .then((resultado:any) =>{
-                        return res.send({resultado});
-                    }).catch((err:any) => {
-                        return res.send({error: err.message});
-                    })
-        }else {
-            return res.send({error: "Los datos están incompletos"});
+app.post('/crear_usuario', autorizacion_admin, (req, res) => {
+    try {
+        var { correo, nombre, caracteristicas }: { correo: string, nombre: string, caracteristicas: Tipos_Usuario } = req.body;
+        if (correo && nombre && caracteristicas) {
+            return controlador.crear_usuario(correo, nombre, caracteristicas)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                })
+        } else {
+            return res.send({ error: "Los datos están incompletos" });
         }
-    }catch (err:any) {
-        return res.send({error: err.message});
+    } catch (err: any) {
+        return res.send({ error: err.message });
     }
-} )
+})
 
 app.post('/confirmar_usuario', (req, res) => {
     try {
@@ -210,17 +210,17 @@ app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
 
 
 //Elimina un usuario
-app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) =>{
+app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) => {
     try {
         let id_usuario: number = parseInt(req.params.id_usuario);
         controlador.eliminar_usuario(id_usuario)
-            .then((resultado:any) => {
-                return res.send({resultado});
-            }).catch((err:any) => {
-                return res.send({ error: err.message});
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
             })
-    }catch (err:any){
-        return res.send({error: err.message})
+    } catch (err: any) {
+        return res.send({ error: err.message })
     }
 })
 
@@ -241,17 +241,17 @@ app.get('/productos', autorizacion_admin, (req, res) => {
 })
 
 //Devuelve todos los productos registrados a un Creador de Contenido
-app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, res) =>{
-    try{
+app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, res) => {
+    try {
         let id_usuario: number = parseInt(req.params.id_creador_contenido);
         controlador.consultar_productos_creador(id_usuario)
-            .then((resultado:any) => {
-                return res.send({resultado});
-            }).catch((err:any) => {
-                return res.send({ error: err.message});
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
             })
 
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })

@@ -8,18 +8,37 @@ class Gestor_Prodcuctos {
     constructor() {
         this.base_datos = DAO_1.default.get_instancia();
     }
-    crear_producto(muchas_cosas) {
+    // Crea el producto con los datos enviados
+    crear_producto(producto) {
         return "producto creado";
     }
-    eliminar_usuario(id_producto) {
-        return "producto eliminado";
-    }
-    consultar_usuario(id_producto) {
-        return this.base_datos.obtener_producto(id_producto).then((producto) => {
+    // Consulta todos los productos activos
+    consultar_productos() {
+        return this.base_datos.consultar_productos()
+            .then((producto) => {
             return producto;
         });
     }
-    editar_usuario(id_producto) {
+    // Obtiene los datos del producto
+    consultar_producto(id_producto) {
+        return this.base_datos.consultar_producto(id_producto)
+            .then((producto) => {
+            return producto;
+        });
+    }
+    // Elimina el producto dado
+    eliminar_producto(id_producto) {
+        return this.base_datos.eliminar_producto(id_producto);
+    }
+    //Obtiene productos de un creador de contenido segun su ID
+    consultar_productos_creador(id_creador_contenido) {
+        return this.base_datos.consultar_productos_creador(id_creador_contenido)
+            .then((producto) => {
+            return producto;
+        });
+    }
+    // Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
+    editar_producto(id_producto) {
         return "producto modificado";
     }
 }
