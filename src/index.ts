@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import Controlador from './Controlador/Controlador';
 import Controlador_Acceso from './Controlador/Controlador_Acceso';
+import { Creador_de_Contenido } from './Modelo/Creador_de_Contenido';
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://localhost:4200'],
     optionsSuccessStatus: 200
@@ -100,6 +101,25 @@ app.post('/registrar_usuario', (req, res) => {
         return res.send({ error: err.message });
     }
 })
+
+//Crear usuario, creador de contenido
+app.post('/crear_usuario', autorizacion_admin, (req, res) =>{
+    try{
+        var{ correo, nombre, caracteristicas}: {correo:string, nombre:string, caracteristicas: Creador_de_Contenido} =req.body;
+        if (correo && nombre && caracteristicas){
+                return controlador.crear_usuario(correo, nombre, caracteristicas)
+                    .then((resultado:any) =>{
+                        return res.send({resultado});
+                    }).catch((err:any) => {
+                        return res.send({error: err.message});
+                    })
+        }else {
+            return res.send({error: "Los datos están incompletos"});
+        }
+    }catch (err:any) {
+        return res.send({error: err.message});
+    }
+} )
 
 app.post('/confirmar_usuario', (req, res) => {
     try {

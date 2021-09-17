@@ -1,4 +1,5 @@
 import { Client } from "pg";
+import { Creador_de_Contenido } from "../Modelo/Creador_de_Contenido";
 import { Estilo } from "../Modelo/Estilo";
 import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
@@ -57,12 +58,28 @@ export default class DAO {
         try {
             let res = await this.cliente.query('select * from registrar_usuario($1,$2,$3)',
                 [correo, nombre, contrasena]);
-            if (res) {
+            if (res.rows[0]) {
                 return res.rows[0].registrar_usuario;
             } else {
                 throw new Error("No se pudo resgistrar al usuario");
             }
         } catch (err) {
+            throw err;
+        }
+    }
+
+    //se crea un usuario consumidor
+    async crear_usuario(tipo_usuario: number, correo: string, nombre: string, contrasena: string, caracteristicas: Creador_de_Contenido): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from crear_usuario($1,$2,$3,$4,$5)',
+                [tipo_usuario, correo, nombre, contrasena, caracteristicas]);
+            if (res.rows[0]){
+                return res.rows[0].crear_usuario;
+            }else {
+                throw new Error("No Se pudo registrar al usuario")
+            }
+
+        } catch (err){
             throw err;
         }
     }

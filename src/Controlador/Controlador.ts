@@ -10,6 +10,8 @@ import { Usuario } from "../Modelo/Usuario";
 import Manejador_Tokens from './Manejador_Tokens';
 import Gestor_Estilos from './Gestor_Estilos';
 import { Estilo } from '../Modelo/Estilo';
+import { Tipo_Usuario } from '../Modelo/Tipo_Usuario';
+import { Creador_de_Contenido } from '../Modelo/Creador_de_Contenido';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -45,6 +47,22 @@ export default class Controlador {
             { encoding: 'utf8', flag: 'r' });
         cuerpo_correo = util.format(cuerpo_correo, link, link, link);
         return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta — Audiophistic', cuerpo_correo);
+    }
+
+    //crear usuario Creador de Contenido
+    async crear_usuario(correo: string, nombre: string, caracteristicas: Creador_de_Contenido): Promise<string>{
+        //genera una constrasenia, hash y registra al usuario en una BD
+        let contrasena: string= this.generacion_contrasena();
+        let hash: string = bcrypt.hashSync(contrasena, this.salts);
+        
+        let id = await this.gestor_usuarios.crear_usuario(correo, nombre, hash, caracteristicas);
+
+        //Envia el correo con la contrasena
+        let cuerpo_correo: string = fs.readFileSync('assets/html/correo_recuperar.html',
+            { encoding: 'utf8', flag: 'r' });
+        cuerpo_correo = util.format(cuerpo_correo, contrasena);
+        return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta de Usuario  — Audiophistic', cuerpo_correo);
+        return "string";
     }
 
     private descifrar_token(token: string): Usuario{

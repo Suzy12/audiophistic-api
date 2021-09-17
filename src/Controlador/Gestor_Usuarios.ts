@@ -1,3 +1,4 @@
+import { Creador_de_Contenido } from "../Modelo/Creador_de_Contenido";
 import { Usuario } from "../Modelo/Usuario"
 import DAO from "./DAO";
 export default class Gestor_Usuarios {
@@ -23,6 +24,14 @@ export default class Gestor_Usuarios {
 
     verificar_usuario(correo: string): Promise<Usuario>{
         return this.base_datos.verificar_usuario(correo);
+    }
+
+    // Crear Usuario Creador de Contenido
+    crear_usuario(correo: string, nombre: string, contrasena: string, caracteristicas: Creador_de_Contenido): Promise<string>{
+        return this.base_datos.crear_usuario(caracteristicas.id_tipo, correo, nombre, contrasena, caracteristicas)
+            .then((id_tipo: string) => {
+                return id_tipo;
+            });
     }
 
     // Elimina el usuario dado usando el método del DAO
