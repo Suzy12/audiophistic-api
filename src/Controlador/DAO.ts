@@ -179,7 +179,6 @@ export default class DAO {
             let res = await this.cliente.query('select * from crear_producto($1, $2, $3, $4, $5, $6, $7, $8, $9)',
                 [id_creador, id_tipo, fecha_lanzamiento, titulo, precio, tiempo_envio, 
                     descripcion, caracteristicas, estilos]);
-            console.log(res);
             if (res.rows[0]) {
                 return res.rows[0].crear_producto;
             } else {
