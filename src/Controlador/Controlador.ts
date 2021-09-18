@@ -57,7 +57,7 @@ export default class Controlador {
         let id = await this.gestor_usuarios.crear_usuario(correo, nombre, hash, caracteristicas);
 
         //Envia el correo con la contrasena
-        let cuerpo_correo: string = fs.readFileSync('assets/html/correo_recuperar.html',
+        let cuerpo_correo: string = fs.readFileSync('assets/html/correo_cuenta_nueva.html',
             { encoding: 'utf8', flag: 'r' });
         cuerpo_correo = util.format(cuerpo_correo, contrasena);
         return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta de Usuario  — Audiophistic', cuerpo_correo);
