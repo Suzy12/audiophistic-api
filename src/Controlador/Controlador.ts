@@ -54,7 +54,7 @@ export default class Controlador {
         let contrasena: string= this.generacion_contrasena();
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
         
-        let id = await this.gestor_usuarios.crear_usuario(correo, nombre, hash, caracteristicas);
+        await this.gestor_usuarios.crear_usuario(correo, nombre, hash, caracteristicas);
 
         //Envia el correo con la contrasena
         let cuerpo_correo: string = fs.readFileSync('assets/html/correo_cuenta_nueva.html',
@@ -75,7 +75,9 @@ export default class Controlador {
     }
 
     // Crea el producto con los datos enviados
-    crear_producto(producto: Producto, estilos: Estilo[]): Promise<string> {
+    crear_producto(producto: Producto, estilos: Estilo[], token: string): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        producto.id_creador = descifrado.id_usuario;
         return this.gestor_productos.crear_producto(producto, estilos);
     }
 
@@ -112,6 +114,12 @@ export default class Controlador {
     //Consulta los productos de un Creador de Contenido segun su ID
     consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
+    }
+
+    //Consulta los productos de un Usuario segun su ID
+    consultar_productos_usuario(token: string): Promise<Producto[]> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
     }
 
     //Elimina de forma logica el usuario dado

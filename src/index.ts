@@ -230,9 +230,10 @@ app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Reque
 // Inserta un producto y todos sus datos a la base de datos
 app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
     try {
-        let { producto, estilos }: { producto: Producto, estilos: Estilo[] } = req.body;
+        let { producto, estilos, token }: 
+                { producto: Producto, estilos: Estilo[], token: string } = req.body;
         if (producto && estilos) {
-            controlador.crear_producto(producto, estilos)
+            controlador.crear_producto(producto, estilos, token)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
@@ -267,6 +268,21 @@ app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, r
     try {
         let id_usuario: number = parseInt(req.params.id_creador_contenido);
         controlador.consultar_productos_creador(id_usuario)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Devuelve los productos que ha creado el usuario dentro del token
+app.get('/mis_productos', autorizacion_creador_contenido, (req: express.Request, res) => {
+    try {
+        let { token }: { token: string } = req.body;
+        controlador.consultar_productos_usuario(token)
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
