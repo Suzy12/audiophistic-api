@@ -189,6 +189,25 @@ export default class DAO {
         }
     }
 
+    // Inserta el producto con los cambios dados
+    async modificar_producto(id_producto: number, id_creador: number, fecha_lanzamiento: Date,
+        titulo: string, precio: number, tiempo_envio: number, descripcion: string, 
+            caracteristicas: Tipos_Producto,
+        estilos: Estilo[]): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from modificar_producto($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+                [id_producto, id_creador, fecha_lanzamiento, titulo, precio, tiempo_envio, 
+                    descripcion, caracteristicas, estilos]);
+            if (res.rows[0]) {
+                return res.rows[0].modificar_producto;
+            } else {
+                throw new Error("No se pudo insertar el producto");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Recupera todos los productos activos
     async consultar_productos(): Promise<Producto[]> {
         try {

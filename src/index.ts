@@ -230,10 +230,30 @@ app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Reque
 // Inserta un producto y todos sus datos a la base de datos
 app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
     try {
-        let { producto, estilos, token }: 
-                { producto: Producto, estilos: Estilo[], token: string } = req.body;
-        if (producto && estilos) {
+        let { producto, estilos }: { producto: Producto, estilos: Estilo[]} = req.body;
+                let token: string = (hay_auth(req, res) as string[])[1];
+        if (producto && estilos && token) {
             controlador.crear_producto(producto, estilos, token)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+app.post('/modificar_producto', autorizacion_creador_contenido, (req, res) => {
+    try {
+        let { producto, estilos}: 
+                { producto: Producto, estilos: Estilo[]} = req.body
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (producto && estilos && token) {
+            controlador.modificar_producto(producto, estilos, token)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
@@ -281,7 +301,7 @@ app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, r
 // Devuelve los productos que ha creado el usuario dentro del token
 app.get('/mis_productos', autorizacion_creador_contenido, (req: express.Request, res) => {
     try {
-        let { token }: { token: string } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
         controlador.consultar_productos_usuario(token)
             .then((resultado: any) => {
                 return res.send({ resultado });

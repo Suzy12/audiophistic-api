@@ -25,6 +25,20 @@ export default class Gestor_Prodcuctos {
         }
     }
 
+    modificar_producto(producto: Producto, estilos: Estilo[]): Promise<string> {
+        // Revisa si los datos opcionales están completos
+        if (producto.fecha_lanzamiento && producto.tiempo_envio && producto.descripcion)
+            return this.base_datos.modificar_producto(producto.id_producto, producto.id_creador,
+                producto.fecha_lanzamiento, producto.titulo, producto.precio, producto.tiempo_envio,
+                producto.descripcion, producto.caracteristicas, estilos)
+                .then((resultado: string) => {
+                    return resultado;
+                });
+        else {
+            throw new Error("Los datos están incompletos");
+        }
+    }
+
 
     // Consulta todos los productos activos
     consultar_productos(): Promise<Producto[]> {

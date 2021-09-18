@@ -80,6 +80,13 @@ export default class Controlador {
         producto.id_creador = descifrado.id_usuario;
         return this.gestor_productos.crear_producto(producto, estilos);
     }
+    
+    // "Modifica" el producto con los datos enviados
+    modificar_producto(producto: Producto, estilos: Estilo[], token: string): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        producto.id_creador = descifrado.id_usuario;
+        return this.gestor_productos.modificar_producto(producto, estilos);
+    }
 
     // Consulta todos los productos
     consultar_productos(): Promise<Producto[]> {
