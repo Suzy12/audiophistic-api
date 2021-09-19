@@ -243,7 +243,7 @@ export default class DAO {
             if (res.rows[0]) {
                 return res.rows;
             } else {
-                throw new Error("El cliente no se puede acceder");
+                throw new Error("El usuario no tiene productos");
             }
         } catch (err) {
             throw err;
