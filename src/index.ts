@@ -230,8 +230,8 @@ app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Reque
 // Inserta un producto y todos sus datos a la base de datos
 app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
     try {
-        let { producto, estilos }: { producto: Producto, estilos: Estilo[]} = req.body;
-                let token: string = (hay_auth(req, res) as string[])[1];
+        let { producto, estilos }: { producto: Producto, estilos: Estilo[] } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
         if (producto && estilos && token) {
             controlador.crear_producto(producto, estilos, token)
                 .then((resultado: any) => {
@@ -249,8 +249,8 @@ app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
 
 app.post('/modificar_producto', autorizacion_creador_contenido, (req, res) => {
     try {
-        let { producto, estilos}: 
-                { producto: Producto, estilos: Estilo[]} = req.body
+        let { producto, estilos }:
+            { producto: Producto, estilos: Estilo[] } = req.body
         let token: string = (hay_auth(req, res) as string[])[1];
         if (producto && estilos && token) {
             controlador.modificar_producto(producto, estilos, token)

@@ -9,7 +9,7 @@ export interface Producto {
     precio: number;
     tiempo_envio?: number;
     descripcion?: string;
-    fecha_lanzamiento?: Date;
+    fecha_lanzamiento?: number;
     enlace?: string;
     foto? : string;
     caracteristicas: Tipos_Producto;

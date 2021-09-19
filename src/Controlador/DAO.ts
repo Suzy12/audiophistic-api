@@ -171,7 +171,7 @@ export default class DAO {
     }
 
     // Crea un producto con los datos dados
-    async crear_producto(id_creador: number, id_tipo: number, fecha_lanzamiento: Date,
+    async crear_producto(id_creador: number, id_tipo: number, fecha_lanzamiento: number,
         titulo: string, precio: number, tiempo_envio: number, descripcion: string, 
             caracteristicas: Tipos_Producto,
         estilos: Estilo[]): Promise<string> {
@@ -190,7 +190,7 @@ export default class DAO {
     }
 
     // Inserta el producto con los cambios dados
-    async modificar_producto(id_producto: number, id_creador: number, fecha_lanzamiento: Date,
+    async modificar_producto(id_producto: number, id_creador: number, fecha_lanzamiento: number,
         titulo: string, precio: number, tiempo_envio: number, descripcion: string, 
             caracteristicas: Tipos_Producto,
         estilos: Estilo[]): Promise<string> {
@@ -204,6 +204,7 @@ export default class DAO {
                 throw new Error("No se pudo insertar el producto");
             }
         } catch (err) {
+            console.log(err);
             throw err;
         }
     }
