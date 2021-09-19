@@ -250,12 +250,27 @@ export default class DAO {
             throw err;
         }
     }
-    // Cambia el estado de un usuario a inactivo
-    async eliminar_producto(id_usuario: number): Promise<string> {
+    // Cambia el estado de un producto a inactivo
+    async eliminar_producto(id_producto: number): Promise<string> {
         try {
-            let res = await this.cliente.query('select * from eliminar_producto($1)', [id_usuario]);
+            let res = await this.cliente.query('select * from eliminar_producto($1)', [id_producto]);
             if (res.rows[0]) {
                 return res.rows[0].eliminar_producto;
+            } else {
+                throw new Error("El producto no pudo ser eliminado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Cambia el estado de un producto del creador a inactivo
+    async eliminar_mi_producto(id_producto: number, id_creador: number): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from eliminar_mi_producto($1, $2)', 
+            [id_producto, id_creador]);
+            if (res.rows[0]) {
+                return res.rows[0].eliminar_mi_producto;
             } else {
                 throw new Error("El producto no pudo ser eliminado");
             }

@@ -103,6 +103,12 @@ export default class Controlador {
         return this.gestor_productos.eliminar_producto(id_producto);
     }
 
+    // Consulta los datos del producto respectivo
+    eliminar_mi_producto(id_producto: number, token: string): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_productos.eliminar_mi_producto(id_producto, descifrado.id_usuario);
+    }
+
     // Consulta los estilos de un producto dado
     consultar_estilos(id_producto: number): Promise<Estilo[]> {
         return this.gestor_estilos.consultar_estilos(id_producto);

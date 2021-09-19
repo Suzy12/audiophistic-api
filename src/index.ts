@@ -358,6 +358,22 @@ app.get('/eliminar_producto/:id_producto', autorizacion_admin, (req: express.Req
     }
 })
 
+// Devuelve todos los datos del usuario, se comunica con el controlador
+app.get('/eliminar_mi_producto/:id_producto', autorizacion_creador_contenido, (req: express.Request, res) => {
+    try {
+        let id_producto: number = parseInt(req.params.id_producto);
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.eliminar_mi_producto(id_producto, token)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {

@@ -62,6 +62,12 @@ export default class Gestor_Prodcuctos {
 
     }
 
+    // Elimina el producto dado
+    eliminar_mi_producto(id_producto: number, id_creador: number): Promise<string> {
+        return this.base_datos.eliminar_mi_producto(id_producto, id_creador);
+
+    }
+
     //Obtiene productos de un creador de contenido segun su ID
     consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.base_datos.consultar_productos_creador(id_creador_contenido)
