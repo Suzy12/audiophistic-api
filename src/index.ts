@@ -7,7 +7,7 @@ import { Producto } from './Modelo/Producto';
 import { Estilo } from './Modelo/Estilo';
 let opciones_cors = {
     origin: ['http://186.176.18.72', '201.194.192.205',
-    '152.231.200.151','http://localhost:4200'],
+    '152.231.200.151','http://localhost:4200', 'https://audiophistic1.web.app'],
     optionsSuccessStatus: 200
 }
 const app = express();

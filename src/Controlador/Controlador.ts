@@ -61,7 +61,6 @@ export default class Controlador {
             { encoding: 'utf8', flag: 'r' });
         cuerpo_correo = util.format(cuerpo_correo, contrasena);
         return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta de Usuario  — Audiophistic', cuerpo_correo);
-        return "string";
     }
 
     private descifrar_token(token: string): Usuario{
