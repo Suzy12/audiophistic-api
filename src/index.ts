@@ -6,7 +6,8 @@ import { Tipos_Usuario } from './Modelo/Tipos_Usuario';
 import { Producto } from './Modelo/Producto';
 import { Estilo } from './Modelo/Estilo';
 let opciones_cors = {
-    origin: ['http://186.176.18.72', 'http://localhost:4200'],
+    origin: ['http://186.176.18.72', '201.194.192.205',
+    '152.231.200.151','http://localhost:4200'],
     optionsSuccessStatus: 200
 }
 const app = express();
