@@ -4,6 +4,7 @@ import { Producto } from "../Modelo/Producto";
 import { Tipos_Producto } from "../Modelo/Tipos_Producto";
 import { Tipos_Usuario } from "../Modelo/Tipos_Usuario";
 import { Usuario } from "../Modelo/Usuario";
+import { Categoria } from "../Modelo/Categoria";
 
 require('dotenv').config();
 
@@ -81,6 +82,21 @@ export default class DAO {
             }
 
         } catch (err){
+            throw err;
+        }
+    }
+
+    //se crea una categoria
+    async crear_categoria(nombre: string, fecha_creacion: Date, cant_blogs: number): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from crear_categoria($1,$2,$3)', [nombre, fecha_creacion, cant_blogs]);
+            if (res.rows[0]){
+                return res.rows[0].crear_categoria;
+            } else{
+                throw new Error("No se pudo crear la categoria");
+            }
+
+        }catch (err){
             throw err;
         }
     }

@@ -9,6 +9,7 @@ import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
 import Manejador_Tokens from './Manejador_Tokens';
 import Gestor_Estilos from './Gestor_Estilos';
+import Gestor_Categorias from './Gestor_Categorias';
 import { Estilo } from '../Modelo/Estilo';
 import { Tipos_Usuario } from '../Modelo/Tipos_Usuario';
 
@@ -20,6 +21,7 @@ export default class Controlador {
     private gestor_productos: Gestor_Prodcuctos;
     private gestor_usuarios: Gestor_Usuarios;
     private gestor_estilos: Gestor_Estilos;
+    private gestor_categorias: Gestor_Categorias;
     //El numero de salts para el hash
     private salts = 10;
 
@@ -29,6 +31,7 @@ export default class Controlador {
         this.gestor_productos = new Gestor_Prodcuctos();
         this.gestor_usuarios = new Gestor_Usuarios();
         this.gestor_estilos = new Gestor_Estilos();
+        this.gestor_categorias= new Gestor_Categorias();
     }
 
 
@@ -71,6 +74,11 @@ export default class Controlador {
     confirmar_usuario(token: string): Promise<string> {
         let id_usuario = this.manejador_token.verificar_token_registro(token);
         return this.gestor_usuarios.confirmar_usuario(id_usuario);
+    }
+
+    // Crea categoria con los datos 
+    crear_categoria(nombre: string, fecha_creacion: Date, cant_blogs: number): Promise<string>{
+        return this.gestor_categorias.crear_categoria(nombre, fecha_creacion, cant_blogs);
     }
 
     // Crea el producto con los datos enviados
