@@ -87,9 +87,9 @@ export default class DAO {
     }
 
     //se crea una categoria
-    async crear_categoria(nombre: string, fecha_creacion: Date, cant_blogs: number): Promise<string>{
+    async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
         try{
-            let res = await this.cliente.query('select * from crear_categoria($1,$2,$3)', [nombre, fecha_creacion, cant_blogs]);
+            let res = await this.cliente.query('select * from crear_categoria($1)', [nombre/*, fecha_creacion, cant_blogs*/]);
             if (res.rows[0]){
                 return res.rows[0].crear_categoria;
             } else{

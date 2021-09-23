@@ -77,8 +77,8 @@ export default class Controlador {
     }
 
     // Crea categoria con los datos 
-    crear_categoria(nombre: string, fecha_creacion: Date, cant_blogs: number): Promise<string>{
-        return this.gestor_categorias.crear_categoria(nombre, fecha_creacion, cant_blogs);
+    crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
+        return this.gestor_categorias.crear_categoria(nombre/*, fecha_creacion, cant_blogs*/);
     }
 
     // Crea el producto con los datos enviados

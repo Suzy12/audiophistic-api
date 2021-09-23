@@ -11,8 +11,8 @@ export default class Gestor_Categorias{
     }
 
     //crea una categoria nueva
-    crear_categoria(nombre: string, fecha_creacion: Date, cant_blogs: number): Promise<string>{
-        return this.base_datos.crear_categoria(nombre, fecha_creacion, cant_blogs);
+    crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
+        return this.base_datos.crear_categoria(nombre/*, fecha_creacion, cant_blogs*/);
     }
 
 

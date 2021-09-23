@@ -249,11 +249,11 @@ app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
 });
 
 //crear una nueva categoria
-app.post('/crear_categoria', (req,res) => {
+app.post('/crear_categoria', autorizacion_creador_contenido, (req,res) => {
     try {
-        let {nombre, fecha_creacion, cant_blogs}: { nombre: string, fecha_creacion: Date, cant_blogs: number} = req.body;
+        let {nombre/*, fecha_creacion, cant_blogs*/}: { nombre: string/*, fecha_creacion: Date, cant_blogs: number*/} = req.body;
         if (nombre){
-            controlador.crear_categoria(nombre, fecha_creacion, cant_blogs)
+            controlador.crear_categoria(nombre, /*fecha_creacion, cant_blogs*/)
                 .then((resultado: any) => {
                     return res.send({resultado});
                 }).catch((err: any) => {
