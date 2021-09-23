@@ -101,6 +101,21 @@ export default class DAO {
         }
     }
 
+    //get categorias
+    async get_categorias(): Promise<string>{
+        try{
+            let res= await this.cliente.query('select * from get_categorias()');
+            if (res.rows[0]){
+                return res.rows[0].get_categorias;
+            } else{
+                throw new Error("No se pudieron traer las categorias ");
+            }
+
+        }catch (err){
+            throw err;
+        }
+    }
+
     // Reemplaza la contrasena de un usuario pero con mail en lugar de ID
     async cambiar_contrasena_con_correo(correo: string, contrasena: string): Promise<string> {
         try {

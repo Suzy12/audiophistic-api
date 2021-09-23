@@ -15,5 +15,10 @@ export default class Gestor_Categorias{
         return this.base_datos.crear_categoria(nombre/*, fecha_creacion, cant_blogs*/);
     }
 
+    //trae todas las categorias
+    get_categorias(): Promise<string>{
+        return this.base_datos.get_categorias();
+    }
+
 
 }

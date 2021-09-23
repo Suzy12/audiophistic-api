@@ -268,6 +268,20 @@ app.post('/crear_categoria', autorizacion_creador_contenido, (req,res) => {
     }
 });
 
+//devuelve todas las categorias
+app.get('/categorias', /*autorizacion_admin,*/ (req,res) => {
+    try{
+        controlador.get_categorias()
+        .then((resultado: any)=>{
+            return res.send({resultado});
+        }).catch((err:any) => {
+            return res.send({error: err.message})
+        });
+    }catch(err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
 app.post('/modificar_producto', autorizacion_creador_contenido, (req, res) => {
     try {
         let { producto, estilos }:

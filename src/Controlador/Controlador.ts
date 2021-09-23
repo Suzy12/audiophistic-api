@@ -81,6 +81,11 @@ export default class Controlador {
         return this.gestor_categorias.crear_categoria(nombre/*, fecha_creacion, cant_blogs*/);
     }
 
+    //Se traen todas las categorias
+    get_categorias():Promise<string>{
+        return this.gestor_categorias.get_categorias();
+    }
+
     // Crea el producto con los datos enviados
     crear_producto(producto: Producto, estilos: Estilo[], token: string): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
