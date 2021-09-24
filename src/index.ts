@@ -283,9 +283,9 @@ app.get('/categorias', autorizacion_admin, (req,res) => {
 });
 
 //devuelve todas las categorias
-app.post('/eliminar_categoria', autorizacion_admin, (req,res) => {
+app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req,res) => {
     try{
-        let { id_categoria }: {id_categoria: number} = req.body;
+        let id_categoria : number = parseInt(req.params.id_categoria);
         controlador.eliminar_categoria(id_categoria)
         .then((resultado: any)=>{
             return res.send({resultado});
