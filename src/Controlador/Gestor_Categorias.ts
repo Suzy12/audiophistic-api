@@ -10,15 +10,19 @@ export default class Gestor_Categorias{
         this.base_datos = DAO.get_instancia();
     }
 
-    //crea una categoria nueva
+    // Crea una categoria nueva
     crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
         return this.base_datos.crear_categoria(nombre/*, fecha_creacion, cant_blogs*/);
     }
 
-    //trae todas las categorias
+    // Consulta todas las categorias
     consultar_categorias(): Promise<Categoria[]>{
         return this.base_datos.consultar_categorias();
     }
 
+    // Elimina una categoria
+    eliminar_categoria(id_categoria: number): Promise<string>{
+        return this.base_datos.eliminar_categoria(id_categoria);
+    }
 
 }

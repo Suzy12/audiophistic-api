@@ -82,9 +82,14 @@ export default class Controlador {
         return this.gestor_categorias.crear_categoria(nombre/*, fecha_creacion, cant_blogs*/);
     }
 
-    //Se traen todas las categorias
+    // Consulta todas las categorias
     consultar_categorias():Promise<Categoria[]>{
         return this.gestor_categorias.consultar_categorias();
+    }
+
+    // Elimina una categoria
+    eliminar_categoria(id_categoria: number):Promise<string>{
+        return this.gestor_categorias.eliminar_categoria(id_categoria);
     }
 
     // Crea el producto con los datos enviados

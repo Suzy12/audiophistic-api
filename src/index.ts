@@ -108,7 +108,7 @@ app.post('/registrar_usuario', (req, res) => {
 //Crear usuario, creador de contenido
 app.post('/crear_usuario', autorizacion_admin, (req, res) => {
     try {
-        var { correo, nombre, caracteristicas }: { correo: string, nombre: string, caracteristicas: Tipos_Usuario } = req.body;
+        let { correo, nombre, caracteristicas }: { correo: string, nombre: string, caracteristicas: Tipos_Usuario } = req.body;
         if (correo && nombre && caracteristicas) {
             return controlador.crear_usuario(correo, nombre, caracteristicas)
                 .then((resultado: any) => {
@@ -249,7 +249,7 @@ app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
 });
 
 //crear una nueva categoria
-app.post('/crear_categoria', autorizacion_creador_contenido, (req,res) => {
+app.post('/crear_categoria', autorizacion_admin, (req,res) => {
     try {
         let {nombre/*, fecha_creacion, cant_blogs*/}: { nombre: string/*, fecha_creacion: Date, cant_blogs: number*/} = req.body;
         if (nombre){
@@ -272,6 +272,21 @@ app.post('/crear_categoria', autorizacion_creador_contenido, (req,res) => {
 app.get('/categorias', autorizacion_admin, (req,res) => {
     try{
         controlador.consultar_categorias()
+        .then((resultado: any)=>{
+            return res.send({resultado});
+        }).catch((err:any) => {
+            return res.send({error: err.message})
+        });
+    }catch(err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+//devuelve todas las categorias
+app.post('/eliminar_categoria', autorizacion_admin, (req,res) => {
+    try{
+        let { id_categoria }: {id_categoria: number} = req.body;
+        controlador.eliminar_categoria(id_categoria)
         .then((resultado: any)=>{
             return res.send({resultado});
         }).catch((err:any) => {

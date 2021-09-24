@@ -86,36 +86,6 @@ export default class DAO {
         }
     }
 
-    //se crea una categoria
-    async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
-        try{
-            let res = await this.cliente.query('select * from crear_categoria($1)', [nombre/*, fecha_creacion, cant_blogs*/]);
-            if (res.rows[0]){
-                return res.rows[0].crear_categoria;
-            } else{
-                throw new Error("No se pudo crear la categoria");
-            }
-
-        }catch (err){
-            throw err;
-        }
-    }
-
-    //Devuelve todas las categorias
-    async consultar_categorias(): Promise<Categoria[]>{
-        try{
-            let res= await this.cliente.query('select * from consultar_categorias()');
-            if (res.rows[0]){
-                return res.rows;
-            } else{
-                throw new Error("No se pudieron traer las categorias ");
-            }
-
-        }catch (err){
-            throw err;
-        }
-    }
-
     // Reemplaza la contrasena de un usuario pero con mail en lugar de ID
     async cambiar_contrasena_con_correo(correo: string, contrasena: string): Promise<string> {
         try {
@@ -334,6 +304,52 @@ export default class DAO {
                 throw new Error("El producto no existe o fue eliminado");
             }
         } catch (err) {
+            throw err;
+        }
+    }
+
+    // Se crea una categoria
+    async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from crear_categoria($1)', [nombre/*, fecha_creacion, cant_blogs*/]);
+            if (res.rows[0]){
+                return res.rows[0].crear_categoria;
+            } else{
+                throw new Error("No se pudo crear la categoria");
+            }
+
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Devuelve todas las categorias
+    async consultar_categorias(): Promise<Categoria[]>{
+        try{
+            let res= await this.cliente.query('select * from consultar_categorias()');
+            if (res.rows[0]){
+                return res.rows;
+            } else{
+                throw new Error("No se pudieron traer las categorias ");
+            }
+
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Devuelve todas las categorias
+    async eliminar_categoria(id_categoria: number): Promise<string>{
+        try{
+            let res= await this.cliente.query('select * from eliminar_categoria($1)',
+                [id_categoria]);
+            if (res.rows[0]){
+                return res.rows[0].eliminar_categoria;
+            } else{
+                throw new Error("No se pudieron traer las categorias ");
+            }
+
+        }catch (err){
             throw err;
         }
     }
