@@ -7,6 +7,7 @@ import Enviador_Correos from "./Enviador_Correos";
 import bcrypt from 'bcrypt';
 import { Producto } from "../Modelo/Producto";
 import { Usuario } from "../Modelo/Usuario";
+import { Categoria } from '../Modelo/Categoria';
 import Manejador_Tokens from './Manejador_Tokens';
 import Gestor_Estilos from './Gestor_Estilos';
 import Gestor_Categorias from './Gestor_Categorias';
@@ -82,8 +83,8 @@ export default class Controlador {
     }
 
     //Se traen todas las categorias
-    get_categorias():Promise<string>{
-        return this.gestor_categorias.get_categorias();
+    consultar_categorias():Promise<Categoria[]>{
+        return this.gestor_categorias.consultar_categorias();
     }
 
     // Crea el producto con los datos enviados

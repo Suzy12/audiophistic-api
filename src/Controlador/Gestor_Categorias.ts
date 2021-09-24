@@ -16,8 +16,8 @@ export default class Gestor_Categorias{
     }
 
     //trae todas las categorias
-    get_categorias(): Promise<string>{
-        return this.base_datos.get_categorias();
+    consultar_categorias(): Promise<Categoria[]>{
+        return this.base_datos.consultar_categorias();
     }
 
 

@@ -101,12 +101,12 @@ export default class DAO {
         }
     }
 
-    //get categorias
-    async get_categorias(): Promise<string>{
+    //Devuelve todas las categorias
+    async consultar_categorias(): Promise<Categoria[]>{
         try{
-            let res= await this.cliente.query('select * from get_categorias()');
+            let res= await this.cliente.query('select * from consultar_categorias()');
             if (res.rows[0]){
-                return res.rows[0].get_categorias;
+                return res.rows;
             } else{
                 throw new Error("No se pudieron traer las categorias ");
             }

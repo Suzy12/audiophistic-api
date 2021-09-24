@@ -269,9 +269,9 @@ app.post('/crear_categoria', autorizacion_creador_contenido, (req,res) => {
 });
 
 //devuelve todas las categorias
-app.get('/categorias', /*autorizacion_admin,*/ (req,res) => {
+app.get('/categorias', autorizacion_admin, (req,res) => {
     try{
-        controlador.get_categorias()
+        controlador.consultar_categorias()
         .then((resultado: any)=>{
             return res.send({resultado});
         }).catch((err:any) => {
