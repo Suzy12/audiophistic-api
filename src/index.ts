@@ -317,6 +317,26 @@ app.post('/modificar_producto', autorizacion_creador_contenido, (req, res) => {
     }
 });
 
+// Editar los datos del usuario
+app.post('/editar_usuario', (req, res) => {
+    try{
+        let { token, nombre_a_cambiar, caracteristicas }: 
+        { token: string, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario } = req.body;
+        if (token && nombre_a_cambiar && caracteristicas){
+            controlador.editar_usuario(token, nombre_a_cambiar, caracteristicas)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err:any) {
+        return res.send({ error: err.message });
+    }
+})
+
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
 

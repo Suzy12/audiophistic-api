@@ -153,7 +153,13 @@ export default class Controlador {
         return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
     }
 
-    //Elimina de forma logica el usuario dado
+    // Editar la informacion de un usuario
+    editar_usuario (token: string, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario): Promise<string>{
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_usuarios.editar_usuario(descifrado.id_usuario, nombre_a_cambiar, caracteristicas);
+    }
+
+    // Elimina de forma logica el usuario dado
     eliminar_usuario(id_usuario: number): Promise<string> {
         return this.gestor_usuarios.eliminar_usuario(id_usuario);
     }

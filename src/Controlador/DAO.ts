@@ -5,6 +5,8 @@ import { Tipos_Producto } from "../Modelo/Tipos_Producto";
 import { Tipos_Usuario } from "../Modelo/Tipos_Usuario";
 import { Usuario } from "../Modelo/Usuario";
 import { Categoria } from "../Modelo/Categoria";
+import Manejador_Tokens from "./Manejador_Tokens";
+import { Token } from "nodemailer/lib/xoauth2";
 
 require('dotenv').config();
 
@@ -70,7 +72,7 @@ export default class DAO {
         }
     }
 
-    //se crea un usuario consumidor
+    // Se crea un usuario consumidor
     async crear_usuario(tipo_usuario: number, correo: string, nombre: string, contrasena: string, caracteristicas: Tipos_Usuario): Promise<string>{
         try{
             let res = await this.cliente.query('select * from crear_usuario($1,$2,$3,$4,$5)',
@@ -84,6 +86,23 @@ export default class DAO {
         } catch (err){
             throw err;
         }
+    }
+
+    // Se edita un usuairo
+    async editar_usuario(id_usuario_a_cambiar: number, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from editar_usuario($1, $2, $3)',
+            [id_usuario_a_cambiar, nombre_a_cambiar, caracteristicas ]);
+            if (res.rows[0]) {
+                return res.rows[0].editar_usuario;
+            } else {
+                throw new Error("No se pudo editar el usuario");
+            }
+        }catch (err) {
+            console.log(err);
+            throw err; 
+        }
+
     }
 
     // Reemplaza la contrasena de un usuario pero con mail en lugar de ID
@@ -142,6 +161,7 @@ export default class DAO {
             throw err;
         }
     }
+
 
     // Recupera todos los usuarios confirmados y activos
     async consultar_usuarios(): Promise<Usuario[]> {

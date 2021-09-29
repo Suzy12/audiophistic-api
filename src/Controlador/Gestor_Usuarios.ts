@@ -74,9 +74,16 @@ export default class Gestor_Usuarios {
 
 
     // Modifica los datos del usuario enviado
-    editar_usuario(id_usuairo: number): string {
-
-        return "usuario modificado";
+    editar_usuario(id_usuairo_a_cambiar: number, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario): Promise<string> {
+        // Revisa si los datos opcionales están completos
+        if (id_usuairo_a_cambiar && nombre_a_cambiar && caracteristicas)
+            return this.base_datos.editar_usuario(id_usuairo_a_cambiar, nombre_a_cambiar, caracteristicas)
+            .then((resultado: string) => {
+                return resultado;
+            });
+        else {
+                throw new Error("Los datos están incompletos");
+        }
     }
 
 
