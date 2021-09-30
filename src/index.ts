@@ -202,6 +202,27 @@ app.post('/iniciar_sesion', (req, res) => {
     }
 })
 
+
+// Editar los datos del usuario
+app.post('/editar_usuario', (req, res) => {
+    try{
+        let { nombre, caracteristicas }: { nombre: string, caracteristicas: Tipos_Usuario } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (token && nombre && caracteristicas !== undefined){
+            controlador.editar_usuario(token, nombre, caracteristicas)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err:any) {
+        return res.send({ error: err.message });
+    }
+})
+
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
 app.get('/usuarios', autorizacion_admin, (req, res) => {
@@ -242,26 +263,6 @@ app.get('/perfil', (req, res) => {
                 return res.send({ error: err.message });
             });
     } catch (err: any) {
-        return res.send({ error: err.message });
-    }
-})
-
-// Editar los datos del usuario
-app.post('/editar_usuario', (req, res) => {
-    try{
-        let { nombre, caracteristicas }: { nombre: string, caracteristicas: Tipos_Usuario } = req.body;
-        let token: string = (hay_auth(req, res) as string[])[1];
-        if (token && nombre && caracteristicas !== undefined){
-            controlador.editar_usuario(token, nombre, caracteristicas)
-                .then((resultado: any) => {
-                    return res.send({ resultado });
-                }).catch((err: any) => {
-                    return res.send({ error: err.message });
-                });
-        } else {
-            return res.send({ error: "Los datos están incompletos" })
-        }
-    } catch (err:any) {
         return res.send({ error: err.message });
     }
 })

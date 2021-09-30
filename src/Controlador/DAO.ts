@@ -88,21 +88,18 @@ export default class DAO {
         }
     }
 
-    // Se edita un usuairo
-    async editar_usuario(id_usuario: number, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {
+    // Reemplaza la contrasena de un usuario
+    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string> {
         try {
-            let res = await this.cliente.query('select * from editar_usuario($1, $2, $3)',
-                [id_usuario, nombre, caracteristicas]);
-            if (res.rows[0]) {
-                return res.rows[0].editar_usuario;
+            let res = await this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena]);
+            if (res.rows[0].cambiar_contrasena) {
+                return res.rows[0].cambiar_contrasena;
             } else {
-                throw new Error("No se pudo editar el usuario");
+                throw new Error("La contraseña no pudo ser cambiada");
             }
         } catch (err) {
-            console.log(err);
             throw err;
         }
-
     }
 
     // Reemplaza la contrasena de un usuario pero con mail en lugar de ID
@@ -148,18 +145,21 @@ export default class DAO {
         }
     }
 
-    // Reemplaza la contrasena de un usuario
-    async cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string> {
+    // Se edita un usuairo
+    async editar_usuario(id_usuario: number, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {
         try {
-            let res = await this.cliente.query('select * from cambiar_contrasena($1::int,$2::character varying(60))', [id_usuario, contrasena]);
-            if (res.rows[0].cambiar_contrasena) {
-                return res.rows[0].cambiar_contrasena;
+            let res = await this.cliente.query('select * from editar_usuario($1, $2, $3)',
+                [id_usuario, nombre, caracteristicas]);
+            if (res.rows[0]) {
+                return res.rows[0].editar_usuario;
             } else {
-                throw new Error("La contraseña no pudo ser cambiada");
+                throw new Error("No se pudo editar el usuario");
             }
         } catch (err) {
+            console.log(err);
             throw err;
         }
+
     }
 
     // Recupera todos los usuarios confirmados y activos
@@ -184,6 +184,20 @@ export default class DAO {
                 return res.rows[0];
             } else {
                 throw new Error("El usuario no existe, no ha sido confirmado o fue eliminado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Eliminación de usuario. Este es un borrado lógico y NO físico. 
+    async eliminar_usuario(id_usuario: number): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from eliminar_usuario($1)', [id_usuario]);
+            if (res.rows[0]) {
+                return ("El usuario ha sido desactivado");
+            } else {
+                throw new Error("el usuario no se ha podido eliminar");
             }
         } catch (err) {
             throw err;
@@ -220,23 +234,6 @@ export default class DAO {
                     descripcion, caracteristicas, estilos]);
             if (res.rows[0]) {
                 return res.rows[0].modificar_producto;
-            } else {
-                throw new Error("No se pudo insertar el producto");
-            }
-        } catch (err) {
-            console.log(err);
-            throw err;
-        }
-    }
-
-
-    // Cambia la existencia del producto dado en los estilos dados
-    async modificar_existencia(id_creador: number, estilos: Estilo[]): Promise<string> {
-        try {
-            let res = await this.cliente.query('select * from modificar_existencia($1, $2)',
-                [id_creador, estilos]);
-            if (res.rows[0]) {
-                return res.rows[0].modificar_existencia;
             } else {
                 throw new Error("No se pudo insertar el producto");
             }
@@ -316,20 +313,6 @@ export default class DAO {
         }
     }
 
-    // Eliminación de usuario. Este es un borrado lógico y NO físico. 
-    async eliminar_usuario(id_usuario: number): Promise<string> {
-        try {
-            let res = await this.cliente.query('select * from eliminar_usuario($1)', [id_usuario]);
-            if (res.rows[0]) {
-                return ("El usuario ha sido desactivado");
-            } else {
-                throw new Error("el usuario no se ha podido eliminar");
-            }
-        } catch (err) {
-            throw err;
-        }
-    }
-
     // Recupera un producto y sus datos segun su id
     async consultar_estilos(id_producto: number): Promise<Estilo[]> {
         try {
@@ -344,6 +327,21 @@ export default class DAO {
         }
     }
 
+    // Cambia la existencia del producto dado en los estilos dados
+    async modificar_existencia(id_creador: number, estilos: Estilo[]): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from modificar_existencia($1, $2)',
+                [id_creador, estilos]);
+            if (res.rows[0]) {
+                return res.rows[0].modificar_existencia;
+            } else {
+                throw new Error("No se pudo insertar el producto");
+            }
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
     // Se crea una categoria
     async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string> {
         try {
