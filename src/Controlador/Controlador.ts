@@ -106,6 +106,12 @@ export default class Controlador {
         return this.gestor_productos.modificar_producto(producto, estilos);
     }
 
+    // "Modifica" la existencia de los estilos del producto
+    modificar_existencia(token: string, estilos: Estilo[]): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_productos.modificar_existencia(descifrado.id_usuario, estilos);
+    }
+
     // Consulta todos los productos
     consultar_productos(): Promise<Producto[]> {
         return this.gestor_productos.consultar_productos();
@@ -142,6 +148,13 @@ export default class Controlador {
         return this.gestor_usuarios.consultar_usuario(id_usuario);
     }
 
+
+    // Consulta los datos del usuario para ese usuario
+    consultar_perfil(token: string): Promise<Usuario> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_usuarios.consultar_usuario(descifrado.id_usuario);
+    }
+
     //Consulta los productos de un Creador de Contenido segun su ID
     consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
@@ -154,9 +167,9 @@ export default class Controlador {
     }
 
     // Editar la informacion de un usuario
-    editar_usuario (token: string, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario): Promise<string>{
+    editar_usuario (token: string, nombre: string, caracteristicas: Tipos_Usuario): Promise<string>{
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_usuarios.editar_usuario(descifrado.id_usuario, nombre_a_cambiar, caracteristicas);
+        return this.gestor_usuarios.editar_usuario(descifrado, nombre, caracteristicas);
     }
 
     // Elimina de forma logica el usuario dado

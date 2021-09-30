@@ -1,9 +1,9 @@
 export interface Estilo {
-    id_producto?:number;
-    id_estilo?:number;
+    id_producto:number;
+    id_estilo:number;
     existencia:number;
-    nombre: string
+    nombre?: string
     precio: number;
-    descripcion: string;
-    fotos: string[];
+    descripcion?: string;
+    fotos?: string[];
 } 

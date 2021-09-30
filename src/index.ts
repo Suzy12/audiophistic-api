@@ -5,6 +5,7 @@ import Controlador_Acceso from './Controlador/Controlador_Acceso';
 import { Tipos_Usuario } from './Modelo/Tipos_Usuario';
 import { Producto } from './Modelo/Producto';
 import { Estilo } from './Modelo/Estilo';
+import { Creador_de_Contenido } from './Modelo/Creador_de_Contenido';
 let opciones_cors = {
     origin: ['http://186.176.18.72', '201.194.192.205',
     '152.231.200.151','http://localhost:4200', 'https://audiophistic1.web.app'],
@@ -108,7 +109,7 @@ app.post('/registrar_usuario', (req, res) => {
 //Crear usuario, creador de contenido
 app.post('/crear_usuario', autorizacion_admin, (req, res) => {
     try {
-        let { correo, nombre, caracteristicas }: { correo: string, nombre: string, caracteristicas: Tipos_Usuario } = req.body;
+        let { correo, nombre, caracteristicas }: { correo: string, nombre: string, caracteristicas: Creador_de_Contenido } = req.body;
         if (correo && nombre && caracteristicas) {
             return controlador.crear_usuario(correo, nombre, caracteristicas)
                 .then((resultado: any) => {
@@ -211,6 +212,40 @@ app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
     }
 })
 
+app.get('/perfil', (req, res) => {
+    try {
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.consultar_perfil(token)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Editar los datos del usuario
+app.post('/editar_usuario', (req, res) => {
+    try{
+        let { nombre, caracteristicas }: { nombre: string, caracteristicas: Tipos_Usuario } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (token && nombre && caracteristicas !== undefined){
+            controlador.editar_usuario(token, nombre, caracteristicas)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err:any) {
+        return res.send({ error: err.message });
+    }
+})
+
 
 //Elimina un usuario
 app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) => {
@@ -226,27 +261,6 @@ app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Reque
         return res.send({ error: err.message })
     }
 })
-
-
-// Inserta un producto y todos sus datos a la base de datos
-app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
-    try {
-        let { producto, estilos }: { producto: Producto, estilos: Estilo[] } = req.body;
-        let token: string = (hay_auth(req, res) as string[])[1];
-        if (producto && estilos && token) {
-            controlador.crear_producto(producto, estilos, token)
-                .then((resultado: any) => {
-                    return res.send({ resultado });
-                }).catch((err: any) => {
-                    return res.send({ error: err.message });
-                });
-        } else {
-            return res.send({ error: "Los datos están incompletos" })
-        }
-    } catch (err: any) {
-        return res.send({ error: err.message });
-    }
-});
 
 //crear una nueva categoria
 app.post('/crear_categoria', autorizacion_admin, (req,res) => {
@@ -297,6 +311,27 @@ app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req,res) => {
     }
 });
 
+// Inserta un producto y todos sus datos a la base de datos
+app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
+    try {
+        let { producto, estilos }: { producto: Producto, estilos: Estilo[] } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (producto && estilos && token) {
+            controlador.crear_producto(producto, estilos, token)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+
 app.post('/modificar_producto', autorizacion_creador_contenido, (req, res) => {
     try {
         let { producto, estilos }:
@@ -317,13 +352,13 @@ app.post('/modificar_producto', autorizacion_creador_contenido, (req, res) => {
     }
 });
 
-// Editar los datos del usuario
-app.post('/editar_usuario', (req, res) => {
-    try{
-        let { token, nombre_a_cambiar, caracteristicas }: 
-        { token: string, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario } = req.body;
-        if (token && nombre_a_cambiar && caracteristicas){
-            controlador.editar_usuario(token, nombre_a_cambiar, caracteristicas)
+app.post('/modificar_existencia', autorizacion_creador_contenido, (req, res) => {
+    try {
+        let { estilos }:
+            { estilos: Estilo[] } = req.body
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (estilos && token) {
+            controlador.modificar_existencia(token, estilos)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
@@ -332,10 +367,10 @@ app.post('/editar_usuario', (req, res) => {
         } else {
             return res.send({ error: "Los datos están incompletos" })
         }
-    } catch (err:any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
-})
+});
 
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
@@ -447,7 +482,8 @@ app.get('/eliminar_mi_producto/:id_producto', autorizacion_creador_contenido, (r
 // Cambio de contrasena, se comunica con el controlador
 app.post('/cambiar_contrasena', (req, res) => {
     try {
-        let { token, contrasena }: { token: string, contrasena: string } = req.body;
+        let { contrasena }: { contrasena: string } = req.body;
+        let token: string = hay_auth(req, res)[1];
         if (token && contrasena) {
             controlador.cambiar_contrasena(token, contrasena)
                 .then((resultado: any) => {

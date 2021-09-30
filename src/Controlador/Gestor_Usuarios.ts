@@ -18,16 +18,16 @@ export default class Gestor_Usuarios {
             });
     }
 
-    confirmar_usuario(id_usuario: number): Promise<string>{
+    confirmar_usuario(id_usuario: number): Promise<string> {
         return this.base_datos.confirmar_usuario(id_usuario);
     }
 
-    verificar_usuario(correo: string): Promise<Usuario>{
+    verificar_usuario(correo: string): Promise<Usuario> {
         return this.base_datos.verificar_usuario(correo);
     }
 
     // Crear Usuario Creador de Contenido
-    crear_usuario(correo: string, nombre: string, contrasena: string, caracteristicas: Tipos_Usuario): Promise<string>{
+    crear_usuario(correo: string, nombre: string, contrasena: string, caracteristicas: Tipos_Usuario): Promise<string> {
         return this.base_datos.crear_usuario(caracteristicas.id_tipo, correo, nombre, contrasena, caracteristicas)
             .then((id_tipo: string) => {
                 return id_tipo;
@@ -35,8 +35,8 @@ export default class Gestor_Usuarios {
     }
 
     // Elimina el usuario dado usando el método del DAO
-    eliminar_usuario(id_usuairo: number): Promise<string>{
-        return this.base_datos.eliminar_usuario(id_usuairo);        
+    eliminar_usuario(id_usuairo: number): Promise<string> {
+        return this.base_datos.eliminar_usuario(id_usuairo);
     }
 
     // Crea el hash y llama a cambiar la contraseña a la base
@@ -74,16 +74,11 @@ export default class Gestor_Usuarios {
 
 
     // Modifica los datos del usuario enviado
-    editar_usuario(id_usuairo_a_cambiar: number, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario): Promise<string> {
-        // Revisa si los datos opcionales están completos
-        if (id_usuairo_a_cambiar && nombre_a_cambiar && caracteristicas)
-            return this.base_datos.editar_usuario(id_usuairo_a_cambiar, nombre_a_cambiar, caracteristicas)
+    editar_usuario(usuario: Usuario, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {
+        return this.base_datos.editar_usuario(usuario.id_usuario, nombre, caracteristicas)
             .then((resultado: string) => {
                 return resultado;
             });
-        else {
-                throw new Error("Los datos están incompletos");
-        }
     }
 
 

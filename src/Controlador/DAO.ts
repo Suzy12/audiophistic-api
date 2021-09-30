@@ -73,34 +73,34 @@ export default class DAO {
     }
 
     // Se crea un usuario consumidor
-    async crear_usuario(tipo_usuario: number, correo: string, nombre: string, contrasena: string, caracteristicas: Tipos_Usuario): Promise<string>{
-        try{
+    async crear_usuario(tipo_usuario: number, correo: string, nombre: string, contrasena: string, caracteristicas: Tipos_Usuario): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from crear_usuario($1,$2,$3,$4,$5)',
                 [tipo_usuario, correo, nombre, contrasena, caracteristicas]);
-            if (res.rows[0]){
+            if (res.rows[0]) {
                 return res.rows[0].crear_usuario;
-            }else {
+            } else {
                 throw new Error("No Se pudo registrar al usuario")
             }
 
-        } catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Se edita un usuairo
-    async editar_usuario(id_usuario_a_cambiar: number, nombre_a_cambiar: string, caracteristicas: Tipos_Usuario): Promise<string>{
-        try{
+    async editar_usuario(id_usuario: number, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from editar_usuario($1, $2, $3)',
-            [id_usuario_a_cambiar, nombre_a_cambiar, caracteristicas ]);
+                [id_usuario, nombre, caracteristicas]);
             if (res.rows[0]) {
                 return res.rows[0].editar_usuario;
             } else {
                 throw new Error("No se pudo editar el usuario");
             }
-        }catch (err) {
+        } catch (err) {
             console.log(err);
-            throw err; 
+            throw err;
         }
 
     }
@@ -193,12 +193,12 @@ export default class DAO {
 
     // Crea un producto con los datos dados
     async crear_producto(id_creador: number, id_tipo: number, fecha_lanzamiento: number,
-        titulo: string, precio: number, tiempo_envio: number, descripcion: string, 
-            caracteristicas: Tipos_Producto,
+        titulo: string, precio: number, tiempo_envio: number, descripcion: string,
+        caracteristicas: Tipos_Producto,
         estilos: Estilo[]): Promise<string> {
         try {
             let res = await this.cliente.query('select * from crear_producto($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-                [id_creador, id_tipo, fecha_lanzamiento, titulo, precio, tiempo_envio, 
+                [id_creador, id_tipo, fecha_lanzamiento, titulo, precio, tiempo_envio,
                     descripcion, caracteristicas, estilos]);
             if (res.rows[0]) {
                 return res.rows[0].crear_producto;
@@ -212,15 +212,32 @@ export default class DAO {
 
     // Inserta el producto con los cambios dados
     async modificar_producto(id_producto: number, id_creador: number, fecha_lanzamiento: number,
-        titulo: string, precio: number, tiempo_envio: number, descripcion: string, 
-            caracteristicas: Tipos_Producto,
+        titulo: string, precio: number, tiempo_envio: number, descripcion: string,
+        caracteristicas: Tipos_Producto,
         estilos: Estilo[]): Promise<string> {
         try {
             let res = await this.cliente.query('select * from modificar_producto($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-                [id_producto, id_creador, fecha_lanzamiento, titulo, precio, tiempo_envio, 
+                [id_producto, id_creador, fecha_lanzamiento, titulo, precio, tiempo_envio,
                     descripcion, caracteristicas, estilos]);
             if (res.rows[0]) {
                 return res.rows[0].modificar_producto;
+            } else {
+                throw new Error("No se pudo insertar el producto");
+            }
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+
+    // Cambia la existencia del producto dado en los estilos dados
+    async modificar_existencia(id_creador: number, estilos: Estilo[]): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from modificar_existencia($1, $2)',
+                [id_creador, estilos]);
+            if (res.rows[0]) {
+                return res.rows[0].modificar_existencia;
             } else {
                 throw new Error("No se pudo insertar el producto");
             }
@@ -288,8 +305,8 @@ export default class DAO {
     // Cambia el estado de un producto del creador a inactivo
     async eliminar_mi_producto(id_producto: number, id_creador: number): Promise<string> {
         try {
-            let res = await this.cliente.query('select * from eliminar_mi_producto($1, $2)', 
-            [id_producto, id_creador]);
+            let res = await this.cliente.query('select * from eliminar_mi_producto($1, $2)',
+                [id_producto, id_creador]);
             if (res.rows[0]) {
                 return res.rows[0].eliminar_mi_producto;
             } else {
@@ -329,47 +346,47 @@ export default class DAO {
     }
 
     // Se crea una categoria
-    async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
-        try{
+    async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from crear_categoria($1)', [nombre/*, fecha_creacion, cant_blogs*/]);
-            if (res.rows[0]){
+            if (res.rows[0]) {
                 return res.rows[0].crear_categoria;
-            } else{
+            } else {
                 throw new Error("No se pudo crear la categoria");
             }
 
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Devuelve todas las categorias
-    async consultar_categorias(): Promise<Categoria[]>{
-        try{
-            let res= await this.cliente.query('select * from consultar_categorias()');
-            if (res.rows[0]){
+    async consultar_categorias(): Promise<Categoria[]> {
+        try {
+            let res = await this.cliente.query('select * from consultar_categorias()');
+            if (res.rows[0]) {
                 return res.rows;
-            } else{
+            } else {
                 throw new Error("No se pudieron traer las categorias ");
             }
 
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Devuelve todas las categorias
-    async eliminar_categoria(id_categoria: number): Promise<string>{
-        try{
-            let res= await this.cliente.query('select * from eliminar_categoria($1)',
+    async eliminar_categoria(id_categoria: number): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from eliminar_categoria($1)',
                 [id_categoria]);
-            if (res.rows[0]){
+            if (res.rows[0]) {
                 return res.rows[0].eliminar_categoria;
-            } else{
+            } else {
                 throw new Error("No se pudieron traer las categorias ");
             }
 
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
