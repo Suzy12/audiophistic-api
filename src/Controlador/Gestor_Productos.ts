@@ -25,6 +25,7 @@ export default class Gestor_Prodcuctos {
         }
     }
 
+    // "Modifica" el producto
     modificar_producto(producto: Producto, estilos: Estilo[]): Promise<string> {
         // Revisa si los datos opcionales están completos
         if (producto.fecha_lanzamiento && producto.tiempo_envio && producto.descripcion)
@@ -39,57 +40,44 @@ export default class Gestor_Prodcuctos {
         }
     }
 
-
-    modificar_existencia(id_creador: number, estilos: Estilo[]): Promise<string> {
-        // Revisa si los datos opcionales están completos
-        return this.base_datos.modificar_existencia(id_creador, estilos)
-            .then((resultado: string) => {
-                return resultado;
-            });
+    // Consulta todos los productos activos
+    consultar_productos(): Promise<Producto[]> {
+        return this.base_datos.consultar_productos()
+            .then((producto: Producto[]) => {
+                return producto;
+            })
     }
 
+    // Obtiene los datos del producto
+    consultar_producto(id_producto: number): Promise<Producto> {
+        return this.base_datos.consultar_producto(id_producto)
+            .then((producto: Producto) => {
+                return producto;
+            })
+    }
 
-// Consulta todos los productos activos
-consultar_productos(): Promise < Producto[] > {
-    return this.base_datos.consultar_productos()
-        .then((producto: Producto[]) => {
-            return producto;
-        })
-}
+    // Elimina el producto dado
+    eliminar_producto(id_producto: number): Promise<string> {
+        return this.base_datos.eliminar_producto(id_producto);
 
-// Obtiene los datos del producto
-consultar_producto(id_producto: number): Promise < Producto > {
-    return this.base_datos.consultar_producto(id_producto)
-        .then((producto: Producto) => {
-            return producto;
-        })
-}
+    }
 
-// Elimina el producto dado
-eliminar_producto(id_producto: number): Promise < string > {
-    return this.base_datos.eliminar_producto(id_producto);
+    // Elimina el producto dado
+    eliminar_mi_producto(id_producto: number, id_creador: number): Promise<string> {
+        return this.base_datos.eliminar_mi_producto(id_producto, id_creador);
 
-}
+    }
 
-// Elimina el producto dado
-eliminar_mi_producto(id_producto: number, id_creador: number): Promise < string > {
-    return this.base_datos.eliminar_mi_producto(id_producto, id_creador);
+    //Obtiene productos de un creador de contenido segun su ID
+    consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
+        return this.base_datos.consultar_productos_creador(id_creador_contenido)
+            .then((producto: Producto[]) => {
+                return producto;
+            })
+    }
 
-}
-
-//Obtiene productos de un creador de contenido segun su ID
-consultar_productos_creador(id_creador_contenido: number): Promise < Producto[] > {
-    return this.base_datos.consultar_productos_creador(id_creador_contenido)
-        .then((producto: Producto[]) => {
-            return producto;
-        })
-}
-
-// Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
-editar_producto(id_producto: number): string {
-    return "producto modificado";
-}
-
-
-
+    // Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
+    editar_producto(id_producto: number): string {
+        return "producto modificado";
+    }
 }

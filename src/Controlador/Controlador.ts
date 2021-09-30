@@ -32,7 +32,7 @@ export default class Controlador {
         this.gestor_productos = new Gestor_Prodcuctos();
         this.gestor_usuarios = new Gestor_Usuarios();
         this.gestor_estilos = new Gestor_Estilos();
-        this.gestor_categorias= new Gestor_Categorias();
+        this.gestor_categorias = new Gestor_Categorias();
     }
 
 
@@ -53,11 +53,11 @@ export default class Controlador {
     }
 
     //crear usuario Creador de Contenido
-    async crear_usuario(correo: string, nombre: string, caracteristicas: Tipos_Usuario): Promise<string>{
+    async crear_usuario(correo: string, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {
         //genera una constrasenia, hash y registra al usuario en una BD
-        let contrasena: string= this.generacion_contrasena();
+        let contrasena: string = this.generacion_contrasena();
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
-        
+
         await this.gestor_usuarios.crear_usuario(correo, nombre, hash, caracteristicas);
 
         //Envia el correo con la contrasena
@@ -67,9 +67,6 @@ export default class Controlador {
         return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta de Usuario  — Audiophistic', cuerpo_correo);
     }
 
-    private descifrar_token(token: string): Usuario{
-        return this.manejador_token.descifrar_token(token)
-    }
 
     //Genera la confirmacion del correo
     confirmar_usuario(token: string): Promise<string> {
@@ -77,19 +74,52 @@ export default class Controlador {
         return this.gestor_usuarios.confirmar_usuario(id_usuario);
     }
 
-    // Crea categoria con los datos 
-    crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string>{
-        return this.gestor_categorias.crear_categoria(nombre/*, fecha_creacion, cant_blogs*/);
+    // Cambia la contrasena del usuario con los datos dados
+    async cambiar_contrasena(token: string, contrasena: string): Promise<{ resultado: string }> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        let hash: string = bcrypt.hashSync(contrasena, this.salts);
+        return this.gestor_usuarios.cambiar_contrasena(descifrado.id_usuario, hash);
     }
 
-    // Consulta todas las categorias
-    consultar_categorias():Promise<Categoria[]>{
-        return this.gestor_categorias.consultar_categorias();
+    // Crea una nueva contrasena, la guarda y envia un correo con la contrasena
+    async crear_contrasena_temporal(correo: string): Promise<string> {
+        var contrasena_temporal: string = this.generacion_contrasena();
+        // Guarda la contrasena temporal en la base
+        let hash: string = bcrypt.hashSync(contrasena_temporal, this.salts);
+        await this.gestor_usuarios.cambiar_contrasena_con_correo(correo, hash);
+        // Integra la nueva contrasena al correo y lo envia
+        var cuerpo_correo: string = fs.readFileSync('./assets/html/correo_recuperar.html',
+            { encoding: 'utf8', flag: 'r' });
+        cuerpo_correo = util.format(cuerpo_correo, contrasena_temporal);
+        return this.envio_correos.enviar_correo(correo, "Contraseña Temporal — Audiophistic", cuerpo_correo);
+
     }
 
-    // Elimina una categoria
-    eliminar_categoria(id_categoria: number):Promise<string>{
-        return this.gestor_categorias.eliminar_categoria(id_categoria);
+    // Editar la informacion de un usuario
+    editar_usuario(token: string, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_usuarios.editar_usuario(descifrado, nombre, caracteristicas);
+    }
+    
+    // Consulta todos los usuarios
+    consultar_usuarios(): Promise<Usuario[]> {
+        return this.gestor_usuarios.consultar_usuarios();
+    }
+
+    // Consulta los datos del usuario
+    consultar_usuario(id_usuario: number): Promise<Usuario> {
+        return this.gestor_usuarios.consultar_usuario(id_usuario);
+    }
+
+    // Consulta los datos del usuario para ese usuario
+    consultar_perfil(token: string): Promise<Usuario> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_usuarios.consultar_usuario(descifrado.id_usuario);
+    }
+
+    // Elimina de forma logica el usuario dado
+    eliminar_usuario(id_usuario: number): Promise<string> {
+        return this.gestor_usuarios.eliminar_usuario(id_usuario);
     }
 
     // Crea el producto con los datos enviados
@@ -98,18 +128,12 @@ export default class Controlador {
         producto.id_creador = descifrado.id_usuario;
         return this.gestor_productos.crear_producto(producto, estilos);
     }
-    
+
     // "Modifica" el producto con los datos enviados
     modificar_producto(producto: Producto, estilos: Estilo[], token: string): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
         producto.id_creador = descifrado.id_usuario;
         return this.gestor_productos.modificar_producto(producto, estilos);
-    }
-
-    // "Modifica" la existencia de los estilos del producto
-    modificar_existencia(token: string, estilos: Estilo[]): Promise<string> {
-        let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_productos.modificar_existencia(descifrado.id_usuario, estilos);
     }
 
     // Consulta todos los productos
@@ -138,21 +162,10 @@ export default class Controlador {
         return this.gestor_estilos.consultar_estilos(id_producto);
     }
 
-    // Consulta todos los usuarios
-    consultar_usuarios(): Promise<Usuario[]> {
-        return this.gestor_usuarios.consultar_usuarios();
-    }
-
-    // Consulta los datos del usuario
-    consultar_usuario(id_usuario: number): Promise<Usuario> {
-        return this.gestor_usuarios.consultar_usuario(id_usuario);
-    }
-
-
-    // Consulta los datos del usuario para ese usuario
-    consultar_perfil(token: string): Promise<Usuario> {
+    // "Modifica" la existencia de los estilos del producto
+    modificar_existencia(token: string, estilos: Estilo[]): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_usuarios.consultar_usuario(descifrado.id_usuario);
+        return this.gestor_estilos.modificar_existencia(descifrado.id_usuario, estilos);
     }
 
     //Consulta los productos de un Creador de Contenido segun su ID
@@ -166,36 +179,24 @@ export default class Controlador {
         return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
     }
 
-    // Editar la informacion de un usuario
-    editar_usuario (token: string, nombre: string, caracteristicas: Tipos_Usuario): Promise<string>{
-        let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_usuarios.editar_usuario(descifrado, nombre, caracteristicas);
+    // Crea categoria con los datos 
+    crear_categoria(nombre: string): Promise<string> {
+        return this.gestor_categorias.crear_categoria(nombre);
     }
 
-    // Elimina de forma logica el usuario dado
-    eliminar_usuario(id_usuario: number): Promise<string> {
-        return this.gestor_usuarios.eliminar_usuario(id_usuario);
+    // Consulta todas las categorias
+    consultar_categorias(): Promise<Categoria[]> {
+        return this.gestor_categorias.consultar_categorias();
     }
 
-    // Cambia la contrasena del usuario con los datos dados
-    async cambiar_contrasena(token: string, contrasena: string): Promise<{ resultado: string }> {
-        let descifrado: Usuario = this.descifrar_token(token);
-        let hash: string = bcrypt.hashSync(contrasena, this.salts);
-        return this.gestor_usuarios.cambiar_contrasena(descifrado.id_usuario, hash);
+    // Elimina una categoria
+    eliminar_categoria(id_categoria: number): Promise<string> {
+        return this.gestor_categorias.eliminar_categoria(id_categoria);
     }
 
-    // Crea una nueva contrasena, la guarda y envia un correo con la contrasena
-    async crear_contrasena_temporal(correo: string): Promise<string> {
-        var contrasena_temporal: string = this.generacion_contrasena();
-        // Guarda la contrasena temporal en la base
-        let hash: string = bcrypt.hashSync(contrasena_temporal, this.salts);
-        await this.gestor_usuarios.cambiar_contrasena_con_correo(correo, hash);
-        // Integra la nueva contrasena al correo y lo envia
-        var cuerpo_correo: string = fs.readFileSync('./assets/html/correo_recuperar.html',
-            { encoding: 'utf8', flag: 'r' });
-        cuerpo_correo = util.format(cuerpo_correo, contrasena_temporal);
-        return this.envio_correos.enviar_correo(correo, "Contraseña Temporal — Audiophistic", cuerpo_correo);
-
+    // Pide al manejador de tokens que descifre el token
+    private descifrar_token(token: string): Usuario {
+        return this.manejador_token.descifrar_token(token)
     }
 
     // Funcion para generar un string aleatorio para la recuperacion de contrasenias

@@ -7,8 +7,8 @@ import { Producto } from './Modelo/Producto';
 import { Estilo } from './Modelo/Estilo';
 import { Creador_de_Contenido } from './Modelo/Creador_de_Contenido';
 let opciones_cors = {
-    origin: ['http://186.176.18.72', '201.194.192.205',
-    '152.231.200.151','http://localhost:4200', 'https://audiophistic1.web.app'],
+    origin: ['http://186.176.18.72', 'http://201.194.192.205',
+    'http://152.231.200.151','http://localhost:4200', 'https://audiophistic1.web.app'],
     optionsSuccessStatus: 200
 }
 const app = express();
@@ -143,6 +143,45 @@ app.post('/confirmar_usuario', (req, res) => {
     }
 })
 
+// Cambio de contrasena, se comunica con el controlador
+app.post('/cambiar_contrasena', (req, res) => {
+    try {
+        let { contrasena }: { contrasena: string } = req.body;
+        let token: string = hay_auth(req, res)[1];
+        if (token && contrasena) {
+            controlador.cambiar_contrasena(token, contrasena)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                })
+                .catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+// Envio de correo con contrasena temporal
+app.post('/recuperar_contrasena', (req, res) => {
+    try {
+        let { correo }: { correo: string } = req.body;
+        if (correo) {
+            controlador.crear_contrasena_temporal(correo)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Hubo un error" })
+        }
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 
 // Inicio de sesion, se comunica con el controlador login
 app.post('/iniciar_sesion', (req, res) => {
@@ -163,25 +202,6 @@ app.post('/iniciar_sesion', (req, res) => {
     }
 })
 
-
-// Inicio de sesion, se comunica con el controlador login
-app.post('/validar_tipo_token', (req, res) => {
-    try {
-        let { token, id_tipo }: { token: string, id_tipo: string } = req.body;
-        if (token && id_tipo) {
-            return controlador_login.validar_tipo(token, parseInt(id_tipo))
-                .then((resultado: any) => {
-                    return res.send({ resultado });
-                }).catch((err: any) => {
-                    return res.send({ error: err.message });
-                });
-        } else {
-            return res.send({ error: "El token no fue enviado" })
-        }
-    } catch (err: any) {
-        return res.send({ error: err.message });
-    }
-})
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
 app.get('/usuarios', autorizacion_admin, (req, res) => {
@@ -246,7 +266,6 @@ app.post('/editar_usuario', (req, res) => {
     }
 })
 
-
 //Elimina un usuario
 app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Request, res) => {
     try {
@@ -261,55 +280,6 @@ app.get('/eliminar_usuario/:id_usuario', autorizacion_admin, (req: express.Reque
         return res.send({ error: err.message })
     }
 })
-
-//crear una nueva categoria
-app.post('/crear_categoria', autorizacion_admin, (req,res) => {
-    try {
-        let {nombre/*, fecha_creacion, cant_blogs*/}: { nombre: string/*, fecha_creacion: Date, cant_blogs: number*/} = req.body;
-        if (nombre){
-            controlador.crear_categoria(nombre, /*fecha_creacion, cant_blogs*/)
-                .then((resultado: any) => {
-                    return res.send({resultado});
-                }).catch((err: any) => {
-                    return res.send ({error: err.message})
-                })
-        }else{
-            return res.send({ error: "No se pudo crear Categoria"})
-        }
-
-    } catch (err:any){
-        return res.send({ error: err.message });
-    }
-});
-
-//devuelve todas las categorias
-app.get('/categorias', autorizacion_admin, (req,res) => {
-    try{
-        controlador.consultar_categorias()
-        .then((resultado: any)=>{
-            return res.send({resultado});
-        }).catch((err:any) => {
-            return res.send({error: err.message})
-        });
-    }catch(err: any) {
-        return res.send({ error: err.message });
-    }
-});
-
-//devuelve todas las categorias
-app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req,res) => {
-    try{
-        let id_categoria : number = parseInt(req.params.id_categoria);
-        controlador.eliminar_categoria(id_categoria)
-        .then((resultado: any)=>{
-            return res.send({resultado});
-        }).catch((err:any) => {
-            return res.send({error: err.message})
-        });
-    }catch(err: any) {
-        return res.send({ error: err.message });
-    }
-});
 
 // Inserta un producto y todos sus datos a la base de datos
 app.post('/crear_producto', autorizacion_creador_contenido, (req, res) => {
@@ -374,7 +344,6 @@ app.post('/modificar_existencia', autorizacion_creador_contenido, (req, res) => 
 
 /* Devuelve todos los usuarios, se comunica con el controlador, 
     Solo pueden accesar con permisos de administrador */
-
 app.get('/productos', autorizacion_admin, (req, res) => {
     try {
         controlador.consultar_productos()
@@ -434,21 +403,6 @@ app.get('/productos/:id_producto', (req: express.Request, res) => {
 })
 
 // Devuelve todos los datos del usuario, se comunica con el controlador
-app.get('/estilos/:id_producto', (req: express.Request, res) => {
-    try {
-        let id_producto: number = parseInt(req.params.id_producto);
-        controlador.consultar_estilos(id_producto)
-            .then((resultado: any) => {
-                return res.send({ resultado });
-            }).catch((err: any) => {
-                return res.send({ error: err.message });
-            });
-    } catch (err: any) {
-        return res.send({ error: err.message });
-    }
-})
-
-// Devuelve todos los datos del usuario, se comunica con el controlador
 app.get('/eliminar_producto/:id_producto', autorizacion_admin, (req: express.Request, res) => {
     try {
         let id_producto: number = parseInt(req.params.id_producto);
@@ -479,40 +433,83 @@ app.get('/eliminar_mi_producto/:id_producto', autorizacion_creador_contenido, (r
     }
 })
 
-// Cambio de contrasena, se comunica con el controlador
-app.post('/cambiar_contrasena', (req, res) => {
+// Devuelve todos los datos del usuario, se comunica con el controlador
+app.get('/estilos/:id_producto', (req: express.Request, res) => {
     try {
-        let { contrasena }: { contrasena: string } = req.body;
-        let token: string = hay_auth(req, res)[1];
-        if (token && contrasena) {
-            controlador.cambiar_contrasena(token, contrasena)
-                .then((resultado: any) => {
-                    return res.send({ resultado });
-                })
-                .catch((err: any) => {
-                    return res.send({ error: err.message });
-                });
-        } else {
-            return res.send({ error: "Los datos están incompletos" })
-        }
+        let id_producto: number = parseInt(req.params.id_producto);
+        controlador.consultar_estilos(id_producto)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
     } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+//crear una nueva categoria
+app.post('/crear_categoria', autorizacion_admin, (req,res) => {
+    try {
+        let {nombre/*, fecha_creacion, cant_blogs*/}: { nombre: string/*, fecha_creacion: Date, cant_blogs: number*/} = req.body;
+        if (nombre){
+            controlador.crear_categoria(nombre, /*fecha_creacion, cant_blogs*/)
+                .then((resultado: any) => {
+                    return res.send({resultado});
+                }).catch((err: any) => {
+                    return res.send ({error: err.message})
+                })
+        }else{
+            return res.send({ error: "No se pudo crear Categoria"})
+        }
+
+    } catch (err:any){
         return res.send({ error: err.message });
     }
 });
 
-// Envio de correo con contrasena temporal
-app.post('/recuperar_contrasena', (req, res) => {
+//devuelve todas las categorias
+app.get('/categorias', autorizacion_admin, (req,res) => {
+    try{
+        controlador.consultar_categorias()
+        .then((resultado: any)=>{
+            return res.send({resultado});
+        }).catch((err:any) => {
+            return res.send({error: err.message})
+        });
+    }catch(err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+//devuelve todas las categorias
+app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req,res) => {
+    try{
+        let id_categoria : number = parseInt(req.params.id_categoria);
+        controlador.eliminar_categoria(id_categoria)
+        .then((resultado: any)=>{
+            return res.send({resultado});
+        }).catch((err:any) => {
+            return res.send({error: err.message})
+        });
+    }catch(err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+// Inicio de sesion, se comunica con el controlador login
+app.post('/validar_tipo_token', (req, res) => {
     try {
-        let { correo }: { correo: string } = req.body;
-        if (correo) {
-            controlador.crear_contrasena_temporal(correo)
+        let { token, id_tipo }: { token: string, id_tipo: string } = req.body;
+        if (token && id_tipo) {
+            return controlador_login.validar_tipo(token, parseInt(id_tipo))
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
         } else {
-            return res.send({ error: "Hubo un error" })
+            return res.send({ error: "El token no fue enviado" })
         }
     } catch (err: any) {
         return res.send({ error: err.message });

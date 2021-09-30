@@ -8,14 +8,7 @@ export default class Gestor_Estilos {
         this.base_datos = DAO.get_instancia();
     }
 
-    // Crea el producto con los datos enviados
-    crear_estilos(producto: Estilo): string {
-
-        return "producto creado";
-
-    }
-
-    // Obtiene los datos del producto
+    // Obtiene los datos del estilo
     consultar_estilos(id_producto: number): Promise<Estilo[]> {
         return this.base_datos.consultar_estilos(id_producto)
             .then((producto: Estilo[]) => {
@@ -23,9 +16,17 @@ export default class Gestor_Estilos {
             })
     }
 
-    // Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
+    // Modifica los datos del estilo enviado, cambia la versión y inserta los nuevos datos según la versión
     editar_estilo(id_producto: number): string {
         return "producto modificado";
+    }
+
+    modificar_existencia(id_creador: number, estilos: Estilo[]): Promise<string> {
+        // Revisa si los datos opcionales están completos
+        return this.base_datos.modificar_existencia(id_creador, estilos)
+            .then((resultado: string) => {
+                return resultado;
+            });
     }
 
 
