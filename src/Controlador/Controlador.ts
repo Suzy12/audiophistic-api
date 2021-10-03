@@ -13,6 +13,8 @@ import Gestor_Estilos from './Gestor_Estilos';
 import Gestor_Categorias from './Gestor_Categorias';
 import { Estilo } from '../Modelo/Estilo';
 import { Tipos_Usuario } from '../Modelo/Tipos_Usuario';
+import { Carrito } from '../Modelo/Carrito';
+import Gestor_Carrito from './Gestor_Carrito';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -23,6 +25,7 @@ export default class Controlador {
     private gestor_usuarios: Gestor_Usuarios;
     private gestor_estilos: Gestor_Estilos;
     private gestor_categorias: Gestor_Categorias;
+    private gestor_carrito: Gestor_Carrito;
     //El numero de salts para el hash
     private salts = 10;
 
@@ -33,6 +36,7 @@ export default class Controlador {
         this.gestor_usuarios = new Gestor_Usuarios();
         this.gestor_estilos = new Gestor_Estilos();
         this.gestor_categorias = new Gestor_Categorias();
+        this.gestor_carrito = new Gestor_Carrito();
     }
 
 
@@ -177,6 +181,12 @@ export default class Controlador {
     consultar_productos_usuario(token: string): Promise<Producto[]> {
         let descifrado: Usuario = this.descifrar_token(token);
         return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
+    }
+
+    // Consulta el carrito de un usuario segun su ID
+    consultar_carrito(token: string): Promise<Carrito[]>{
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_carrito.consultar_carrito(descifrado.id_usuario);
     }
 
     // Crea categoria con los datos 

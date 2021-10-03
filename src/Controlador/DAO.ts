@@ -7,6 +7,7 @@ import { Usuario } from "../Modelo/Usuario";
 import { Categoria } from "../Modelo/Categoria";
 import Manejador_Tokens from "./Manejador_Tokens";
 import { Token } from "nodemailer/lib/xoauth2";
+import { Carrito } from "../Modelo/Carrito";
 
 require('dotenv').config();
 
@@ -342,6 +343,22 @@ export default class DAO {
             throw err;
         }
     }
+
+    // Consulta al carrito
+    async consultar_carrito(id_usuario: number): Promise<Carrito[]>{
+        try {
+            let res = await this.cliente.query('select * from consultar_carrito($1)', [id_usuario]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("El carrito no pudo ser consultado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+
     // Se crea una categoria
     async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string> {
         try {
