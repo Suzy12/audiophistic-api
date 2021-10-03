@@ -1,5 +1,7 @@
+import { Producto } from "../Modelo/Producto";
 import { Tipos_Usuario } from "../Modelo/Tipos_Usuario";
 import { Usuario } from "../Modelo/Usuario"
+import { Carrito } from "../Modelo/Carrito";
 import DAO from "./DAO";
 export default class Gestor_Usuarios {
     // Definimos como hacer las llamadas al DAO
@@ -85,6 +87,8 @@ export default class Gestor_Usuarios {
                 return resultado;
             });
     }
+
+    
 
 
 

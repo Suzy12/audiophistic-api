@@ -464,6 +464,21 @@ app.get('/estilos/:id_producto', (req: express.Request, res) => {
     }
 })
 
+// Consulta lo que hay en un carrito
+app.get('/carrito', (req: express.Request, res) => {
+    try{
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.consultar_carrito(token)
+        .then((resultado: any) => {
+            return res.send({ resultado });
+        }).catch((err: any) => {
+            return res.send({ error: err.message });
+        });
+    } catch(err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
 //crear una nueva categoria
 app.post('/crear_categoria', autorizacion_admin, (req,res) => {
     try {
