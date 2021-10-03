@@ -39,7 +39,6 @@ export default class Controlador {
         this.gestor_carrito = new Gestor_Carrito();
     }
 
-
     // Registra a un consumidor
     async registrar_usuario(correo: string, nombre: string, contrasena: string): Promise<string> {
         //Genera el hash y guarda al usuario en la base de datos
@@ -188,9 +187,21 @@ export default class Controlador {
         return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
     }
 
-    // Consulta el carrito de un usuario segun su ID
-    consultar_carrito(token: string): Promise<Carrito[]>{
+    // Agrega un producto al carrito
+    agregar_al_carrito(token: string, id_producto: number, id_estilo: number, cantidad: number): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
+        if(descifrado.caracteristicas?.id_tipo != 3){
+            throw new Error('El usuario puede tener un carrito');
+        };
+        return this.gestor_carrito.agregar_al_carrito(descifrado.id_usuario, id_producto, id_estilo, cantidad);
+    }
+
+    // Consulta el carrito de un usuario segun su ID
+    consultar_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }>{
+        let descifrado: Usuario = this.descifrar_token(token);
+        if(descifrado.caracteristicas?.id_tipo != 3){
+            throw new Error('El usuario puede tener un carrito');
+        };
         return this.gestor_carrito.consultar_carrito(descifrado.id_usuario);
     }
 

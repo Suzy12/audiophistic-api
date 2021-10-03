@@ -359,11 +359,26 @@ export default class DAO {
     }
 
     // Consulta al carrito
-    async consultar_carrito(id_usuario: number): Promise<Carrito[]>{
+    async agregar_al_carrito(id_usuario: number, id_producto: number, id_estilo: number, cantidad: number):
+        Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from agregar_al_carrito($1,$2,$3,$4)', [id_usuario, id_producto, id_estilo, cantidad]);
+            if (res.rows[0]) {
+                return res.rows[0].agregar_al_carrito;
+            } else {
+                throw new Error("El carrito no pudo ser consultado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Consulta al carrito
+    async consultar_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         try {
             let res = await this.cliente.query('select * from consultar_carrito($1)', [id_usuario]);
             if (res.rows[0]) {
-                return res.rows[0];
+                return res.rows[0].consultar_carrito;
             } else {
                 throw new Error("El carrito no pudo ser consultado");
             }

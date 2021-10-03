@@ -464,7 +464,24 @@ app.get('/estilos/:id_producto', (req: express.Request, res) => {
     }
 })
 
-// Consulta lo que hay en un carrito
+// Agrega el producto carrito del usuario
+app.post('/agregar_al_carrito', (req: express.Request, res) => {
+    try{
+        let { id_producto, id_estilo, cantidad }: 
+        { id_producto: number, id_estilo: number, cantidad: number } = req.body;  
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.agregar_al_carrito(token, id_producto, id_estilo, cantidad)
+        .then((resultado: any) => {
+            return res.send({ resultado });
+        }).catch((err: any) => {
+            return res.send({ error: err.message });
+        });
+    } catch(err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Consulta los productos del carrito de un usuario
 app.get('/carrito', (req: express.Request, res) => {
     try{
         let token: string = (hay_auth(req, res) as string[])[1];
