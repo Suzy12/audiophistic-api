@@ -482,6 +482,21 @@ app.post('/agregar_al_carrito', (req: express.Request, res) => {
 })
 
 // Consulta los productos del carrito de un usuario
+app.get('/thumbnail_carrito', (req: express.Request, res) => {
+    try{
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.thumbnail_carrito(token)
+        .then((resultado: any) => {
+            return res.send({ resultado });
+        }).catch((err: any) => {
+            return res.send({ error: err.message });
+        });
+    } catch(err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Consulta los productos del carrito de un usuario
 app.get('/carrito', (req: express.Request, res) => {
     try{
         let token: string = (hay_auth(req, res) as string[])[1];

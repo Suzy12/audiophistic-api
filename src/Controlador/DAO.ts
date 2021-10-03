@@ -374,11 +374,11 @@ export default class DAO {
     }
 
     // Consulta al carrito
-    async consultar_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
+    async thumbnail_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         try {
-            let res = await this.cliente.query('select * from consultar_carrito($1)', [id_usuario]);
+            let res = await this.cliente.query('select * from thumbnail_carrito($1)', [id_usuario]);
             if (res.rows[0]) {
-                return res.rows[0].consultar_carrito;
+                return res.rows[0];
             } else {
                 throw new Error("El carrito no pudo ser consultado");
             }
@@ -387,6 +387,19 @@ export default class DAO {
         }
     }
 
+    // Consulta al carrito
+    async consultar_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
+        try {
+            let res = await this.cliente.query('select * from consultar_carrito($1)', [id_usuario]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("El carrito no pudo ser consultado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
 
     // Se crea una categoria
     async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string> {

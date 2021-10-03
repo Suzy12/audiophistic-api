@@ -17,6 +17,14 @@ export default class Gestor_Carrito {
     }
 
     // Consulta el contenido del carrito
+    thumbnail_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
+        return this.base_datos.thumbnail_carrito(id_usuario)
+            .then((producto: { cambiado: boolean, carrito: Carrito[] }) => {
+                return producto;
+            })
+    }
+
+    // Consulta el contenido del carrito
     consultar_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         return this.base_datos.consultar_carrito(id_usuario)
             .then((producto: { cambiado: boolean, carrito: Carrito[] }) => {

@@ -42,6 +42,7 @@ export default class Controlador {
     // Registra a un consumidor
     async registrar_usuario(correo: string, nombre: string, contrasena: string): Promise<string> {
         //Genera el hash y guarda al usuario en la base de datos
+        correo = correo.toLowerCase();
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
         let id: number = await this.gestor_usuarios.registrar_usuario(correo, nombre, hash);
 
@@ -58,6 +59,7 @@ export default class Controlador {
     //crear usuario Creador de Contenido
     async crear_usuario(correo: string, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {
         //genera una constrasenia, hash y registra al usuario en una BD
+        correo = correo.toLowerCase();
         let contrasena: string = this.generacion_contrasena();
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
 
@@ -69,7 +71,6 @@ export default class Controlador {
         cuerpo_correo = util.format(cuerpo_correo, contrasena);
         return this.envio_correos.enviar_correo(correo, 'Confirmar cuenta de Usuario  — Audiophistic', cuerpo_correo);
     }
-
 
     //Genera la confirmacion del correo
     confirmar_usuario(token: string): Promise<string> {
@@ -197,10 +198,19 @@ export default class Controlador {
     }
 
     // Consulta el carrito de un usuario segun su ID
+    thumbnail_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }>{
+        let descifrado: Usuario = this.descifrar_token(token);
+        if(descifrado.caracteristicas?.id_tipo != 3){
+            throw new Error('El usuario no puede tener un carrito');
+        };
+        return this.gestor_carrito.thumbnail_carrito(descifrado.id_usuario);
+    }
+
+    // Consulta el carrito de un usuario segun su ID
     consultar_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }>{
         let descifrado: Usuario = this.descifrar_token(token);
         if(descifrado.caracteristicas?.id_tipo != 3){
-            throw new Error('El usuario puede tener un carrito');
+            throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.consultar_carrito(descifrado.id_usuario);
     }
