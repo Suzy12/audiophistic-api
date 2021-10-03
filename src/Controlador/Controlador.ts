@@ -75,7 +75,7 @@ export default class Controlador {
     }
 
     // Cambia la contrasena del usuario con los datos dados
-    async cambiar_contrasena(token: string, contrasena: string): Promise<{ resultado: string }> {
+    async cambiar_contrasena(token: string, contrasena: string): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
         let hash: string = bcrypt.hashSync(contrasena, this.salts);
         return this.gestor_usuarios.cambiar_contrasena(descifrado.id_usuario, hash);
@@ -208,9 +208,7 @@ export default class Controlador {
     private generacion_contrasena(): string {
         return generator.generate({
             length: 10,
-            symbols: true,
             numbers: true,
-            strict: true
         })
 
     }

@@ -40,10 +40,10 @@ export default class Gestor_Usuarios {
     }
 
     // Crea el hash y llama a cambiar la contraseña a la base
-    cambiar_contrasena(id_usuario: number, contrasena: string): Promise<{ resultado: string }> {
+    cambiar_contrasena(id_usuario: number, contrasena: string): Promise<string> {
         return this.base_datos.cambiar_contrasena(id_usuario, contrasena)
             .then((resultado: string) => {
-                return { resultado };
+                return resultado;
             })
     }
 
