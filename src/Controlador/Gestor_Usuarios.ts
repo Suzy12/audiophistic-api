@@ -54,16 +54,6 @@ export default class Gestor_Usuarios {
         })
     }
 
-    // Consulta un usuario con su id
-    consultar_usuario(id_usuario: number): Promise<Usuario> {
-        return this.base_datos.consultar_usuario(id_usuario)
-            .then((usuario: Usuario) => {
-                return usuario;
-            })
-    }
-
-
-
     //Trae la informacion del grupo de usuarios
     consultar_usuarios(): Promise<Usuario[]> {
         return this.base_datos.consultar_usuarios()
@@ -72,6 +62,21 @@ export default class Gestor_Usuarios {
             })
     }
 
+    // Consulta un usuario con su id
+    consultar_usuario(id_usuario: number): Promise<Usuario> {
+        return this.base_datos.consultar_usuario(id_usuario)
+            .then((usuario: Usuario) => {
+                return usuario;
+            })
+    }
+
+    // Consulta un usuario con su id
+    consultar_creador_contenido(id_creador: number): Promise<Usuario> {
+        return this.base_datos.consultar_creador_contenido(id_creador)
+            .then((usuario: Usuario) => {
+                return usuario;
+            })
+    }
 
     // Modifica los datos del usuario enviado
     editar_usuario(usuario: Usuario, nombre: string, caracteristicas: Tipos_Usuario): Promise<string> {

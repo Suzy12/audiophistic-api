@@ -190,6 +190,20 @@ export default class DAO {
         }
     }
 
+    // Recupera un usuario y sus datos segun su id
+    async consultar_creador_contenido(id_usuario: number): Promise<Usuario> {
+        try {
+            let res = await this.cliente.query('select * from consultar_creador_contenido($1)', [id_usuario]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("El usuario no existe, no ha sido confirmado o fue eliminado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Eliminación de usuario. Este es un borrado lógico y NO físico. 
     async eliminar_usuario(id_usuario: number): Promise<string> {
         try {

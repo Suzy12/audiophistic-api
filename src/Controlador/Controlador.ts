@@ -111,6 +111,11 @@ export default class Controlador {
         return this.gestor_usuarios.consultar_usuario(id_usuario);
     }
 
+    // Consulta los datos del usuario
+    consultar_creador_contenido(id_creador: number): Promise<Usuario> {
+        return this.gestor_usuarios.consultar_creador_contenido(id_creador);
+    }
+
     // Consulta los datos del usuario para ese usuario
     consultar_perfil(token: string): Promise<Usuario> {
         let descifrado: Usuario = this.descifrar_token(token);

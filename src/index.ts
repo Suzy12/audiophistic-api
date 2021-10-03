@@ -253,6 +253,21 @@ app.get('/usuarios/:id_usuario', autorizacion_admin, (req, res) => {
     }
 })
 
+// Devuelve todos los datos del creador del contenido, se comunica con el controlador
+app.get('/creador_contenido/:id_creador', (req, res) => {
+    try {
+        let id_creador: number = parseInt(req.params.id_creador);
+        controlador.consultar_creador_contenido(id_creador)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
 app.get('/perfil', (req, res) => {
     try {
         let token: string = (hay_auth(req, res) as string[])[1];
