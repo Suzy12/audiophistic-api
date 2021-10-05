@@ -8,7 +8,7 @@ import { Estilo } from './Modelo/Estilo';
 import { Creador_de_Contenido } from './Modelo/Creador_de_Contenido';
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://201.194.192.205',
-    'http://152.231.200.151','http://localhost:4200', 'https://audiophistic1.web.app'],
+        'http://152.231.200.151', 'http://localhost:4200', 'https://audiophistic1.web.app'],
     optionsSuccessStatus: 200
 }
 const app = express();
@@ -205,10 +205,10 @@ app.post('/iniciar_sesion', (req, res) => {
 
 // Editar los datos del usuario
 app.post('/editar_usuario', (req, res) => {
-    try{
+    try {
         let { nombre, caracteristicas }: { nombre: string, caracteristicas: Tipos_Usuario } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
-        if (token && nombre && caracteristicas !== undefined){
+        if (token && nombre && caracteristicas !== undefined) {
             controlador.editar_usuario(token, nombre, caracteristicas)
                 .then((resultado: any) => {
                     return res.send({ resultado });
@@ -218,7 +218,7 @@ app.post('/editar_usuario', (req, res) => {
         } else {
             return res.send({ error: "Los datos están incompletos" })
         }
-    } catch (err:any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
@@ -374,7 +374,7 @@ app.get('/productos', autorizacion_admin, (req, res) => {
 })
 
 //Devuelve todos los productos registrados a un Creador de Contenido
-app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, res) => {
+app.get('/productos_por_creador/:id_creador_contenido', autorizacion_admin, (req: express.Request, res) => {
     try {
         let id_usuario: number = parseInt(req.params.id_creador_contenido);
         controlador.consultar_productos_creador(id_usuario)
@@ -388,6 +388,20 @@ app.get('/productos_por_creador/:id_creador_contenido', (req: express.Request, r
     }
 })
 
+//Devuelve todos los productos, mas su foto, registrados a un Creador de Contenido
+app.get('/thumbnail_productos_por_creador/:id_creador_contenido', (req: express.Request, res) => {
+    try {
+        let id_usuario: number = parseInt(req.params.id_creador_contenido);
+        controlador.thumbnail_productos_creador(id_usuario)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 // Devuelve los productos que ha creado el usuario dentro del token
 app.get('/mis_productos', autorizacion_creador_contenido, (req: express.Request, res) => {
     try {
@@ -466,96 +480,129 @@ app.get('/estilos/:id_producto', (req: express.Request, res) => {
 
 // Agrega el producto carrito del usuario
 app.post('/agregar_al_carrito', (req: express.Request, res) => {
-    try{
-        let { id_producto, id_estilo, cantidad }: 
-        { id_producto: number, id_estilo: number, cantidad: number } = req.body;  
+    try {
+        let { id_producto, id_estilo, cantidad }:
+            { id_producto: number, id_estilo: number, cantidad: number } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
         controlador.agregar_al_carrito(token, id_producto, id_estilo, cantidad)
-        .then((resultado: any) => {
-            return res.send({ resultado });
-        }).catch((err: any) => {
-            return res.send({ error: err.message });
-        });
-    } catch(err: any) {
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Cambia la cantidad del producto del usuario
+app.post('/cambiar_cantidad_carrito', (req: express.Request, res) => {
+    try {
+        let { id_producto, id_estilo, cantidad }:
+            { id_producto: number, id_estilo: number, cantidad: number } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.cambiar_cantidad_carrito(token, id_producto, id_estilo, cantidad)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+app.post('/eliminar_del_carrito', (req: express.Request, res) => {
+    try {
+        let { id_producto, id_estilo }:
+            { id_producto: number, id_estilo: number } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.eliminar_del_carrito(token, id_producto, id_estilo)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 // Consulta los productos del carrito de un usuario
 app.get('/thumbnail_carrito', (req: express.Request, res) => {
-    try{
+    try {
         let token: string = (hay_auth(req, res) as string[])[1];
         controlador.thumbnail_carrito(token)
-        .then((resultado: any) => {
-            return res.send({ resultado });
-        }).catch((err: any) => {
-            return res.send({ error: err.message });
-        });
-    } catch(err: any) {
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 // Consulta los productos del carrito de un usuario
 app.get('/carrito', (req: express.Request, res) => {
-    try{
+    try {
         let token: string = (hay_auth(req, res) as string[])[1];
         controlador.consultar_carrito(token)
-        .then((resultado: any) => {
-            return res.send({ resultado });
-        }).catch((err: any) => {
-            return res.send({ error: err.message });
-        });
-    } catch(err: any) {
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 //crear una nueva categoria
-app.post('/crear_categoria', autorizacion_admin, (req,res) => {
+app.post('/crear_categoria', autorizacion_admin, (req, res) => {
     try {
-        let {nombre/*, fecha_creacion, cant_blogs*/}: { nombre: string/*, fecha_creacion: Date, cant_blogs: number*/} = req.body;
-        if (nombre){
+        let { nombre/*, fecha_creacion, cant_blogs*/ }: { nombre: string/*, fecha_creacion: Date, cant_blogs: number*/ } = req.body;
+        if (nombre) {
             controlador.crear_categoria(nombre, /*fecha_creacion, cant_blogs*/)
                 .then((resultado: any) => {
-                    return res.send({resultado});
+                    return res.send({ resultado });
                 }).catch((err: any) => {
-                    return res.send ({error: err.message})
+                    return res.send({ error: err.message })
                 })
-        }else{
-            return res.send({ error: "No se pudo crear Categoria"})
+        } else {
+            return res.send({ error: "No se pudo crear Categoria" })
         }
 
-    } catch (err:any){
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 });
 
 //devuelve todas las categorias
-app.get('/categorias', autorizacion_admin, (req,res) => {
-    try{
+app.get('/categorias', autorizacion_admin, (req, res) => {
+    try {
         controlador.consultar_categorias()
-        .then((resultado: any)=>{
-            return res.send({resultado});
-        }).catch((err:any) => {
-            return res.send({error: err.message})
-        });
-    }catch(err: any) {
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message })
+            });
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 });
 
 //devuelve todas las categorias
-app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req,res) => {
-    try{
-        let id_categoria : number = parseInt(req.params.id_categoria);
+app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req, res) => {
+    try {
+        let id_categoria: number = parseInt(req.params.id_categoria);
         controlador.eliminar_categoria(id_categoria)
-        .then((resultado: any)=>{
-            return res.send({resultado});
-        }).catch((err:any) => {
-            return res.send({error: err.message})
-        });
-    }catch(err: any) {
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message })
+            });
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 });

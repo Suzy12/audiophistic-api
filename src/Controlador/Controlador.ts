@@ -182,6 +182,11 @@ export default class Controlador {
         return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
     }
 
+    //Consulta los productos, mas su foto, de un Creador de Contenido segun su ID
+    thumbnail_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
+        return this.gestor_productos.thumbnail_productos_creador(id_creador_contenido);
+    }
+
     //Consulta los productos de un Usuario segun su ID
     consultar_productos_usuario(token: string): Promise<Producto[]> {
         let descifrado: Usuario = this.descifrar_token(token);
@@ -192,9 +197,27 @@ export default class Controlador {
     agregar_al_carrito(token: string, id_producto: number, id_estilo: number, cantidad: number): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
         if(descifrado.caracteristicas?.id_tipo != 3){
-            throw new Error('El usuario puede tener un carrito');
+            throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.agregar_al_carrito(descifrado.id_usuario, id_producto, id_estilo, cantidad);
+    }
+
+    // Cambia la cantiadd de un producto del carrito
+    cambiar_cantidad_carrito(token: string, id_producto: number, id_estilo: number, cantidad: number): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        if(descifrado.caracteristicas?.id_tipo != 3){
+            throw new Error('El usuario no puede tener un carrito');
+        };
+        return this.gestor_carrito.cambiar_cantidad_carrito(descifrado.id_usuario, id_producto, id_estilo, cantidad);
+    }
+
+    // Elimina un producto del carrito
+    eliminar_del_carrito(token: string, id_producto: number, id_estilo: number): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        if(descifrado.caracteristicas?.id_tipo != 3){
+            throw new Error('El usuario no puede tener un carrito');
+        };
+        return this.gestor_carrito.eliminar_del_carrito(descifrado.id_usuario, id_producto, id_estilo);
     }
 
     // Consulta el carrito de un usuario segun su ID

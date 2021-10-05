@@ -299,6 +299,21 @@ export default class DAO {
             throw err;
         }
     }
+
+    //Consulta los productos, mas su foto, de un Creador de Contenido segun su ID
+    async thumbnail_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
+        try {
+            let res = await this.cliente.query('select * from thumbnail_productos_por_creador($1)', [id_creador_contenido]);
+            if (res.rows[0]) {
+                return res.rows;
+            } else {
+                throw new Error("El usuario no tiene productos");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Cambia el estado de un producto a inactivo
     async eliminar_producto(id_producto: number): Promise<string> {
         try {
@@ -362,11 +377,44 @@ export default class DAO {
     async agregar_al_carrito(id_usuario: number, id_producto: number, id_estilo: number, cantidad: number):
         Promise<string> {
         try {
-            let res = await this.cliente.query('select * from agregar_al_carrito($1,$2,$3,$4)', [id_usuario, id_producto, id_estilo, cantidad]);
+            let res = await this.cliente.query('select * from agregar_al_carrito($1,$2,$3,$4)',
+                [id_usuario, id_producto, id_estilo, cantidad]);
             if (res.rows[0]) {
                 return res.rows[0].agregar_al_carrito;
             } else {
-                throw new Error("El carrito no pudo ser consultado");
+                throw new Error("El carrito no pudo ser accesado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Consulta al carrito
+    async cambiar_cantidad_carrito(id_usuario: number, id_producto: number, id_estilo: number, cantidad: number):
+        Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from cambiar_cantidad_carrito($1,$2,$3,$4)',
+                [id_usuario, id_producto, id_estilo, cantidad]);
+            if (res.rows[0]) {
+                return res.rows[0].cambiar_cantidad_carrito;
+            } else {
+                throw new Error("El carrito no pudo ser cambiado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Consulta al carrito
+    async eliminar_del_carrito(id_usuario: number, id_producto: number, id_estilo: number):
+        Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from eliminar_del_carrito($1,$2,$3)',
+                [id_usuario, id_producto, id_estilo]);
+            if (res.rows[0]) {
+                return res.rows[0].eliminar_del_carrito;
+            } else {
+                throw new Error("El carrito no pudo ser cambiado");
             }
         } catch (err) {
             throw err;

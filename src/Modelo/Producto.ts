@@ -11,6 +11,6 @@ export interface Producto {
     descripcion?: string;
     fecha_lanzamiento?: number;
     enlace?: string;
-    foto? : string;
+    imagen? : string;
     caracteristicas: Tipos_Producto;
 } 

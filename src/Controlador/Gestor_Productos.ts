@@ -76,6 +76,14 @@ export default class Gestor_Prodcuctos {
             })
     }
 
+    //Obtiene productos, mas su foto, de un creador de contenido segun su ID
+    thumbnail_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
+        return this.base_datos.thumbnail_productos_creador(id_creador_contenido)
+            .then((producto: Producto[]) => {
+                return producto;
+            })
+    }
+
     // Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
     editar_producto(id_producto: number): string {
         return "producto modificado";

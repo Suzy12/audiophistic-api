@@ -16,6 +16,22 @@ export default class Gestor_Carrito {
             })
     }
 
+    // Cambia la cantidad de un producto del carrito
+    cambiar_cantidad_carrito(id_usuario: number, id_producto: number, id_estilo: number, cantidad: number): Promise<string> {
+        return this.base_datos.cambiar_cantidad_carrito(id_usuario, id_producto, id_estilo, cantidad)
+            .then((producto: string) => {
+                return producto;
+            })
+    }
+
+    // Consulta el contenido del carrito
+    eliminar_del_carrito(id_usuario: number, id_producto: number, id_estilo: number): Promise<string> {
+        return this.base_datos.eliminar_del_carrito(id_usuario, id_producto, id_estilo)
+            .then((producto: string) => {
+                return producto;
+            })
+    }
+
     // Consulta el contenido del carrito
     thumbnail_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         return this.base_datos.thumbnail_carrito(id_usuario)
