@@ -418,6 +418,21 @@ app.get('/mis_productos', autorizacion_creador_contenido, (req: express.Request,
 })
 
 // Devuelve todos los datos del usuario, se comunica con el controlador
+app.get('/productos_por_tipo/:id_tipo', (req: express.Request, res) => {
+    try {
+        let id_producto: number = parseInt(req.params.id_tipo);
+        controlador.productos_por_tipo(id_producto)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Devuelve todos los datos del usuario, se comunica con el controlador
 app.get('/productos/:id_producto', (req: express.Request, res) => {
     try {
         let id_producto: number = parseInt(req.params.id_producto);

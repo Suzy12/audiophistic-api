@@ -150,6 +150,27 @@ export default class Controlador {
         return this.gestor_productos.consultar_productos();
     }
 
+    //Consulta los productos de un Creador de Contenido segun su ID
+    consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
+        return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
+    }
+
+    //Consulta los productos, mas su foto, de un Creador de Contenido segun su ID
+    thumbnail_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
+        return this.gestor_productos.thumbnail_productos_creador(id_creador_contenido);
+    }
+
+    //Consulta los productos de un Usuario segun su ID
+    consultar_productos_usuario(token: string): Promise<Producto[]> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
+    }
+
+    // Consulta los datos del producto respectivo
+    productos_por_tipo(id_tipo: number): Promise<Producto[]> {
+        return this.gestor_productos.productos_por_tipo(id_tipo);
+    }
+
     // Consulta los datos del producto respectivo
     consultar_producto(id_producto: number): Promise<Producto> {
         return this.gestor_productos.consultar_producto(id_producto);
@@ -175,22 +196,6 @@ export default class Controlador {
     modificar_existencia(token: string, estilos: Estilo[]): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
         return this.gestor_estilos.modificar_existencia(descifrado.id_usuario, estilos);
-    }
-
-    //Consulta los productos de un Creador de Contenido segun su ID
-    consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
-        return this.gestor_productos.consultar_productos_creador(id_creador_contenido);
-    }
-
-    //Consulta los productos, mas su foto, de un Creador de Contenido segun su ID
-    thumbnail_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
-        return this.gestor_productos.thumbnail_productos_creador(id_creador_contenido);
-    }
-
-    //Consulta los productos de un Usuario segun su ID
-    consultar_productos_usuario(token: string): Promise<Producto[]> {
-        let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
     }
 
     // Agrega un producto al carrito

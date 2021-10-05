@@ -273,6 +273,20 @@ export default class DAO {
     }
 
     // Recupera un producto y sus datos segun su id
+    async productos_por_tipo(id_tipo: number): Promise<Producto[]> {
+        try {
+            let res = await this.cliente.query('select * from productos_por_tipo($1)', [id_tipo]);
+            if (res.rows[0]) {
+                return res.rows;
+            } else {
+                throw new Error("El producto no existe o fue eliminado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Recupera un producto y sus datos segun su id
     async consultar_producto(id_producto: number): Promise<Producto> {
         try {
             let res = await this.cliente.query('select * from consultar_producto($1)', [id_producto]);

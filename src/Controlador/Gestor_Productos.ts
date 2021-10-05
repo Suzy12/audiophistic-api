@@ -49,6 +49,14 @@ export default class Gestor_Prodcuctos {
     }
 
     // Obtiene los datos del producto
+    productos_por_tipo(id_producto: number): Promise<Producto[]> {
+        return this.base_datos.productos_por_tipo(id_producto)
+            .then((producto: Producto[]) => {
+                return producto;
+            })
+    }
+
+    // Obtiene los datos del producto
     consultar_producto(id_producto: number): Promise<Producto> {
         return this.base_datos.consultar_producto(id_producto)
             .then((producto: Producto) => {
