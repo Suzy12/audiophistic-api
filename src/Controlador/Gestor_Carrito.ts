@@ -49,11 +49,5 @@ export default class Gestor_Carrito {
             })
     }
 
-    //Realizar el checkout
-    realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: string): Promise<Pedido>{
-        return this.base_datos.realizar_checkout(carrito, monto_total, direccion_pedido)
-        .then((pedido: Pedido) => {
-            return pedido;
-        })
-    }
+    
 }

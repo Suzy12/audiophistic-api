@@ -9,6 +9,7 @@ import Manejador_Tokens from "./Manejador_Tokens";
 import { Token } from "nodemailer/lib/xoauth2";
 import { Carrito } from "../Modelo/Carrito";
 import { Pedido} from "../Modelo/Pedido";
+import { Direccion} from "../Modelo/Direccion";
 
 require('dotenv').config();
 
@@ -465,9 +466,10 @@ export default class DAO {
     }
 
     // Realizar el Checkout
-    async realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: string) :Promise<Pedido>{
+    async realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: Direccion, direccion_facturacion: Direccion) :Promise<Pedido>{
         try {
-            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3)', [carrito, monto_total, direccion_pedido]);
+            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3,$4)',
+            [carrito, monto_total, direccion_pedido, direccion_facturacion]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {

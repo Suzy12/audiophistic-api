@@ -17,6 +17,7 @@ import { Carrito } from '../Modelo/Carrito';
 import Gestor_Carrito from './Gestor_Carrito';
 import { Pedido } from '../Modelo/Pedido';
 import Gestor_Pedidos from './Gestor_Pedidos';
+import { Direccion } from "../Modelo/Direccion";
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -248,8 +249,8 @@ export default class Controlador {
     }
 
     // Realiza el checkout
-    realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: string): Promise<Pedido>{
-        return this.gestor_carrito.realizar_checkout(carrito, monto_total, direccion_pedido);
+    realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: Direccion, direccion_facturacion: Direccion): Promise<Pedido>{
+        return this.gestor_pedidos.realizar_checkout(carrito, monto_total, direccion_pedido, direccion_facturacion);
     }
 
     // Realiza el pago
