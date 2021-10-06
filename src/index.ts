@@ -600,9 +600,9 @@ app.post('/checkout', (req, res) =>{
 // Realizar Pago
 app.post('/pagar',  (req, res) =>{
     try{
-        let {pedido} : {pedido: Pedido} = req.body;
-        if (pedido){
-            controlador.realizar_pago(pedido)
+        let {pedido, direccion_pedido} : {pedido: Pedido, direccion_pedido : Direccion} = req.body;
+        if (pedido && direccion_pedido){
+            controlador.realizar_pago(pedido, direccion_pedido)
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {

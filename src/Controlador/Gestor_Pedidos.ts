@@ -23,8 +23,8 @@ export default class Gestor_Pedidos {
 
 
     // Realiza el pago con un pedido
-    realizar_pago(pedido: Pedido): Promise<string>{
-        return this.base_datos.realizar_pago(pedido)
+    realizar_pago(pedido: Pedido, direccion_pedido: Direccion): Promise<string>{
+        return this.base_datos.realizar_pago(pedido, direccion_pedido)
             .then((pedido: string) => {
                 return pedido;
             })

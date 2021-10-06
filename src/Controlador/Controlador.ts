@@ -254,8 +254,8 @@ export default class Controlador {
     }
 
     // Realiza el pago
-    realizar_pago(pedido:Pedido): Promise<string>{
-        return this.gestor_pedidos.realizar_pago(pedido);
+    realizar_pago(pedido:Pedido, direccion_pedido: Direccion): Promise<string>{
+        return this.gestor_pedidos.realizar_pago(pedido, direccion_pedido);
     }
 
     // Crea categoria con los datos 
