@@ -6,6 +6,8 @@ import { Tipos_Usuario } from './Modelo/Tipos_Usuario';
 import { Producto } from './Modelo/Producto';
 import { Estilo } from './Modelo/Estilo';
 import { Creador_de_Contenido } from './Modelo/Creador_de_Contenido';
+import { Carrito } from './Modelo/Carrito';
+import { Pedido } from './Modelo/Pedido';
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://201.194.192.205',
         'http://152.231.200.151', 'http://localhost:4200', 'https://audiophistic1.web.app'],
@@ -569,6 +571,47 @@ app.get('/carrito', (req: express.Request, res) => {
                 return res.send({ error: err.message });
             });
     } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Realizar checkout de un carrito
+app.post('/checkout', (req, res) =>{ 
+    try{
+        let { carrito, monto_total, direccion_pedido }:
+            { carrito: Carrito, monto_total: number, direccion_pedido: string } = req.body;
+            if (carrito && monto_total && direccion_pedido){
+                controlador.realizar_checkout(carrito, monto_total, direccion_pedido)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+            }else{
+                return res.send({ error: "No se pudo realizar el checkout" })
+            }
+            
+    }catch  (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Realizar Pago
+app.post('/pagar',  (req, res) =>{
+    try{
+        let {pedido} : {pedido: Pedido} = req.body;
+        if (pedido){
+            controlador.realizar_pago(pedido)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+        }else{
+            return res.send({ error: "No se pudo completar el pago" })
+        }
+
+    }catch (err: any) {
         return res.send({ error: err.message });
     }
 })

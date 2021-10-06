@@ -15,6 +15,8 @@ import { Estilo } from '../Modelo/Estilo';
 import { Tipos_Usuario } from '../Modelo/Tipos_Usuario';
 import { Carrito } from '../Modelo/Carrito';
 import Gestor_Carrito from './Gestor_Carrito';
+import { Pedido } from '../Modelo/Pedido';
+import Gestor_Pedidos from './Gestor_Pedidos';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -26,6 +28,7 @@ export default class Controlador {
     private gestor_estilos: Gestor_Estilos;
     private gestor_categorias: Gestor_Categorias;
     private gestor_carrito: Gestor_Carrito;
+    private gestor_pedidos: Gestor_Pedidos;
     //El numero de salts para el hash
     private salts = 10;
 
@@ -37,6 +40,7 @@ export default class Controlador {
         this.gestor_estilos = new Gestor_Estilos();
         this.gestor_categorias = new Gestor_Categorias();
         this.gestor_carrito = new Gestor_Carrito();
+        this.gestor_pedidos= new Gestor_Pedidos();
     }
 
     // Registra a un consumidor
@@ -225,7 +229,7 @@ export default class Controlador {
         return this.gestor_carrito.eliminar_del_carrito(descifrado.id_usuario, id_producto, id_estilo);
     }
 
-    // Consulta el carrito de un usuario segun su ID
+    // Thumbnail del carrito de un usuario segun su ID
     thumbnail_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }>{
         let descifrado: Usuario = this.descifrar_token(token);
         if(descifrado.caracteristicas?.id_tipo != 3){
@@ -241,6 +245,16 @@ export default class Controlador {
             throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.consultar_carrito(descifrado.id_usuario);
+    }
+
+    // Realiza el checkout
+    realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: string): Promise<Pedido>{
+        return this.gestor_carrito.realizar_checkout(carrito, monto_total, direccion_pedido);
+    }
+
+    // Realiza el pago
+    realizar_pago(pedido:Pedido): Promise<string>{
+        return this.gestor_pedidos.realizar_pago(pedido);
     }
 
     // Crea categoria con los datos 

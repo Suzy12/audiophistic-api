@@ -1,4 +1,5 @@
 import { Carrito } from "../Modelo/Carrito";
+import { Pedido } from "../Modelo/Pedido";
 import DAO from "./DAO";
 
 export default class Gestor_Carrito {
@@ -8,7 +9,7 @@ export default class Gestor_Carrito {
         this.base_datos = DAO.get_instancia();
     }
 
-    // Consulta el contenido del carrito
+    // Agregar el contenido del carrito
     agregar_al_carrito(id_usuario: number, id_producto: number, id_estilo: number, cantidad: number): Promise<string> {
         return this.base_datos.agregar_al_carrito(id_usuario, id_producto, id_estilo, cantidad)
             .then((producto: string) => {
@@ -24,7 +25,7 @@ export default class Gestor_Carrito {
             })
     }
 
-    // Consulta el contenido del carrito
+    // Eliminar el contenido del carrito
     eliminar_del_carrito(id_usuario: number, id_producto: number, id_estilo: number): Promise<string> {
         return this.base_datos.eliminar_del_carrito(id_usuario, id_producto, id_estilo)
             .then((producto: string) => {
@@ -32,7 +33,7 @@ export default class Gestor_Carrito {
             })
     }
 
-    // Consulta el contenido del carrito
+    // Thumbnail el contenido del carrito
     thumbnail_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         return this.base_datos.thumbnail_carrito(id_usuario)
             .then((producto: { cambiado: boolean, carrito: Carrito[] }) => {
@@ -46,5 +47,13 @@ export default class Gestor_Carrito {
             .then((producto: { cambiado: boolean, carrito: Carrito[] }) => {
                 return producto;
             })
+    }
+
+    //Realizar el checkout
+    realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: string): Promise<Pedido>{
+        return this.base_datos.realizar_checkout(carrito, monto_total, direccion_pedido)
+        .then((pedido: Pedido) => {
+            return pedido;
+        })
     }
 }

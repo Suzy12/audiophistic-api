@@ -8,6 +8,7 @@ import { Categoria } from "../Modelo/Categoria";
 import Manejador_Tokens from "./Manejador_Tokens";
 import { Token } from "nodemailer/lib/xoauth2";
 import { Carrito } from "../Modelo/Carrito";
+import { Pedido} from "../Modelo/Pedido";
 
 require('dotenv').config();
 
@@ -387,7 +388,7 @@ export default class DAO {
         }
     }
 
-    // Consulta al carrito
+    // Agregar al carrito
     async agregar_al_carrito(id_usuario: number, id_producto: number, id_estilo: number, cantidad: number):
         Promise<string> {
         try {
@@ -403,7 +404,7 @@ export default class DAO {
         }
     }
 
-    // Consulta al carrito
+    // Cambiar cantidad de productos al carrito
     async cambiar_cantidad_carrito(id_usuario: number, id_producto: number, id_estilo: number, cantidad: number):
         Promise<string> {
         try {
@@ -419,7 +420,7 @@ export default class DAO {
         }
     }
 
-    // Consulta al carrito
+    // Eliminar del carrito
     async eliminar_del_carrito(id_usuario: number, id_producto: number, id_estilo: number):
         Promise<string> {
         try {
@@ -435,7 +436,7 @@ export default class DAO {
         }
     }
 
-    // Consulta al carrito
+    // Thumbnail al carrito
     async thumbnail_carrito(id_usuario: number): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         try {
             let res = await this.cliente.query('select * from thumbnail_carrito($1)', [id_usuario]);
@@ -459,6 +460,34 @@ export default class DAO {
                 throw new Error("El carrito no pudo ser consultado");
             }
         } catch (err) {
+            throw err;
+        }
+    }
+
+    // Realizar el Checkout
+    async realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: string) :Promise<Pedido>{
+        try {
+            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3)', [carrito, monto_total, direccion_pedido]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("No se pudo realizar el checkout");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Realiza el pago, tiene un pedido como entrada
+    async realizar_pago(pedido: Pedido): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from pagar($1)', [pedido]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("Hubo un error a la hora de realizar el pago");
+            }
+        }catch (err) {
             throw err;
         }
     }
