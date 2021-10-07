@@ -18,8 +18,10 @@ export default class Gestor_Pedidos {
 
     //Realizar el checkout
     realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, nombre: string,
-        correo: string, direccion_pedido: Direccion): Promise<number> {
-        return this.base_datos.realizar_checkout(id_usuario, carrito, monto_total, nombre, correo, direccion_pedido)
+        correo: string, direccion: string | undefined , canton: string | undefined , provincia: string | undefined , cedula: number | undefined ,
+        telefono: number | undefined , nombre_consumidor: string | undefined ): Promise<number> {
+        return this.base_datos.realizar_checkout(id_usuario, carrito, monto_total, nombre, correo,
+            direccion, canton, provincia, cedula,telefono, nombre_consumidor)
             .then((id_pedido: number) => {
                 return id_pedido;
             })
@@ -27,8 +29,9 @@ export default class Gestor_Pedidos {
 
 
     // Realiza el pago con un pedido
-    realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number,
-        comprobante: string, direccion_pedido: Direccion): Promise<string> {
+    realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
+        comprobante: string, direccion: string | undefined , canton: string | undefined , provincia: string | undefined , cedula: number | undefined ,
+        telefono: number | undefined , nombre_consumidor: string | undefined): Promise<string> {
         let tipo_pago: Tipo_de_Pago;
         switch (id_metodo_pago) {
             case 1:
@@ -44,7 +47,8 @@ export default class Gestor_Pedidos {
                 throw new Error("El tipo de pago no es válido");
         }
 
-        return tipo_pago.pagar(id_pedido, monto, comprobante, direccion_pedido)
+        return tipo_pago.pagar(id_pedido, monto, subtotal, costo_envio, comprobante,
+            direccion, canton, provincia, cedula, telefono, nombre_consumidor)
             .then((resultado: string) => {
                 return resultado;
             })

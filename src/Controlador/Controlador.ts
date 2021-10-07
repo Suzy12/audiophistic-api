@@ -252,13 +252,30 @@ export default class Controlador {
     realizar_checkout(token: string, carrito: Carrito[], monto_total: number, nombre: string,
         correo: string, direccion_pedido: Direccion): Promise<number>{
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, nombre, correo, direccion_pedido);
+        let direccion: string | undefined = direccion_pedido.direccion;
+        let canton: string | undefined = direccion_pedido.canton;
+        let provincia: string  | undefined= direccion_pedido.provincia;
+        let cedula: number | undefined = direccion_pedido.cedula;
+        let telefono: number | undefined = direccion_pedido.telefono;
+        let nombre_consumidor: string | undefined = direccion_pedido.nombre_consumidor;
+
+        return this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, nombre, correo,
+                                                    direccion, canton, provincia, cedula, telefono, nombre_consumidor);
     }
 
     // Realiza el pago
-    realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, 
+    realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
             comprobante: string,direccion_pedido: Direccion): Promise<string>{
-        return this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, comprobante, direccion_pedido);
+
+        let direccion: string | undefined = direccion_pedido.direccion;
+        let canton: string | undefined = direccion_pedido.canton;
+        let provincia: string  | undefined= direccion_pedido.provincia;
+        let cedula: number | undefined = direccion_pedido.cedula;
+        let telefono: number | undefined = direccion_pedido.telefono;
+        let nombre_consumidor: string | undefined = direccion_pedido.nombre_consumidor;
+
+        return this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante,
+                                                direccion, canton, provincia, cedula, telefono, nombre_consumidor);
     }
 
     // Crea categoria con los datos 

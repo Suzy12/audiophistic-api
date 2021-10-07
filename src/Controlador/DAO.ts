@@ -467,10 +467,11 @@ export default class DAO {
 
     // Realizar el Checkout
     async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, 
-        nombre: string, correo: string, direccion_pedido: Direccion) :Promise<number>{
+        nombre: string, correo: string, direccion: string | undefined , canton: string | undefined , provincia: string | undefined,
+        cedula: number | undefined, telefono: number | undefined , nombre_consumidor: string | undefined ) :Promise<number>{
         try {
-            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3,$4,$5,$6)',
-            [id_usuario, carrito, monto_total, nombre, correo, direccion_pedido]);
+            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
+            [id_usuario, carrito, monto_total, nombre, correo, direccion, canton, provincia, cedula, telefono, nombre_consumidor]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
@@ -482,9 +483,12 @@ export default class DAO {
     }
 
     // Realiza el pago, tiene un pedido como entrada
-    async realizar_pago(id_pedido: number, direccion_pedido: Direccion): Promise<string>{
+    async realizar_pago(id_pedido: number, monto: number, subtotal: number, costo_envio: number, comprobante: string, 
+        direccion: string | undefined , canton: string | undefined , provincia: string | undefined , cedula: number | undefined ,
+        telefono: number | undefined , nombre_consumidor: string | undefined): Promise<string>{
         try{
-            let res = await this.cliente.query('select * from pagar($1, $2)', [id_pedido, direccion_pedido]);
+            let res = await this.cliente.query('select * from pagar($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
+            [id_pedido, monto, subtotal, costo_envio, comprobante, direccion, canton, provincia, cedula, telefono, nombre_consumidor]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {

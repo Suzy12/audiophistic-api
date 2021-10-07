@@ -604,13 +604,13 @@ app.post('/checkout', (req, res) => {
 // Realizar Pago
 app.post('/pagar', (req, res) => {
     try {
-        let { id_pedido, id_metodo_pago, monto, comprobante, direccion_pedido }:
+        let { id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido }:
             {
-                id_pedido: number, id_metodo_pago: number, monto: number, comprobante: string,
+                id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number, comprobante: string,
                 direccion_pedido: Direccion
             } = req.body;
         if (id_pedido && direccion_pedido ) {
-            controlador.realizar_pago(id_pedido, id_metodo_pago, monto, comprobante, direccion_pedido)
+            controlador.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
