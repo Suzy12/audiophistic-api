@@ -577,42 +577,50 @@ app.get('/carrito', (req: express.Request, res) => {
 })
 
 // Realizar checkout de un carrito
-app.post('/checkout', (req, res) =>{ 
-    try{
-        let { carrito, monto_total, direccion_pedido, direccion_facturacion }:
-            { carrito: Carrito, monto_total: number, direccion_pedido: Direccion, direccion_facturacion: Direccion } = req.body;
-            if (carrito && monto_total && direccion_pedido && direccion_facturacion){
-                controlador.realizar_checkout(carrito, monto_total, direccion_pedido, direccion_facturacion)
+app.post('/checkout', (req, res) => {
+    try {
+        let { carrito, monto_total, nombre, correo, direccion_pedido }:
+            {
+                carrito: Carrito[], monto_total: number, nombre: string, correo: string,
+                direccion_pedido: Direccion
+            } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (carrito && monto_total && nombre && correo && direccion_pedido) {
+            controlador.realizar_checkout(token, carrito, monto_total, nombre, correo, direccion_pedido)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
-            }else{
-                return res.send({ error: "No se pudo realizar el checkout" })
-            }
-            
-    }catch  (err: any) {
+        } else {
+            return res.send({ error: "No se pudo realizar el checkout" })
+        }
+
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 // Realizar Pago
-app.post('/pagar',  (req, res) =>{
-    try{
-        let {pedido, direccion_pedido} : {pedido: Pedido, direccion_pedido : Direccion} = req.body;
-        if (pedido && direccion_pedido){
-            controlador.realizar_pago(pedido, direccion_pedido)
-            .then((resultado: any) => {
-                return res.send({ resultado });
-            }).catch((err: any) => {
-                return res.send({ error: err.message });
-            });
-        }else{
+app.post('/pagar', (req, res) => {
+    try {
+        let { id_pedido, id_metodo_pago, monto, comprobante, direccion_facturacion }:
+            {
+                id_pedido: number, id_metodo_pago: number, monto: number, comprobante: string,
+                direccion_facturacion: Direccion
+            } = req.body;
+        if (id_pedido && direccion_facturacion) {
+            controlador.realizar_pago(id_pedido, direccion_pedido)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
             return res.send({ error: "No se pudo completar el pago" })
         }
 
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
