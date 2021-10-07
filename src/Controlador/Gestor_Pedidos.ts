@@ -1,6 +1,9 @@
-import { Pedido } from "../Modelo/Pedido";
 import { Carrito } from "../Modelo/Carrito";
 import { Direccion } from "../Modelo/Direccion";
+import { Sinpe } from "../Modelo/Sinpe";
+import { Tarjeta } from "../Modelo/Tarjeta";
+import { Tipo_de_Pago } from "../Modelo/Tipo_de_Pago";
+import { Transferencia } from "../Modelo/Transferencia";
 import DAO from "./DAO";
 
 
@@ -15,19 +18,35 @@ export default class Gestor_Pedidos {
 
     //Realizar el checkout
     realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, nombre: string,
-        correo: string, direccion_pedido: Direccion): Promise<number>{
-        return this.base_datos.realizar_checkout(id_usuario, carrito, monto_total, nombre, correo,  direccion_pedido)
-        .then((id_pedido: number) => {
-            return id_pedido;
-        })
+        correo: string, direccion_pedido: Direccion): Promise<number> {
+        return this.base_datos.realizar_checkout(id_usuario, carrito, monto_total, nombre, correo, direccion_pedido)
+            .then((id_pedido: number) => {
+                return id_pedido;
+            })
     }
 
 
     // Realiza el pago con un pedido
-    realizar_pago(id_pedido: number, direccion_pedido: Direccion): Promise<string>{
-        return this.base_datos.realizar_pago(id_pedido, direccion_pedido)
-            .then((pedido: string) => {
-                return pedido;
+    realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number,
+        comprobante: string, direccion_pedido: Direccion): Promise<string> {
+        let tipo_pago: Tipo_de_Pago;
+        switch (id_metodo_pago) {
+            case 1:
+                tipo_pago = new Tarjeta();
+                break;
+            case 2:
+                tipo_pago = new Transferencia();
+                break;
+            case 3:
+                tipo_pago = new Sinpe();
+                break;
+            default:
+                throw new Error("El tipo de pago no es válido");
+        }
+
+        return tipo_pago.pagar(id_pedido, monto, comprobante, direccion_pedido)
+            .then((resultado: string) => {
+                return resultado;
             })
     }
 }

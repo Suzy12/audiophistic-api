@@ -609,8 +609,8 @@ app.post('/pagar', (req, res) => {
                 id_pedido: number, id_metodo_pago: number, monto: number, comprobante: string,
                 direccion_pedido: Direccion
             } = req.body;
-        if (id_pedido && direccion_pedido) {
-            controlador.realizar_pago(id_pedido, direccion_pedido)
+        if (id_pedido && direccion_pedido ) {
+            controlador.realizar_pago(id_pedido, id_metodo_pago, monto, comprobante, direccion_pedido)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
