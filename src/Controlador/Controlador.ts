@@ -249,13 +249,15 @@ export default class Controlador {
     }
 
     // Realiza el checkout
-    realizar_checkout(carrito: Carrito, monto_total: number, direccion_pedido: Direccion, direccion_facturacion: Direccion): Promise<Pedido>{
-        return this.gestor_pedidos.realizar_checkout(carrito, monto_total, direccion_pedido, direccion_facturacion);
+    realizar_checkout(token: string, carrito: Carrito[], monto_total: number, nombre: string,
+        correo: string, direccion_pedido: Direccion): Promise<number>{
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, nombre, correo, direccion_pedido,);
     }
 
     // Realiza el pago
-    realizar_pago(pedido:Pedido, direccion_pedido: Direccion): Promise<string>{
-        return this.gestor_pedidos.realizar_pago(pedido, direccion_pedido);
+    realizar_pago(id_pedido: number, direccion_pedido: Direccion): Promise<string>{
+        return this.gestor_pedidos.realizar_pago(id_pedido, direccion_pedido);
     }
 
     // Crea categoria con los datos 
