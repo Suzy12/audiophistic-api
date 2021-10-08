@@ -41,7 +41,7 @@ export default class Controlador {
         this.gestor_estilos = new Gestor_Estilos();
         this.gestor_categorias = new Gestor_Categorias();
         this.gestor_carrito = new Gestor_Carrito();
-        this.gestor_pedidos= new Gestor_Pedidos();
+        this.gestor_pedidos = new Gestor_Pedidos();
     }
 
     // Registra a un consumidor
@@ -109,7 +109,7 @@ export default class Controlador {
         let descifrado: Usuario = this.descifrar_token(token);
         return this.gestor_usuarios.editar_usuario(descifrado, nombre, caracteristicas);
     }
-    
+
     // Consulta todos los usuarios
     consultar_usuarios(): Promise<Usuario[]> {
         return this.gestor_usuarios.consultar_usuarios();
@@ -206,7 +206,7 @@ export default class Controlador {
     // Agrega un producto al carrito
     agregar_al_carrito(token: string, id_producto: number, id_estilo: number, cantidad: number): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        if(descifrado.caracteristicas?.id_tipo != 3){
+        if (descifrado.caracteristicas?.id_tipo != 3) {
             throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.agregar_al_carrito(descifrado.id_usuario, id_producto, id_estilo, cantidad);
@@ -215,7 +215,7 @@ export default class Controlador {
     // Cambia la cantiadd de un producto del carrito
     cambiar_cantidad_carrito(token: string, id_producto: number, id_estilo: number, cantidad: number): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        if(descifrado.caracteristicas?.id_tipo != 3){
+        if (descifrado.caracteristicas?.id_tipo != 3) {
             throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.cambiar_cantidad_carrito(descifrado.id_usuario, id_producto, id_estilo, cantidad);
@@ -224,58 +224,42 @@ export default class Controlador {
     // Elimina un producto del carrito
     eliminar_del_carrito(token: string, id_producto: number, id_estilo: number): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        if(descifrado.caracteristicas?.id_tipo != 3){
+        if (descifrado.caracteristicas?.id_tipo != 3) {
             throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.eliminar_del_carrito(descifrado.id_usuario, id_producto, id_estilo);
     }
 
     // Thumbnail del carrito de un usuario segun su ID
-    thumbnail_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }>{
+    thumbnail_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         let descifrado: Usuario = this.descifrar_token(token);
-        if(descifrado.caracteristicas?.id_tipo != 3){
+        if (descifrado.caracteristicas?.id_tipo != 3) {
             throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.thumbnail_carrito(descifrado.id_usuario);
     }
 
     // Consulta el carrito de un usuario segun su ID
-    consultar_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }>{
+    consultar_carrito(token: string): Promise<{ cambiado: boolean, carrito: Carrito[] }> {
         let descifrado: Usuario = this.descifrar_token(token);
-        if(descifrado.caracteristicas?.id_tipo != 3){
+        if (descifrado.caracteristicas?.id_tipo != 3) {
             throw new Error('El usuario no puede tener un carrito');
         };
         return this.gestor_carrito.consultar_carrito(descifrado.id_usuario);
     }
 
     // Realiza el checkout
-    realizar_checkout(token: string, carrito: Carrito[], monto_total: number, nombre: string,
-        correo: string, direccion_pedido: Direccion): Promise<number>{
+    realizar_checkout(token: string, carrito: Carrito[], monto_total: number, subtotal: number,
+        costo_envio: number, nombre: string, correo: string, direccion_pedido: Direccion): Promise<number> {
         let descifrado: Usuario = this.descifrar_token(token);
-        let direccion: string | undefined = direccion_pedido.direccion;
-        let canton: string | undefined = direccion_pedido.canton;
-        let provincia: string  | undefined= direccion_pedido.provincia;
-        let cedula: number | undefined = direccion_pedido.cedula;
-        let telefono: number | undefined = direccion_pedido.telefono;
-        let nombre_consumidor: string | undefined = direccion_pedido.nombre_consumidor;
-
-        return this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, nombre, correo,
-                                                    direccion, canton, provincia, cedula, telefono, nombre_consumidor);
+        return this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, subtotal,
+            costo_envio, nombre, correo, direccion_pedido);
     }
 
     // Realiza el pago
     realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
-            comprobante: string,direccion_pedido: Direccion): Promise<string>{
-
-        let direccion: string | undefined = direccion_pedido.direccion;
-        let canton: string | undefined = direccion_pedido.canton;
-        let provincia: string  | undefined= direccion_pedido.provincia;
-        let cedula: number | undefined = direccion_pedido.cedula;
-        let telefono: number | undefined = direccion_pedido.telefono;
-        let nombre_consumidor: string | undefined = direccion_pedido.nombre_consumidor;
-
-        return this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante,
-                                                direccion, canton, provincia, cedula, telefono, nombre_consumidor);
+        comprobante: string, direccion_pedido: Direccion): Promise<string> {
+        return this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido);
     }
 
     // Crea categoria con los datos 

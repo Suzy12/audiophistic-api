@@ -8,8 +8,8 @@ import { Categoria } from "../Modelo/Categoria";
 import Manejador_Tokens from "./Manejador_Tokens";
 import { Token } from "nodemailer/lib/xoauth2";
 import { Carrito } from "../Modelo/Carrito";
-import { Pedido} from "../Modelo/Pedido";
-import { Direccion} from "../Modelo/Direccion";
+import { Pedido } from "../Modelo/Pedido";
+import { Direccion } from "../Modelo/Direccion";
 
 require('dotenv').config();
 
@@ -466,12 +466,13 @@ export default class DAO {
     }
 
     // Realizar el Checkout
-    async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, 
-        nombre: string, correo: string, direccion: string | undefined , canton: string | undefined , provincia: string | undefined,
-        cedula: number | undefined, telefono: number | undefined , nombre_consumidor: string | undefined ) :Promise<number>{
+    async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number, costo_envio: number,
+        nombre: string, correo: string, direccion: string, canton: string, provincia: string,
+        cedula: string, telefono: string, nombre_consumidor: string): Promise<number> {
         try {
-            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
-            [id_usuario, carrito, monto_total, nombre, correo, direccion, canton, provincia, cedula, telefono, nombre_consumidor]);
+            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
+                [id_usuario, carrito, monto_total, subtotal, costo_envio, nombre, correo, direccion,
+                    canton, provincia, cedula, telefono, nombre_consumidor]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
@@ -483,26 +484,27 @@ export default class DAO {
     }
 
     // Realiza el pago, tiene un pedido como entrada
-    async realizar_pago(id_pedido: number, monto: number, subtotal: number, costo_envio: number, comprobante: string, 
-        direccion: string | undefined , canton: string | undefined , provincia: string | undefined , cedula: number | undefined ,
-        telefono: number | undefined , nombre_consumidor: string | undefined): Promise<string>{
-        try{
-            let res = await this.cliente.query('select * from pagar($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
-            [id_pedido, monto, subtotal, costo_envio, comprobante, direccion, canton, provincia, cedula, telefono, nombre_consumidor]);
+    async realizar_pago(id_pedido: number, id_tipo: number, monto: number, subtotal: number, costo_envio: number, 
+        comprobante: string, direccion: string, canton: string, provincia: string, cedula: string,
+        telefono: string, nombre_consumidor: string): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from pagar($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
+                [id_pedido, id_tipo, monto, subtotal, costo_envio, comprobante, direccion, 
+                    canton, provincia, cedula, telefono, nombre_consumidor]);
             if (res.rows[0]) {
                 return res.rows[0];
             } else {
                 throw new Error("Hubo un error a la hora de realizar el pago");
             }
-        }catch (err) {
+        } catch (err) {
             throw err;
         }
     }
 
     // Se crea una categoria
-    async crear_categoria(nombre: string/*, fecha_creacion: Date, cant_blogs: number*/): Promise<string> {
+    async crear_categoria(nombre: string): Promise<string> {
         try {
-            let res = await this.cliente.query('select * from crear_categoria($1)', [nombre/*, fecha_creacion, cant_blogs*/]);
+            let res = await this.cliente.query('select * from crear_categoria($1)', [nombre]);
             if (res.rows[0]) {
                 return res.rows[0].crear_categoria;
             } else {

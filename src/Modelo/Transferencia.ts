@@ -12,9 +12,9 @@ export class Transferencia extends Tipo_de_Pago{
     }
 
     async pagar(id_pedido: number, monto: number, subtotal: number, costo_envio: number, comprobante: string, 
-        direccion: string | undefined , canton: string | undefined , provincia: string | undefined , cedula: number | undefined ,
-        telefono: number | undefined , nombre_consumidor: string | undefined): Promise<string>{
-        return this.base_de_datos.realizar_pago(id_pedido, monto, subtotal, costo_envio, comprobante, direccion, 
-                                                canton, provincia, cedula, telefono, nombre_consumidor);
+        direccion_pedido: Direccion): Promise<string>{
+        return this.base_de_datos.realizar_pago(id_pedido, this.id_tipo, monto, subtotal, costo_envio, comprobante,
+            direccion_pedido.direccion, direccion_pedido.canton, direccion_pedido.provincia,
+            direccion_pedido.cedula, direccion_pedido.telefono, direccion_pedido.nombre_consumidor);
     }
 }

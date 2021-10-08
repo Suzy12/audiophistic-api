@@ -579,14 +579,14 @@ app.get('/carrito', (req: express.Request, res) => {
 // Realizar checkout de un carrito
 app.post('/checkout', (req, res) => {
     try {
-        let { carrito, monto_total, nombre, correo, direccion_pedido }:
+        let { carrito, monto_total, subtotal, costo_envio, nombre, correo, direccion_pedido }:
             {
-                carrito: Carrito[], monto_total: number, nombre: string, correo: string,
-                direccion_pedido: Direccion
+                carrito: Carrito[], monto_total: number, subtotal: number, costo_envio: number, 
+                nombre: string, correo: string, direccion_pedido: Direccion
             } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
-        if (carrito && monto_total && nombre && correo && direccion_pedido) {
-            controlador.realizar_checkout(token, carrito, monto_total, nombre, correo, direccion_pedido)
+        if (carrito && monto_total && nombre && correo && direccion_pedido && subtotal && costo_envio) {
+            controlador.realizar_checkout(token, carrito, monto_total, subtotal, costo_envio, nombre, correo, direccion_pedido)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {

@@ -13,7 +13,6 @@ export abstract class Tipo_de_Pago{
     }
 
     abstract pagar(id_pedido: number, monto: number, subtotal: number, costo_envio: number, comprobante: string, 
-        direccion: string | undefined , canton: string | undefined , provincia: string | undefined , cedula: number | undefined ,
-        telefono: number | undefined , nombre_consumidor: string | undefined): Promise<string>;
+        direccion_pedido: Direccion): Promise<string>;
 
 }
