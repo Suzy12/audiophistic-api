@@ -248,6 +248,14 @@ export default class Controlador {
         return this.gestor_carrito.consultar_carrito(descifrado.id_usuario);
     }
 
+    // Consulta los datos del los tipos de pago disponibles
+    consultar_tipos_de_pago(): Promise<{
+        id_tipo_pago: number, nombre: string,
+        descripcion: string, comprobante: boolean
+    }[]> {
+        return this.gestor_pedidos.consultar_tipos_de_pago();
+    }
+
     // Realiza el checkout
     realizar_checkout(token: string, carrito: Carrito[], monto_total: number, subtotal: number,
         costo_envio: number, correo: string, direccion_pedido: Direccion): Promise<number> {

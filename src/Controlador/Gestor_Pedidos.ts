@@ -15,6 +15,14 @@ export default class Gestor_Pedidos {
         this.base_datos = DAO.get_instancia();
     }
 
+    // Consulta los datos del los tipos de pago disponibles
+    consultar_tipos_de_pago(): Promise<{
+        id_tipo_pago: number, nombre: string,
+        descripcion: string, comprobante: boolean
+    }[]> {
+        return this.base_datos.consultar_tipos_de_pago();
+    }
+
 
     //Realizar el checkout
     realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number, costo_envio: number,

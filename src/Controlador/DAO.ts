@@ -465,6 +465,23 @@ export default class DAO {
         }
     }
 
+    // Consulta al carrito
+    async consultar_tipos_de_pago(): Promise<{
+        id_tipo_pago: number, nombre: string,
+        descripcion: string, comprobante: boolean
+    }[]> {
+        try {
+            let res = await this.cliente.query('select * from consultar_tipos_de_pago()');
+            if (res.rows[0]) {
+                return res.rows;
+            } else {
+                throw new Error("El carrito no pudo ser consultado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Realizar el Checkout
     async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number, 
         costo_envio: number, correo: string, direccion: string, canton: string, provincia: string, 

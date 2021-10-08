@@ -576,6 +576,20 @@ app.get('/carrito', (req: express.Request, res) => {
     }
 })
 
+// Consulta los productos del carrito de un usuario
+app.get('/tipos_de_pago', (req: express.Request, res) => {
+    try {
+        controlador.consultar_tipos_de_pago()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
 // Realizar checkout de un carrito
 app.post('/checkout', (req, res) => {
     try {
