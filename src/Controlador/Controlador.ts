@@ -250,15 +250,15 @@ export default class Controlador {
 
     // Realiza el checkout
     realizar_checkout(token: string, carrito: Carrito[], monto_total: number, subtotal: number,
-        costo_envio: number, nombre: string, correo: string, direccion_pedido: Direccion): Promise<number> {
+        costo_envio: number, correo: string, direccion_pedido: Direccion): Promise<number> {
         let descifrado: Usuario = this.descifrar_token(token);
         return this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, subtotal,
-            costo_envio, nombre, correo, direccion_pedido);
+            costo_envio, correo, direccion_pedido);
     }
 
     // Realiza el pago
     realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
-        comprobante: string, direccion_pedido: Direccion): Promise<string> {
+        correo: string, comprobante: string, direccion_pedido: Direccion): Promise<string> {
         return this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido);
     }
 

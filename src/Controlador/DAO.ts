@@ -466,15 +466,15 @@ export default class DAO {
     }
 
     // Realizar el Checkout
-    async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number, costo_envio: number,
-        nombre: string, correo: string, direccion: string, canton: string, provincia: string,
+    async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number, 
+        costo_envio: number, correo: string, direccion: string, canton: string, provincia: string, 
         cedula: string, telefono: string, nombre_consumidor: string): Promise<number> {
         try {
-            let res = await this.cliente.query('select * from consultar_carrito($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
-                [id_usuario, carrito, monto_total, subtotal, costo_envio, nombre, correo, direccion,
+            let res = await this.cliente.query('select * from realizar_checkout($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
+                [id_usuario, carrito, monto_total, subtotal, costo_envio, correo, direccion,
                     canton, provincia, cedula, telefono, nombre_consumidor]);
             if (res.rows[0]) {
-                return res.rows[0];
+                return res.rows[0].realizar_checkout;
             } else {
                 throw new Error("No se pudo realizar el checkout");
             }

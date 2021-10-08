@@ -579,14 +579,14 @@ app.get('/carrito', (req: express.Request, res) => {
 // Realizar checkout de un carrito
 app.post('/checkout', (req, res) => {
     try {
-        let { carrito, monto_total, subtotal, costo_envio, nombre, correo, direccion_pedido }:
+        let { carrito, monto_total, subtotal, costo_envio, correo, direccion_pedido }:
             {
                 carrito: Carrito[], monto_total: number, subtotal: number, costo_envio: number, 
-                nombre: string, correo: string, direccion_pedido: Direccion
+                correo: string, direccion_pedido: Direccion
             } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
-        if (carrito && monto_total && nombre && correo && direccion_pedido && subtotal && costo_envio) {
-            controlador.realizar_checkout(token, carrito, monto_total, subtotal, costo_envio, nombre, correo, direccion_pedido)
+        if (carrito && monto_total && correo && direccion_pedido && subtotal && costo_envio) {
+            controlador.realizar_checkout(token, carrito, monto_total, subtotal, costo_envio, correo, direccion_pedido)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
@@ -604,13 +604,13 @@ app.post('/checkout', (req, res) => {
 // Realizar Pago
 app.post('/pagar', (req, res) => {
     try {
-        let { id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido }:
+        let { id_pedido, id_metodo_pago, monto, subtotal, costo_envio, correo, comprobante, direccion_pedido }:
             {
-                id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number, comprobante: string,
-                direccion_pedido: Direccion
+                id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number, 
+                correo: string, comprobante: string, direccion_pedido: Direccion
             } = req.body;
-        if (id_pedido && direccion_pedido ) {
-            controlador.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido)
+        if (id_pedido && id_metodo_pago && monto && subtotal && costo_envio && correo && direccion_pedido ) {
+            controlador.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, correo, comprobante, direccion_pedido)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {

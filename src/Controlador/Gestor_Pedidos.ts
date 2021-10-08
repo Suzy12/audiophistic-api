@@ -18,9 +18,9 @@ export default class Gestor_Pedidos {
 
     //Realizar el checkout
     realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number, costo_envio: number,
-        nombre: string, correo: string, direccion_pedido: Direccion): Promise<number> {
+        correo: string, direccion_pedido: Direccion): Promise<number> {
         return this.base_datos.realizar_checkout(id_usuario, carrito, monto_total, subtotal,
-            costo_envio, nombre, correo, direccion_pedido.direccion, direccion_pedido.canton, 
+            costo_envio, correo, direccion_pedido.direccion, direccion_pedido.canton, 
             direccion_pedido.provincia, direccion_pedido.cedula, direccion_pedido.telefono, direccion_pedido.nombre_consumidor)
             .then((id_pedido: number) => {
                 return id_pedido;
