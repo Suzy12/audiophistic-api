@@ -257,17 +257,59 @@ export default class Controlador {
     }
 
     // Realiza el checkout
-    realizar_checkout(token: string, carrito: Carrito[], monto_total: number, subtotal: number,
+    async realizar_checkout(token: string, carrito: Carrito[], monto_total: number, subtotal: number,
         costo_envio: number, correo: string, direccion_pedido: Direccion): Promise<number> {
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, subtotal,
+        let id_pedido: number = await this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, subtotal,
             costo_envio, correo, direccion_pedido);
+        // Formateador para ingresar en el correo el dinero en formato de dinero
+        let formatter = new Intl.NumberFormat('es-ES', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+        // Trae el cuerpo del correo
+        let tabla_carrito: string = ''
+        for (let i = 0; i < carrito.length; i++) {
+            tabla_carrito += `<tr>
+            <td style="font-size:15px; padding: 15px 10px 5px 10px;">${carrito[i].titulo}<br><span
+                    style="font-size:13px; color: #929191;">${carrito[i].nombre_estilo}</span></td>
+            <td style="padding: 15px 10px 5px 10px;" align="center">${Math.abs(carrito[i].cantidad)}<br></td>
+            <td style="padding: 15px 10px 5px 10px;">₡${formatter.format(carrito[i].cantidad == -1
+                ? carrito[i].precio : carrito[i].precio * carrito[i].cantidad)}</td>
+        </tr>`
+        }
+        let cuerpo_correo: string = fs.readFileSync('./assets/html/pedido_confirmado.html',
+            { encoding: 'utf8', flag: 'r' });
+        //Substituye las %s por las variables que queremos
+        cuerpo_correo = util.format(cuerpo_correo, tabla_carrito, id_pedido, "₡" + formatter.format(subtotal), "₡" + formatter.format(costo_envio),
+            "₡" + formatter.format(monto_total - costo_envio - subtotal), "₡" + formatter.format(monto_total),
+            direccion_pedido.nombre_consumidor, direccion_pedido.cedula, direccion_pedido.telefono,
+            direccion_pedido.provincia, direccion_pedido.canton, direccion_pedido.direccion);
+        await this.envio_correos.enviar_correo(correo, "Pedido Confirmado — Audiophistic", cuerpo_correo);
+        return 1;
     }
 
     // Realiza el pago
-    realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
+    async realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
         correo: string, comprobante: string, direccion_pedido: Direccion): Promise<string> {
-        return this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido);
+        await this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido);
+        // Formateador para ingresar en el correo el dinero en formato de dinero
+        var formatter = new Intl.NumberFormat('es-ES', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+        // Trae el cuerpo del correo
+        let cuerpo_correo: string = fs.readFileSync('./assets/html/pago_confirmado.html',
+            { encoding: 'utf8', flag: 'r' });
+        //Substituye las %s por las variables que queremos
+        cuerpo_correo = util.format(cuerpo_correo, new Date().toLocaleDateString(
+            'es-ES',
+            { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }//Opciones para el fomrato de la fecha
+        ), "₡" + formatter.format(monto), id_pedido, "₡" + formatter.format(subtotal), "₡" + formatter.format(costo_envio),
+            "₡" + formatter.format(monto - costo_envio - subtotal), "₡" + formatter.format(monto), direccion_pedido.nombre_consumidor,
+            direccion_pedido.cedula, direccion_pedido.telefono, direccion_pedido.provincia, direccion_pedido.canton,
+            direccion_pedido.direccion);
+        return this.envio_correos.enviar_correo(correo, "Pago Confirmado — Audiophistic", cuerpo_correo);
     }
 
     // Crea categoria con los datos 
