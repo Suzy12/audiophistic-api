@@ -258,10 +258,10 @@ export default class Controlador {
 
     // Realiza el checkout
     async realizar_checkout(token: string, carrito: Carrito[], monto_total: number, subtotal: number,
-        costo_envio: number, correo: string, direccion_pedido: Direccion): Promise<number> {
+        costo_envio: number, direccion_pedido: Direccion): Promise<number> {
         let descifrado: Usuario = this.descifrar_token(token);
         let id_pedido: number = await this.gestor_pedidos.realizar_checkout(descifrado.id_usuario, carrito, monto_total, subtotal,
-            costo_envio, correo, direccion_pedido);
+            costo_envio, descifrado.correo, direccion_pedido);
         // Formateador para ingresar en el correo el dinero en formato de dinero
         let formatter = new Intl.NumberFormat('es-ES', {
             minimumFractionDigits: 2,
@@ -285,13 +285,14 @@ export default class Controlador {
             "₡" + formatter.format(monto_total - costo_envio - subtotal), "₡" + formatter.format(monto_total),
             direccion_pedido.nombre_consumidor, direccion_pedido.cedula, direccion_pedido.telefono,
             direccion_pedido.provincia, direccion_pedido.canton, direccion_pedido.direccion);
-        await this.envio_correos.enviar_correo(correo, "Pedido Confirmado — Audiophistic", cuerpo_correo);
-        return 1;
+        await this.envio_correos.enviar_correo(descifrado.correo, "Pedido Confirmado — Audiophistic", cuerpo_correo);
+        return id_pedido;
     }
 
     // Realiza el pago
-    async realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
-        correo: string, comprobante: string, direccion_pedido: Direccion): Promise<string> {
+    async realizar_pago(token: string, id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, 
+        costo_envio: number, comprobante: string, direccion_pedido: Direccion): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
         await this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido);
         // Formateador para ingresar en el correo el dinero en formato de dinero
         var formatter = new Intl.NumberFormat('es-ES', {
@@ -309,7 +310,7 @@ export default class Controlador {
             "₡" + formatter.format(monto - costo_envio - subtotal), "₡" + formatter.format(monto), direccion_pedido.nombre_consumidor,
             direccion_pedido.cedula, direccion_pedido.telefono, direccion_pedido.provincia, direccion_pedido.canton,
             direccion_pedido.direccion);
-        return this.envio_correos.enviar_correo(correo, "Pago Confirmado — Audiophistic", cuerpo_correo);
+        return this.envio_correos.enviar_correo(descifrado.correo, "Pago Confirmado — Audiophistic", cuerpo_correo);
     }
 
     // Crea categoria con los datos 
