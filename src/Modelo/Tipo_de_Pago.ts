@@ -12,7 +12,7 @@ export abstract class Tipo_de_Pago{
         this.nombre_tipo = nombre_tipo;
     }
 
-    abstract pagar(id_pedido: number, monto: number, subtotal: number, costo_envio: number, comprobante: string, 
+    abstract pagar(id_pedido: number, monto_total: number, subtotal: number, costo_envio: number, comprobante: string, 
         direccion_pedido: Direccion): Promise<string>;
 
 }

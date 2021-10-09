@@ -501,12 +501,12 @@ export default class DAO {
     }
 
     // Realiza el pago, tiene un pedido como entrada
-    async realizar_pago(id_pedido: number, id_tipo: number, monto: number, subtotal: number, costo_envio: number, 
+    async realizar_pago(id_pedido: number, id_tipo: number, monto_total: number, subtotal: number, costo_envio: number, 
         comprobante: string, direccion: string, canton: string, provincia: string, cedula: string,
         telefono: string, nombre_consumidor: string): Promise<string> {
         try {
             let res = await this.cliente.query('select * from realizar_pago($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
-                [id_pedido, id_tipo, monto, subtotal, costo_envio, comprobante, direccion, 
+                [id_pedido, id_tipo, monto_total, subtotal, costo_envio, comprobante, direccion, 
                     canton, provincia, cedula, telefono, nombre_consumidor]);
             if (res.rows[0]) {
                 return res.rows[0].realizar_pago;

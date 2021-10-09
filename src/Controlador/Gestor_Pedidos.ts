@@ -37,7 +37,7 @@ export default class Gestor_Pedidos {
 
 
     // Realiza el pago con un pedido
-    realizar_pago(id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
+    realizar_pago(id_pedido: number, id_metodo_pago: number, monto_total: number, subtotal: number, costo_envio: number,
         comprobante: string, direccion_pedido: Direccion): Promise<string> {
         let tipo_pago: Tipo_de_Pago;
         switch (id_metodo_pago) {
@@ -54,7 +54,7 @@ export default class Gestor_Pedidos {
                 throw new Error("El tipo de pago no es válido");
         }
 
-        return tipo_pago.pagar(id_pedido, monto, subtotal, costo_envio, comprobante,
+        return tipo_pago.pagar(id_pedido, monto_total, subtotal, costo_envio, comprobante,
             direccion_pedido)
             .then((resultado: string) => {
                 return resultado;

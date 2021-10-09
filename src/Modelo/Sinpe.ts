@@ -11,9 +11,9 @@ export class Sinpe extends Tipo_de_Pago{
         this.base_de_datos= DAO.get_instancia();
     }
 
-    async pagar(id_pedido: number, monto: number, subtotal: number, costo_envio: number, comprobante: string, 
+    async pagar(id_pedido: number, monto_total: number, subtotal: number, costo_envio: number, comprobante: string, 
         direccion_pedido: Direccion): Promise<string>{
-        return this.base_de_datos.realizar_pago(id_pedido, this.id_tipo, monto, subtotal, costo_envio, comprobante,
+        return this.base_de_datos.realizar_pago(id_pedido, this.id_tipo, monto_total, subtotal, costo_envio, comprobante,
             direccion_pedido.direccion, direccion_pedido.canton, direccion_pedido.provincia,
             direccion_pedido.cedula, direccion_pedido.telefono, direccion_pedido.nombre_consumidor);
     }

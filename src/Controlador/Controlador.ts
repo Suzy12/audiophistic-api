@@ -290,10 +290,10 @@ export default class Controlador {
     }
 
     // Realiza el pago
-    async realizar_pago(token: string, id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, 
+    async realizar_pago(token: string, id_pedido: number, id_metodo_pago: number, monto_total: number, subtotal: number, 
         costo_envio: number, comprobante: string, direccion_pedido: Direccion): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        await this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido);
+        await this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto_total, subtotal, costo_envio, comprobante, direccion_pedido);
         // Formateador para ingresar en el correo el dinero en formato de dinero
         var formatter = new Intl.NumberFormat('es-ES', {
             minimumFractionDigits: 2,
@@ -306,8 +306,8 @@ export default class Controlador {
         cuerpo_correo = util.format(cuerpo_correo, new Date().toLocaleDateString(
             'es-ES',
             { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }//Opciones para el fomrato de la fecha
-        ), "₡" + formatter.format(monto), id_pedido, "₡" + formatter.format(subtotal), "₡" + formatter.format(costo_envio),
-            "₡" + formatter.format(monto - costo_envio - subtotal), "₡" + formatter.format(monto), direccion_pedido.nombre_consumidor,
+        ), "₡" + formatter.format(monto_total), id_pedido, "₡" + formatter.format(subtotal), "₡" + formatter.format(costo_envio),
+            "₡" + formatter.format(monto_total - costo_envio - subtotal), "₡" + formatter.format(monto_total), direccion_pedido.nombre_consumidor,
             direccion_pedido.cedula, direccion_pedido.telefono, direccion_pedido.provincia, direccion_pedido.canton,
             direccion_pedido.direccion);
         return this.envio_correos.enviar_correo(descifrado.correo, "Pago Confirmado — Audiophistic", cuerpo_correo);

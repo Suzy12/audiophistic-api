@@ -618,14 +618,14 @@ app.post('/checkout', (req, res) => {
 // Realizar Pago
 app.post('/pagar', (req, res) => {
     try {
-        let { id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido }:
+        let { id_pedido, id_metodo_pago, monto_total, subtotal, costo_envio, comprobante, direccion_pedido }:
             {
-                id_pedido: number, id_metodo_pago: number, monto: number, subtotal: number, costo_envio: number,
+                id_pedido: number, id_metodo_pago: number, monto_total: number, subtotal: number, costo_envio: number,
                 comprobante: string, direccion_pedido: Direccion
             } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
-        if (id_pedido && id_metodo_pago && monto && subtotal && costo_envio && direccion_pedido) {
-            controlador.realizar_pago(token, id_pedido, id_metodo_pago, monto, subtotal, costo_envio, comprobante, direccion_pedido)
+        if (id_pedido && id_metodo_pago && monto_total && subtotal && costo_envio && direccion_pedido) {
+            controlador.realizar_pago(token, id_pedido, id_metodo_pago, monto_total, subtotal, costo_envio, comprobante, direccion_pedido)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
