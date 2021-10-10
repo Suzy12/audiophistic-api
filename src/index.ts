@@ -497,7 +497,7 @@ app.get('/estilos/:id_producto', (req: express.Request, res) => {
 })
 
 // Agrega el producto carrito del usuario
-app.post('/agregar_al_carrito', (req: express.Request, res) => {
+app.post('/agregar_al_carrito', autorizacion_consumidor, (req: express.Request, res) => {
     try {
         let { id_producto, id_estilo, cantidad }:
             { id_producto: number, id_estilo: number, cantidad: number } = req.body;
@@ -514,7 +514,7 @@ app.post('/agregar_al_carrito', (req: express.Request, res) => {
 })
 
 // Cambia la cantidad del producto del usuario
-app.post('/cambiar_cantidad_carrito', (req: express.Request, res) => {
+app.post('/cambiar_cantidad_carrito', autorizacion_consumidor, (req: express.Request, res) => {
     try {
         let { id_producto, id_estilo, cantidad }:
             { id_producto: number, id_estilo: number, cantidad: number } = req.body;
@@ -530,7 +530,7 @@ app.post('/cambiar_cantidad_carrito', (req: express.Request, res) => {
     }
 })
 
-app.post('/eliminar_del_carrito', (req: express.Request, res) => {
+app.post('/eliminar_del_carrito', autorizacion_consumidor, (req: express.Request, res) => {
     try {
         let { id_producto, id_estilo }:
             { id_producto: number, id_estilo: number } = req.body;
@@ -547,7 +547,7 @@ app.post('/eliminar_del_carrito', (req: express.Request, res) => {
 })
 
 // Consulta los productos del carrito de un usuario
-app.get('/thumbnail_carrito', (req: express.Request, res) => {
+app.get('/thumbnail_carrito', autorizacion_consumidor, (req: express.Request, res) => {
     try {
         let token: string = (hay_auth(req, res) as string[])[1];
         controlador.thumbnail_carrito(token)
@@ -562,7 +562,7 @@ app.get('/thumbnail_carrito', (req: express.Request, res) => {
 })
 
 // Consulta los productos del carrito de un usuario
-app.get('/carrito', (req: express.Request, res) => {
+app.get('/carrito', autorizacion_consumidor, (req: express.Request, res) => {
     try {
         let token: string = (hay_auth(req, res) as string[])[1];
         controlador.consultar_carrito(token)
@@ -591,7 +591,7 @@ app.get('/tipos_de_pago', (req: express.Request, res) => {
 })
 
 // Realizar checkout de un carrito
-app.post('/checkout', (req, res) => {
+app.post('/checkout', autorizacion_consumidor, (req, res) => {
     try {
         let { carrito, monto_total, subtotal, costo_envio, direccion_pedido }:
             {
@@ -616,7 +616,7 @@ app.post('/checkout', (req, res) => {
 })
 
 // Realizar Pago
-app.post('/pagar', (req, res) => {
+app.post('/pagar', autorizacion_consumidor, (req, res) => {
     try {
         let { id_pedido, id_metodo_pago, monto_total, subtotal, costo_envio, comprobante, direccion_pedido }:
             {
