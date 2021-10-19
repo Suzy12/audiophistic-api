@@ -10,6 +10,7 @@ import { Token } from "nodemailer/lib/xoauth2";
 import { Carrito } from "../Modelo/Carrito";
 import { Pedido } from "../Modelo/Pedido";
 import { Direccion } from "../Modelo/Direccion";
+import { Blog } from "../Modelo/Blog";
 
 require('dotenv').config();
 
@@ -563,6 +564,103 @@ export default class DAO {
             throw err;
         }
     }
+
+    // Crear Blog
+    async crear_blog(id_creador: number, id_blog: number, version_blog: number, fecha_creacion: Date,
+                    id_categoria: number, titulo: string, etiquetas: string[], contenido: string,
+                    activo: boolean, enlace: string ): Promise<Blog>{
+        try{
+            let res = await this.cliente.query('select * from crear_blog($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+                [id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas,
+                    contenido, activo, enlace]);
+            if (res.rows[0]) {
+                return res.rows[0].crear_blog;
+            } else {
+                throw new Error("No se pudo crear el Blog");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Modificar un Blog
+    async modificar_blog(id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
+                    id_categoria: number, titulo: string, etiquetas: string[], contenido: string,
+                    activo: boolean, enlace: string ): Promise<Blog>{
+        try{
+            let res = await this.cliente.query('select * from modificar_blog($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+            [id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas,
+            contenido, activo, enlace]);
+                if (res.rows[0]) {
+                    return res.rows[0].modificar_blog;
+                } else {
+                    throw new Error("No se pudo crear el Blog");
+                }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Consultar Blog
+    async consultar_blog(id_blog: number): Promise<Blog>{
+        try{
+            let res = await this.cliente.query('select * from consultar_blog($1)', [id_blog]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("El Blog no existe o fue eliminado");
+            }
+
+        } catch (err){
+            throw err;
+        }
+    }
+
+    //Consultar Blogs de un Creador en especifico
+    async consultar_blogs_creador(id_autor: number): Promise<Blog[]>{
+        try{
+            let res = await this.cliente.query('select * from consultar_blog($1)', [id_autor]);
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("El Autor no tiene blogs");
+            }
+
+        } catch (err){
+            throw err;
+        }
+    }
+
+
+    // Cambia el estado de un producto a inactivo
+    async eliminar_blog(id_blog: number): Promise<string> {
+        try {
+            let res = await this.cliente.query('select * from eliminar_blog($1)', [id_blog]);
+            if (res.rows[0]) {
+                return res.rows[0].eliminar_blog;
+            } else {
+                throw new Error("El Blog no pudo ser eliminado");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Cambia el estado de un producto del creador a inactivo
+    async eliminar_mi_blog(id_blog: number, id_creador: number): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from eliminar_mi_blog($1, $2)',
+                [id_blog, id_creador]);
+            if (res.rows[0]) {
+                    return res.rows[0].eliminar_mi_blog;
+            } else {
+                    throw new Error("El blog  no pudo ser eliminado");
+            }
+        }catch (err) {
+            throw err;
+        }
+    }
+
 
 }
 

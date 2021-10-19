@@ -674,7 +674,7 @@ app.get('/categorias', autorizacion_admin, (req, res) => {
     }
 });
 
-//devuelve todas las categorias
+// Elimina una categoria
 app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req, res) => {
     try {
         let id_categoria: number = parseInt(req.params.id_categoria);
@@ -688,6 +688,117 @@ app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req, res) => {
         return res.send({ error: err.message });
     }
 });
+
+// Crear Blog
+app.post('/crear_blog', autorizacion_creador_contenido,  (req, res) =>{
+    try{
+        let { id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas, contenido,
+            activo, enlace }:
+            { id_creador: number, id_blog: number, version_blog: number, fecha_creacion: Date,
+            id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string } = req.body;
+            let token: string = (hay_auth(req, res) as string[])[1];
+            if (id_creador && id_blog && version_blog && fecha_creacion && id_categoria && titulo && etiquetas && contenido &&
+                activo && enlace && token){
+                    controlador.crear_blog(id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas, contenido,
+                        activo, enlace)
+                        .then((resultado: any) => {
+                            return res.send({ resultado });
+                        }).catch((err: any) => {
+                            return res.send({ error: err.message });
+                        });
+                } else{
+                    return res.send({ error: "Los datos del blog están incompletos" })
+                }
+    }catch(err: any){
+        return res.send({ error: err.message });
+    }
+})
+
+// Modificar Blog
+app.post('/modificar_blog', autorizacion_creador_contenido,  (req, res) =>{
+    try{
+        let { id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
+            activo, enlace }:
+            { id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
+            id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string } = req.body;
+            let token: string = (hay_auth(req, res) as string[])[1];
+            if (id_creador && id_blog && version_blog && fecha_modificacion && id_categoria && titulo && etiquetas && contenido &&
+                activo && enlace && token){
+                    controlador.modificar_blog(id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
+                        activo, enlace)
+                        .then((resultado: any) => {
+                            return res.send({ resultado });
+                        }).catch((err: any) => {
+                            return res.send({ error: err.message });
+                        });
+                } else{
+                    return res.send({ error: "Los datos del blog están incompletos" })
+                }
+    }catch(err: any){
+        return res.send({ error: err.message });
+    }
+})
+
+// Consultar un Blog
+app.get('/consultar_blog/:id_blog', (req: express.Request, res) => {
+    try {
+        let id_blog: number = parseInt(req.params.id_blog);
+        controlador.consultar_blog(id_blog)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+// Devuelve los productos que ha creado el usuario dentro del token
+app.get('/mis_blogs', autorizacion_creador_contenido, (req: express.Request, res) => {
+    try {
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.consultar_blogs_creador(token)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Cambia el estado de un blog a inactivo
+app.get('/eliminar_blog/:id_blog', autorizacion_admin,(req, res) => {
+    try{
+        let id_blog: number = parseInt(req.params.id_blog);
+        controlador.eliminar_blog(id_blog)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message })
+            });
+    } catch (err:any) {
+        return res.send({ error: err.message });
+    }
+});
+
+// Cambia el estado de un blog del creador a inactivo
+app.get('/eliminar_mi_blog/:id_blog', autorizacion_creador_contenido, (req: express.Request, res) =>{
+    try{
+        let id_blog: number = parseInt(req.params.id_blog);
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.eliminar_mi_blog(id_blog, token)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 
 // Inicio de sesion, se comunica con el controlador login
 app.post('/validar_tipo_token', (req, res) => {

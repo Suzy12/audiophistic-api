@@ -18,6 +18,8 @@ import Gestor_Carrito from './Gestor_Carrito';
 import { Pedido } from '../Modelo/Pedido';
 import Gestor_Pedidos from './Gestor_Pedidos';
 import { Direccion } from "../Modelo/Direccion";
+import Gestor_Blogs from './Gestor_Blogs';
+import { Blog } from '../Modelo/Blog';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -30,6 +32,7 @@ export default class Controlador {
     private gestor_categorias: Gestor_Categorias;
     private gestor_carrito: Gestor_Carrito;
     private gestor_pedidos: Gestor_Pedidos;
+    private gestor_blogs: Gestor_Blogs;
     //El numero de salts para el hash
     private salts = 10;
 
@@ -42,6 +45,7 @@ export default class Controlador {
         this.gestor_categorias = new Gestor_Categorias();
         this.gestor_carrito = new Gestor_Carrito();
         this.gestor_pedidos = new Gestor_Pedidos();
+        this.gestor_blogs = new Gestor_Blogs();
     }
 
     // Registra a un consumidor
@@ -326,6 +330,42 @@ export default class Controlador {
     // Elimina una categoria
     eliminar_categoria(id_categoria: number): Promise<string> {
         return this.gestor_categorias.eliminar_categoria(id_categoria);
+    }
+
+    // Crear un Blog 
+    crear_blog(id_creador: number, id_blog: number, version_blog: number, fecha_creacion: Date,
+        id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string ): Promise<Blog>{
+            return this.gestor_blogs.crear_blog(id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas, contenido,
+                                                activo, enlace)
+    }
+
+    // Modificar un blog
+    modificar_blog(id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
+        id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string ): Promise<Blog>{
+            return this.gestor_blogs.modificar_blog(id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
+                                                activo, enlace)
+    }
+
+    // Consultar un Blog
+    consultar_blog(id_blog: number): Promise<Blog>{
+        return this.gestor_blogs.consultar_blog(id_blog);
+    }
+
+    // Consultar blogs de un creador de contenido
+    consultar_blogs_creador(token: string): Promise<Blog[]>{
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_blogs.consultar_blogs_creador(descifrado.id_usuario);
+    }
+
+    // Cambia el estado de un blog a inactivo
+    eliminar_blog(id_blog: number): Promise<string>{
+        return this.gestor_blogs.eliminar_blog(id_blog);
+    }
+
+    // Cambia el estado de un blog del creador a inactivo
+    eliminar_mi_blog(id_blog: number, token: string): Promise<string>{
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_blogs.eliminar_mi_blog(id_blog, descifrado.id_usuario);
     }
 
     // Pide al manejador de tokens que descifre el token

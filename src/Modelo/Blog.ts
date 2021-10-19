@@ -1,12 +1,14 @@
 export interface Blog {
+    id_creador:number;
     id_blog:number;
-    id_autor:number;
+    version_blog: number;
     fecha_creacion: Date;
     fecha_modificacion: Date;
     id_categoria:number;
     titulo: string
     etiquetas: string[];
     contenido: string;
+    activo: boolean;
     enlace: string;
-    productos: number[];
+    //productos: number[];
 } 
