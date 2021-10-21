@@ -20,6 +20,11 @@ export default class Gestor_Categorias{
         return this.base_datos.consultar_categorias();
     }
 
+    // Consulta todas las categorias con metadatos para el administrador
+    consultar_categorias_publico(): Promise<Categoria[]>{
+        return this.base_datos.consultar_categorias_publico();
+    }
+
     // Elimina una categoria
     eliminar_categoria(id_categoria: number): Promise<string>{
         return this.base_datos.eliminar_categoria(id_categoria);

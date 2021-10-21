@@ -534,7 +534,7 @@ export default class DAO {
         }
     }
 
-    // Devuelve todas las categorias
+    // Devuelve todas las categorias con metadatos para el administrador
     async consultar_categorias(): Promise<Categoria[]> {
         try {
             let res = await this.cliente.query('select * from consultar_categorias()');
@@ -542,6 +542,21 @@ export default class DAO {
                 return res.rows;
             } else {
                 throw new Error("No se pudieron traer las categorias ");
+            }
+
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Devuelve todas las categorias 
+    async consultar_categorias_publico(): Promise<Categoria[]> {
+        try {
+            let res = await this.cliente.query('select * from consultar_categorias_publico()');
+            if (res.rows[0]) {
+                return res.rows;
+            } else {
+                throw new Error("No se pudieron traer las categorias");
             }
 
         } catch (err) {
@@ -566,13 +581,11 @@ export default class DAO {
     }
 
     // Crear Blog
-    async crear_blog(id_creador: number, id_blog: number, version_blog: number, fecha_creacion: Date,
-                    id_categoria: number, titulo: string, etiquetas: string[], contenido: string,
-                    activo: boolean, enlace: string ): Promise<Blog>{
+    async crear_blog(id_creador: number, id_categoria: number, titulo: string, imagen: string,
+        etiquetas: string[], contenido: string, productos: number[]): Promise<Blog>{
         try{
-            let res = await this.cliente.query('select * from crear_blog($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-                [id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas,
-                    contenido, activo, enlace]);
+            let res = await this.cliente.query('select * from crear_blog($1, $2, $3, $4, $5, $6, $7)',
+                [id_creador, id_categoria, titulo, imagen, etiquetas, contenido, productos]);
             if (res.rows[0]) {
                 return res.rows[0].crear_blog;
             } else {

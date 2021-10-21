@@ -1,14 +1,16 @@
+import { Producto } from "./Producto";
+
 export interface Blog {
-    id_creador:number;
     id_blog:number;
-    version_blog: number;
-    fecha_creacion: Date;
-    fecha_modificacion: Date;
-    id_categoria:number;
+    id_creador?:number;
+    nombre_creador?: string;
+    fecha_creacion?: Date;
+    id_categoria?:number;
+    nombre_categoria?:string;
     titulo: string
-    etiquetas: string[];
-    contenido: string;
-    activo: boolean;
-    enlace: string;
-    //productos: number[];
+    imagen?: string
+    etiquetas?: string[];
+    contenido?: string;
+    enlace?: string;
+    productos?: Producto[];
 } 

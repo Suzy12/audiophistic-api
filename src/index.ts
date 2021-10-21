@@ -660,10 +660,24 @@ app.post('/crear_categoria', autorizacion_admin, (req, res) => {
     }
 });
 
-//devuelve todas las categorias
+//devuelve todas las categorias con metadatos para el admin
 app.get('/categorias', autorizacion_admin, (req, res) => {
     try {
         controlador.consultar_categorias()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message })
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+});
+
+//devuelve todas las categorias
+app.get('/categorias_publico', (req, res) => {
+    try {
+        controlador.consultar_categorias_publico()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -692,22 +706,19 @@ app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req, res) => {
 // Crear Blog
 app.post('/crear_blog', autorizacion_creador_contenido,  (req, res) =>{
     try{
-        let { id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas, contenido,
-            activo, enlace }:
-            { id_creador: number, id_blog: number, version_blog: number, fecha_creacion: Date,
-            id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string } = req.body;
+        let { id_categoria, titulo, imagen, etiquetas, contenido, productos}:
+            { id_categoria: number, titulo: string, imagen: string, etiquetas: string[], 
+                contenido: string, activo: boolean, enlace: string, productos: number[] } = req.body;
             let token: string = (hay_auth(req, res) as string[])[1];
-            if (id_creador && id_blog && version_blog && fecha_creacion && id_categoria && titulo && etiquetas && contenido &&
-                activo && enlace && token){
-                    controlador.crear_blog(id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas, contenido,
-                        activo, enlace)
+            if (id_categoria && titulo && imagen && etiquetas && contenido && productos && token){
+                    controlador.crear_blog(token, id_categoria, titulo, imagen, etiquetas, contenido, productos)
                         .then((resultado: any) => {
                             return res.send({ resultado });
                         }).catch((err: any) => {
                             return res.send({ error: err.message });
                         });
                 } else{
-                    return res.send({ error: "Los datos del blog están incompletos" })
+                    return res.send({ error: "Los datos del blog están incompletos"})
                 }
     }catch(err: any){
         return res.send({ error: err.message });
@@ -740,7 +751,7 @@ app.post('/modificar_blog', autorizacion_creador_contenido,  (req, res) =>{
 })
 
 // Consultar un Blog
-app.get('/consultar_blog/:id_blog', (req: express.Request, res) => {
+app.get('/blogs/:id_blog', (req: express.Request, res) => {
     try {
         let id_blog: number = parseInt(req.params.id_blog);
         controlador.consultar_blog(id_blog)
@@ -753,6 +764,21 @@ app.get('/consultar_blog/:id_blog', (req: express.Request, res) => {
         return res.send({ error: err.message });
     }
 });
+
+// Devuelve todos los blogs
+app.get('/blogs', autorizacion_creador_contenido, (req: express.Request, res) => {
+    try {
+        let token: string = (hay_auth(req, res) as string[])[1];
+        controlador.consultar_blogs_creador(token)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
 
 // Devuelve los productos que ha creado el usuario dentro del token
 app.get('/mis_blogs', autorizacion_creador_contenido, (req: express.Request, res) => {

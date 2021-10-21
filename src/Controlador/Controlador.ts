@@ -294,7 +294,7 @@ export default class Controlador {
     }
 
     // Realiza el pago
-    async realizar_pago(token: string, id_pedido: number, id_metodo_pago: number, monto_total: number, subtotal: number, 
+    async realizar_pago(token: string, id_pedido: number, id_metodo_pago: number, monto_total: number, subtotal: number,
         costo_envio: number, comprobante: string, direccion_pedido: Direccion): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
         await this.gestor_pedidos.realizar_pago(id_pedido, id_metodo_pago, monto_total, subtotal, costo_envio, comprobante, direccion_pedido);
@@ -322,9 +322,14 @@ export default class Controlador {
         return this.gestor_categorias.crear_categoria(nombre);
     }
 
-    // Consulta todas las categorias
+    // Consulta todas las categorias con metadatos para el administrador
     consultar_categorias(): Promise<Categoria[]> {
         return this.gestor_categorias.consultar_categorias();
+    }
+
+    // Consulta todas las categorias con solo el nombre y el id
+    consultar_categorias_publico(): Promise<Categoria[]> {
+        return this.gestor_categorias.consultar_categorias_publico();
     }
 
     // Elimina una categoria
@@ -333,37 +338,38 @@ export default class Controlador {
     }
 
     // Crear un Blog 
-    crear_blog(id_creador: number, id_blog: number, version_blog: number, fecha_creacion: Date,
-        id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string ): Promise<Blog>{
-            return this.gestor_blogs.crear_blog(id_creador, id_blog, version_blog, fecha_creacion, id_categoria, titulo, etiquetas, contenido,
-                                                activo, enlace)
+    crear_blog(token: string, id_categoria: number, titulo: string, imagen: string,
+        etiquetas: string[], contenido: string, productos: number[]): Promise<Blog> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_blogs.crear_blog(descifrado.id_usuario, id_categoria, titulo, imagen,
+            etiquetas, contenido, productos)
     }
 
     // Modificar un blog
     modificar_blog(id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
-        id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string ): Promise<Blog>{
-            return this.gestor_blogs.modificar_blog(id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
-                                                activo, enlace)
+        id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string): Promise<Blog> {
+        return this.gestor_blogs.modificar_blog(id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
+            activo, enlace)
     }
 
     // Consultar un Blog
-    consultar_blog(id_blog: number): Promise<Blog>{
+    consultar_blog(id_blog: number): Promise<Blog> {
         return this.gestor_blogs.consultar_blog(id_blog);
     }
 
     // Consultar blogs de un creador de contenido
-    consultar_blogs_creador(token: string): Promise<Blog[]>{
+    consultar_blogs_creador(token: string): Promise<Blog[]> {
         let descifrado: Usuario = this.descifrar_token(token);
         return this.gestor_blogs.consultar_blogs_creador(descifrado.id_usuario);
     }
 
     // Cambia el estado de un blog a inactivo
-    eliminar_blog(id_blog: number): Promise<string>{
+    eliminar_blog(id_blog: number): Promise<string> {
         return this.gestor_blogs.eliminar_blog(id_blog);
     }
 
     // Cambia el estado de un blog del creador a inactivo
-    eliminar_mi_blog(id_blog: number, token: string): Promise<string>{
+    eliminar_mi_blog(id_blog: number, token: string): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
         return this.gestor_blogs.eliminar_mi_blog(id_blog, descifrado.id_usuario);
     }
