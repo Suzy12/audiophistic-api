@@ -317,6 +317,21 @@ export default class DAO {
         }
     }
 
+    //Consulta los productos de un Creador de Contenido segun su ID
+    async consultar_productos_sin_blog_creador(id_creador_contenido: number): Promise<Producto[]> {
+        try {
+            let res = await this.cliente.query('select * from consultar_productos_sin_blog_creador($1)', 
+            [id_creador_contenido]);
+            if (res.rows[0]) {
+                return res.rows;
+            } else {
+                throw new Error("El usuario no tiene productos");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     //Consulta los productos, mas su foto, de un Creador de Contenido segun su ID
     async thumbnail_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         try {
@@ -630,11 +645,11 @@ export default class DAO {
     }
 
     //Consultar Blogs de un Creador en especifico
-    async consultar_blogs_creador(id_autor: number): Promise<Blog[]>{
+    async consultar_blogs_por_creador(id_autor: number): Promise<Blog[]>{
         try{
-            let res = await this.cliente.query('select * from consultar_blog($1)', [id_autor]);
+            let res = await this.cliente.query('select * from consultar_blogs_por_creador($1)', [id_autor]);
             if (res.rows[0]) {
-                return res.rows[0];
+                return res.rows;
             } else {
                 throw new Error("El Autor no tiene blogs");
             }
@@ -645,7 +660,7 @@ export default class DAO {
     }
 
     // Consulta los blogs, mas su foto, de un Creador de Contenido segun su ID
-    async thumbnail_blogs_creador(id_creador_contenido: number): Promise<Blog[]>{
+    async thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]>{
         try{
             let res = await this.cliente.query('select * from thumbnail_blogs_por_creador($1)', [id_creador_contenido]);
             if (res.rows[0]) {
@@ -663,7 +678,22 @@ export default class DAO {
         try{
             let res = await this.cliente.query('select * from consultar_blogs()');
             if (res.rows[0]) {
-                return res.rows[0];
+                return res.rows;
+            } else {
+                throw new Error("No hay blogs");
+            }
+
+        } catch (err){
+            throw err;
+        }
+    }
+
+    // Consulta todos los blogs
+    async consultar_thumbnail_blogs(): Promise<Blog[]>{
+        try{
+            let res = await this.cliente.query('select * from consultar_thumbnail_blogs()');
+            if (res.rows[0]) {
+                return res.rows;
             } else {
                 throw new Error("No hay blogs");
             }

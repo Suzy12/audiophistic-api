@@ -175,6 +175,12 @@ export default class Controlador {
         return this.gestor_productos.consultar_productos_creador(descifrado.id_usuario);
     }
 
+    //Consulta los productos de un Usuario segun su ID
+    consultar_productos_sin_blog_creador(token: string): Promise<Producto[]> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_productos.consultar_productos_sin_blog_creador(descifrado.id_usuario);
+    }
+
     // Consulta los datos del producto respectivo
     productos_por_tipo(id_tipo: number): Promise<Producto[]> {
         return this.gestor_productos.productos_por_tipo(id_tipo);
@@ -358,19 +364,24 @@ export default class Controlador {
     }
 
     // Consultar blogs de un creador de contenido
-    consultar_blogs_creador(token: string): Promise<Blog[]> {
+    consultar_blogs_por_creador(token: string): Promise<Blog[]> {
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_blogs.consultar_blogs_creador(descifrado.id_usuario);
+        return this.gestor_blogs.consultar_blogs_por_creador(descifrado.id_usuario);
     }
 
     // Consultar blogs de un creador de contenido
-    thumbnail_blogs_creador(id_creador_contenido: number): Promise<Blog[]>{
-        return this.gestor_blogs.thumbnail_blog_creador(id_creador_contenido);
+    thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]>{
+        return this.gestor_blogs.thumbnail_blogs_por_creador(id_creador_contenido);
     }
 
     // Obtiene todos los blogs
     consultar_blogs(): Promise<Blog[]>{
         return this.gestor_blogs.consultar_blogs();
+    }
+
+    // Obtiene todos los blogs
+    consultar_thumbnail_blogs(): Promise<Blog[]>{
+        return this.gestor_blogs.consultar_thumbnail_blogs();
     }
 
     // Cambia el estado de un blog a inactivo

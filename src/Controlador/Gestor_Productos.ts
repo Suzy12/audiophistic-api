@@ -64,21 +64,17 @@ export default class Gestor_Prodcuctos {
             })
     }
 
-    // Elimina el producto dado
-    eliminar_producto(id_producto: number): Promise<string> {
-        return this.base_datos.eliminar_producto(id_producto);
-
-    }
-
-    // Elimina el producto dado
-    eliminar_mi_producto(id_producto: number, id_creador: number): Promise<string> {
-        return this.base_datos.eliminar_mi_producto(id_producto, id_creador);
-
-    }
-
     // Obtiene productos de un creador de contenido segun su ID
     consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.base_datos.consultar_productos_creador(id_creador_contenido)
+            .then((producto: Producto[]) => {
+                return producto;
+            })
+    }
+
+    // Obtiene productos de un creador de contenido segun su ID
+    consultar_productos_sin_blog_creador(id_creador_contenido: number): Promise<Producto[]> {
+        return this.base_datos.consultar_productos_sin_blog_creador(id_creador_contenido)
             .then((producto: Producto[]) => {
                 return producto;
             })
@@ -92,8 +88,15 @@ export default class Gestor_Prodcuctos {
             })
     }
 
-    // Modifica los datos del producto enviado, cambia la versión y inserta los nuevos datos según la versión
-    editar_producto(id_producto: number): string {
-        return "producto modificado";
+    // Elimina el producto dado
+    eliminar_producto(id_producto: number): Promise<string> {
+        return this.base_datos.eliminar_producto(id_producto);
+
+    }
+
+    // Elimina el producto dado
+    eliminar_mi_producto(id_producto: number, id_creador: number): Promise<string> {
+        return this.base_datos.eliminar_mi_producto(id_producto, id_creador);
+
     }
 }

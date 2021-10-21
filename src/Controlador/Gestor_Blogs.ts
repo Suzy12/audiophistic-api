@@ -42,16 +42,16 @@ export default class Gestor_Blogs {
     }
 
     // Consultar los blogs de un creador
-    consultar_blogs_creador(id_autor: number): Promise<Blog[]> {
-        return this.base_datos.consultar_blogs_creador(id_autor)
+    consultar_blogs_por_creador(id_autor: number): Promise<Blog[]> {
+        return this.base_datos.consultar_blogs_por_creador(id_autor)
             .then((blog: Blog[]) => {
                 return blog;
             })
     }
 
     // Obtiene blogs, mas su foto, de un creador de contenido segun su ID
-    thumbnail_blog_creador(id_creador_contenido: number): Promise<Blog[]>{
-        return this.base_datos.thumbnail_blogs_creador(id_creador_contenido)
+    thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]>{
+        return this.base_datos.thumbnail_blogs_por_creador(id_creador_contenido)
             .then((blog: Blog[]) => {
                 return blog;
             })
@@ -60,6 +60,14 @@ export default class Gestor_Blogs {
     // Obtiene todos los blogs
     consultar_blogs(): Promise<Blog[]>{
         return this.base_datos.consultar_blogs()
+            .then((blog: Blog[]) => {
+                return blog;
+            })
+    }
+
+    // Obtiene todos los blogs
+    consultar_thumbnail_blogs(): Promise<Blog[]>{
+        return this.base_datos.consultar_thumbnail_blogs()
             .then((blog: Blog[]) => {
                 return blog;
             })
