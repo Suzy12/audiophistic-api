@@ -405,6 +405,7 @@ app.get('/thumbnail_productos_por_creador/:id_creador_contenido', (req: express.
         return res.send({ error: err.message });
     }
 })
+
 // Devuelve los productos que ha creado el usuario dentro del token
 app.get('/mis_productos', autorizacion_creador_contenido, (req: express.Request, res) => {
     try {
@@ -816,6 +817,35 @@ app.get('/eliminar_mi_blog/:id_blog', autorizacion_creador_contenido, (req: expr
         let id_blog: number = parseInt(req.params.id_blog);
         let token: string = (hay_auth(req, res) as string[])[1];
         controlador.eliminar_mi_blog(id_blog, token)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+//Devuelve todos los blogs, mas su foto, registrados a un Creador de Contenido
+app.get('/thumbnail_blogs_por_creador/:id_creador_contenido', (req: express.Request, res) =>{
+    try{
+        let id_usuario: number = parseInt(req.params.id_creador_contenido);
+        controlador.thumbnail_blogs_creador(id_usuario)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// obtiene todos los blogs
+app.get('/consultar_blogs', (req: express.Request, res) =>{
+    try{
+        controlador.consultar_blogs()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {

@@ -644,6 +644,34 @@ export default class DAO {
         }
     }
 
+    // Consulta los blogs, mas su foto, de un Creador de Contenido segun su ID
+    async thumbnail_blogs_creador(id_creador_contenido: number): Promise<Blog[]>{
+        try{
+            let res = await this.cliente.query('select * from thumbnail_blogs_por_creador($1)', [id_creador_contenido]);
+            if (res.rows[0]) {
+                return res.rows;
+            } else {
+                throw new Error("El usuario no tiene blogs");
+            }
+        }catch (err) {
+            throw err;
+        }
+    }
+
+    // Consulta todos los blogs
+    async consultar_blogs(): Promise<Blog[]>{
+        try{
+            let res = await this.cliente.query('select * from consultar_blogs()');
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("No hay blogs");
+            }
+
+        } catch (err){
+            throw err;
+        }
+    }
 
     // Cambia el estado de un producto a inactivo
     async eliminar_blog(id_blog: number): Promise<string> {

@@ -49,6 +49,22 @@ export default class Gestor_Blogs {
             })
     }
 
+    // Obtiene blogs, mas su foto, de un creador de contenido segun su ID
+    thumbnail_blog_creador(id_creador_contenido: number): Promise<Blog[]>{
+        return this.base_datos.thumbnail_blogs_creador(id_creador_contenido)
+            .then((blog: Blog[]) => {
+                return blog;
+            })
+    }
+
+    // Obtiene todos los blogs
+    consultar_blogs(): Promise<Blog[]>{
+        return this.base_datos.consultar_blogs()
+            .then((blog: Blog[]) => {
+                return blog;
+            })
+    }
+
 
     // Cambia el estado de un blog a inactivo
     eliminar_blog(id_blog: number): Promise<string> {

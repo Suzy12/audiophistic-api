@@ -76,7 +76,7 @@ export default class Gestor_Prodcuctos {
 
     }
 
-    //Obtiene productos de un creador de contenido segun su ID
+    // Obtiene productos de un creador de contenido segun su ID
     consultar_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.base_datos.consultar_productos_creador(id_creador_contenido)
             .then((producto: Producto[]) => {
@@ -84,7 +84,7 @@ export default class Gestor_Prodcuctos {
             })
     }
 
-    //Obtiene productos, mas su foto, de un creador de contenido segun su ID
+    // Obtiene productos, mas su foto, de un creador de contenido segun su ID
     thumbnail_productos_creador(id_creador_contenido: number): Promise<Producto[]> {
         return this.base_datos.thumbnail_productos_creador(id_creador_contenido)
             .then((producto: Producto[]) => {

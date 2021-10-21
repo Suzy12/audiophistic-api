@@ -363,6 +363,16 @@ export default class Controlador {
         return this.gestor_blogs.consultar_blogs_creador(descifrado.id_usuario);
     }
 
+    // Consultar blogs de un creador de contenido
+    thumbnail_blogs_creador(id_creador_contenido: number): Promise<Blog[]>{
+        return this.gestor_blogs.thumbnail_blog_creador(id_creador_contenido);
+    }
+
+    // Obtiene todos los blogs
+    consultar_blogs(): Promise<Blog[]>{
+        return this.gestor_blogs.consultar_blogs();
+    }
+
     // Cambia el estado de un blog a inactivo
     eliminar_blog(id_blog: number): Promise<string> {
         return this.gestor_blogs.eliminar_blog(id_blog);
