@@ -352,10 +352,11 @@ export default class Controlador {
     }
 
     // Modificar un blog
-    modificar_blog(id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
-        id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string): Promise<Blog> {
-        return this.gestor_blogs.modificar_blog(id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
-            activo, enlace)
+    modificar_blog(token: string, id_blog: number, id_categoria: number, titulo: string, imagen: string,
+        etiquetas: string[], contenido: string, productos: number[]): Promise<Blog> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_blogs.modificar_blog(descifrado.id_usuario, id_blog, id_categoria, titulo, imagen,
+            etiquetas, contenido, productos)
     }
 
     // Consultar un Blog
@@ -370,17 +371,17 @@ export default class Controlador {
     }
 
     // Consultar blogs de un creador de contenido
-    thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]>{
+    thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]> {
         return this.gestor_blogs.thumbnail_blogs_por_creador(id_creador_contenido);
     }
 
     // Obtiene todos los blogs
-    consultar_blogs(): Promise<Blog[]>{
+    consultar_blogs(): Promise<Blog[]> {
         return this.gestor_blogs.consultar_blogs();
     }
 
     // Obtiene todos los blogs
-    consultar_thumbnail_blogs(): Promise<Blog[]>{
+    consultar_thumbnail_blogs(): Promise<Blog[]> {
         return this.gestor_blogs.consultar_thumbnail_blogs();
     }
 

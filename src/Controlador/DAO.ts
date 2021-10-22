@@ -612,13 +612,11 @@ export default class DAO {
     }
 
     // Modificar un Blog
-    async modificar_blog(id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
-                    id_categoria: number, titulo: string, etiquetas: string[], contenido: string,
-                    activo: boolean, enlace: string ): Promise<Blog>{
+    async modificar_blog(id_creador: number, id_blog: number, id_categoria: number, titulo: string, imagen: string,
+        etiquetas: string[], contenido: string, productos: number[] ): Promise<Blog>{
         try{
-            let res = await this.cliente.query('select * from modificar_blog($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-            [id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas,
-            contenido, activo, enlace]);
+            let res = await this.cliente.query('select * from modificar_blog($1, $2, $3, $4, $5, $6, $7, $8)',
+            [id_creador, id_blog, id_categoria, titulo, imagen, etiquetas, contenido, productos]);
                 if (res.rows[0]) {
                     return res.rows[0].modificar_blog;
                 } else {

@@ -22,10 +22,10 @@ export default class Gestor_Blogs {
     }
 
     // modificar un blog
-    modificar_blog(id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
-        id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string): Promise<Blog> {
-        return this.base_datos.modificar_blog(id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
-            activo, enlace)
+    modificar_blog(id_creador: number, id_blog: number, id_categoria: number, titulo: string, imagen: string,
+        etiquetas: string[], contenido: string, productos: number[]): Promise<Blog> {
+        return this.base_datos.modificar_blog(id_creador, id_blog, id_categoria, titulo, imagen, 
+            etiquetas, contenido, productos)
             .then((resultado: Blog) => {
                 return resultado
             });
@@ -50,7 +50,7 @@ export default class Gestor_Blogs {
     }
 
     // Obtiene blogs, mas su foto, de un creador de contenido segun su ID
-    thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]>{
+    thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]> {
         return this.base_datos.thumbnail_blogs_por_creador(id_creador_contenido)
             .then((blog: Blog[]) => {
                 return blog;
@@ -58,7 +58,7 @@ export default class Gestor_Blogs {
     }
 
     // Obtiene todos los blogs
-    consultar_blogs(): Promise<Blog[]>{
+    consultar_blogs(): Promise<Blog[]> {
         return this.base_datos.consultar_blogs()
             .then((blog: Blog[]) => {
                 return blog;
@@ -66,7 +66,7 @@ export default class Gestor_Blogs {
     }
 
     // Obtiene todos los blogs
-    consultar_thumbnail_blogs(): Promise<Blog[]>{
+    consultar_thumbnail_blogs(): Promise<Blog[]> {
         return this.base_datos.consultar_thumbnail_blogs()
             .then((blog: Blog[]) => {
                 return blog;

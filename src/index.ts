@@ -720,48 +720,51 @@ app.get('/eliminar_categoria/:id_categoria', autorizacion_admin, (req, res) => {
 });
 
 // Crear Blog
-app.post('/crear_blog', autorizacion_creador_contenido,  (req, res) =>{
-    try{
-        let { id_categoria, titulo, imagen, etiquetas, contenido, productos}:
-            { id_categoria: number, titulo: string, imagen: string, etiquetas: string[], 
-                contenido: string, activo: boolean, enlace: string, productos: number[] } = req.body;
-            let token: string = (hay_auth(req, res) as string[])[1];
-            if (id_categoria && titulo && imagen && etiquetas && contenido && productos && token){
-                    controlador.crear_blog(token, id_categoria, titulo, imagen, etiquetas, contenido, productos)
-                        .then((resultado: any) => {
-                            return res.send({ resultado });
-                        }).catch((err: any) => {
-                            return res.send({ error: err.message });
-                        });
-                } else{
-                    return res.send({ error: "Los datos del blog están incompletos"})
-                }
-    }catch(err: any){
+app.post('/crear_blog', autorizacion_creador_contenido, (req, res) => {
+    try {
+        let { id_categoria, titulo, imagen, etiquetas, contenido, productos }:
+            {
+                id_categoria: number, titulo: string, imagen: string, etiquetas: string[],
+                contenido: string, activo: boolean, enlace: string, productos: number[]
+            } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_categoria && titulo && imagen && etiquetas && contenido && productos && token) {
+            controlador.crear_blog(token, id_categoria, titulo, imagen, etiquetas, contenido, productos)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos del blog están incompletos" })
+        }
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 // Modificar Blog
-app.post('/modificar_blog', autorizacion_creador_contenido,  (req, res) =>{
-    try{
-        let { id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
-            activo, enlace }:
-            { id_creador: number, id_blog: number, version_blog: number, fecha_modificacion: Date,
-            id_categoria: number, titulo: string, etiquetas: string[], contenido: string, activo: boolean, enlace: string } = req.body;
-            let token: string = (hay_auth(req, res) as string[])[1];
-            if (id_creador && id_blog && version_blog && fecha_modificacion && id_categoria && titulo && etiquetas && contenido &&
-                activo && enlace && token){
-                    controlador.modificar_blog(id_creador, id_blog, version_blog, fecha_modificacion, id_categoria, titulo, etiquetas, contenido,
-                        activo, enlace)
-                        .then((resultado: any) => {
-                            return res.send({ resultado });
-                        }).catch((err: any) => {
-                            return res.send({ error: err.message });
-                        });
-                } else{
-                    return res.send({ error: "Los datos del blog están incompletos" })
-                }
-    }catch(err: any){
+app.post('/modificar_blog', autorizacion_creador_contenido, (req, res) => {
+    try {
+        let { id_blog, id_categoria, titulo, imagen, etiquetas, contenido, productos }:
+            {
+                id_blog: number, id_categoria: number, titulo: string,
+                imagen: string, etiquetas: string[], contenido: string,
+                productos: number[]
+            } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (token && id_blog && id_categoria && titulo && imagen && etiquetas && contenido && productos) {
+            controlador.modificar_blog(token, id_blog, id_categoria, titulo, imagen,
+                etiquetas, contenido, productos)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos del blog están incompletos" })
+        }
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
@@ -782,29 +785,29 @@ app.get('/blogs/:id_blog', (req: express.Request, res) => {
 });
 
 // obtiene todos los blogs
-app.get('/blogs', autorizacion_admin, (req: express.Request, res) =>{
-    try{
+app.get('/blogs', autorizacion_admin, (req: express.Request, res) => {
+    try {
         controlador.consultar_blogs()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
             });
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 // obtiene todos los blogs
-app.get('/thumbnail_blogs', (req: express.Request, res) =>{
-    try{
+app.get('/thumbnail_blogs', (req: express.Request, res) => {
+    try {
         controlador.consultar_thumbnail_blogs()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
                 return res.send({ error: err.message });
             });
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
@@ -825,8 +828,8 @@ app.get('/mis_blogs', autorizacion_creador_contenido, (req: express.Request, res
 })
 
 //Devuelve todos los blogs, mas su foto, registrados a un Creador de Contenido
-app.get('/thumbnail_blogs_por_creador/:id_creador_contenido', (req: express.Request, res) =>{
-    try{
+app.get('/thumbnail_blogs_por_creador/:id_creador_contenido', (req: express.Request, res) => {
+    try {
         let id_usuario: number = parseInt(req.params.id_creador_contenido);
         controlador.thumbnail_blogs_por_creador(id_usuario)
             .then((resultado: any) => {
@@ -840,8 +843,8 @@ app.get('/thumbnail_blogs_por_creador/:id_creador_contenido', (req: express.Requ
 })
 
 // Cambia el estado de un blog a inactivo
-app.get('/eliminar_blog/:id_blog', autorizacion_admin,(req, res) => {
-    try{
+app.get('/eliminar_blog/:id_blog', autorizacion_admin, (req, res) => {
+    try {
         let id_blog: number = parseInt(req.params.id_blog);
         controlador.eliminar_blog(id_blog)
             .then((resultado: any) => {
@@ -849,14 +852,14 @@ app.get('/eliminar_blog/:id_blog', autorizacion_admin,(req, res) => {
             }).catch((err: any) => {
                 return res.send({ error: err.message })
             });
-    } catch (err:any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 });
 
 // Cambia el estado de un blog del creador a inactivo
-app.get('/eliminar_mi_blog/:id_blog', autorizacion_creador_contenido, (req: express.Request, res) =>{
-    try{
+app.get('/eliminar_mi_blog/:id_blog', autorizacion_creador_contenido, (req: express.Request, res) => {
+    try {
         let id_blog: number = parseInt(req.params.id_blog);
         let token: string = (hay_auth(req, res) as string[])[1];
         controlador.eliminar_mi_blog(id_blog, token)
@@ -865,7 +868,7 @@ app.get('/eliminar_mi_blog/:id_blog', autorizacion_creador_contenido, (req: expr
             }).catch((err: any) => {
                 return res.send({ error: err.message });
             });
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
