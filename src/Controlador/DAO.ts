@@ -11,6 +11,8 @@ import { Carrito } from "../Modelo/Carrito";
 import { Pedido } from "../Modelo/Pedido";
 import { Direccion } from "../Modelo/Direccion";
 import { Blog } from "../Modelo/Blog";
+import { Resena } from "../Modelo/Resena";
+import {Objeto_Calificacion} from "../Modelo/Objeto_Calificacion";
 
 require('dotenv').config();
 
@@ -731,7 +733,147 @@ export default class DAO {
     }
 
 
-}
+    // Crear clasificación blog
+    async crear_clasificación_blog(id_consumidor:number, id_origen:number, calificación:number): Promise<Resena>{
+        try{
+            let res = await this.cliente.query('select * from crear_calificacion_blog($1,$2,$3)', [id_consumidor, id_origen, calificación]);
+            if (res.rows[0]){
+                return res.rows[0].crear_calificacion_blog;
+            }else{
+                throw new Error("No se pudo crear la calificacion");
+            }
 
+        }catch (err){
+            throw err;
+        }
+
+    }
+
+    // Modificar clasificación blog
+    async modificar_clasificación_blog(id_calificacion: number, id_consumidor:number, id_origen:number, calificación:number): Promise<Resena>{
+        try{
+            let res = await this.cliente.query('select * from modificar_calificacion_blog($1,$2,$3)', [id_consumidor, id_origen, calificación]);
+            if (res.rows[0]){
+                return res.rows[0].crear_calificacion_blog;
+            }else{
+                throw new Error("No se pudo crear la calificacion");
+            }
+
+        }catch (err){
+            throw err;
+        }
+
+    }
+
+    //Crear Comentario de un blog
+    async crear_comentario_blog(id_consumidor: number, id_origen:number, comentario: string):Promise<Resena> {
+        try{
+            let res = await this.cliente.query('select * from crear_comentario_blog($1,$2)', [id_consumidor, id_origen, comentario]);
+            if (res.rows[0]){
+                return res.rows[0].crear_calificacion_blog;
+            }else{
+                throw new Error("No se pudo crear el comentario");
+            }
+        }catch (err){
+            throw err;
+        }
+
+    }
+
+    //Modifica el comentario de un blog
+    async modificar_comentario_blog(id_comentario: number, id_consumidor: number, id_origen:number, comentario: string):Promise<Resena> {
+        try{
+            let res = await this.cliente.query('select * from modificar_comentario_blog($1,$2,$3)',
+            [id_comentario, id_consumidor, id_origen, comentario]);
+            if (res.rows[0]){
+                return res.rows[0].crear_calificacion_blog;
+            }else{
+                throw new Error("No se pudo modificar el comentario");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Eliminar comentario de un blog
+    async eliminar_comentario_blog(id_comentario:number): Promise<string>{
+        try{
+            let res = await this.cliente.query('select * from eliminar_comentario_blog($1)',
+            [id_comentario]);
+            if (res.rows[0]) {
+                return res.rows[0].eliminar_mi_blog;
+        } else {
+                throw new Error("El comentario del blog  no pudo ser eliminado");
+        }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    
+    // Crear una resena del producto
+    async crear_resena_producto(id_origen: number, id_usuario: number, calificacion: Objeto_Calificacion[]): Promise<Resena>{
+        try {
+            let res = await this.cliente.query('select * from crear_resena_producto($1,$2,$3)',
+            [id_origen, id_usuario, calificacion]);
+            if (res.rows[0]) {
+                return res.rows[0].crear_resena_producto;
+            } else {
+                throw new Error("La Resena del producto no pudo ser creada");
+        }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Modificar la resena del producto
+    async modificar_resena_producto (id_resena: number, id_origen: number, id_usuario: number, calificacion: Objeto_Calificacion[]): Promise<Resena>{
+        try {
+            let res = await this.cliente.query('select * from modificar_resena_producto($1,$2,$3,$4)',
+            [id_resena, id_origen, id_usuario, calificacion]);
+            if (res.rows[0]) {
+                return res.rows[0].crear_resena_producto;
+            } else {
+                throw new Error("La Resena del producto no pudo ser modificada");
+        }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Eliminar la resena de un producto
+    async eliminar_resena_producto (id_resena: number): Promise<Resena>{
+        try{
+            let res = await this.cliente.query('select * from eliminar_resena_producto($1)',
+            [id_resena]);
+            if (res.rows[0]) {
+                return res.rows[0].eliminar_mi_blog;
+            } else {
+                throw new Error("La resena del producto no pudo ser eliminado");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    
+
+    // Consultar la resena de un producto
+    async consultar_resena_produtco(id_resena:number): Promise<Resena>{
+        try{
+            let res = await this.cliente.query('select * from consultar_resena_producto($1)',
+            [id_resena]);
+            if (res.rows[0]) {
+                return res.rows[0].eliminar_mi_blog;
+            } else {
+                throw new Error("La resena del producto no pudo ser traida");
+            }
+        } catch (err){
+            throw err;
+        }
+    }
+
+
+}
 
 

@@ -9,6 +9,8 @@ import { Creador_de_Contenido } from './Modelo/Creador_de_Contenido';
 import { Carrito } from './Modelo/Carrito';
 import { Pedido } from './Modelo/Pedido';
 import { Direccion } from "./Modelo/Direccion";
+import { Objeto_Calificacion } from './Modelo/Objeto_Calificacion';
+
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://201.194.192.205',
         'http://152.231.200.151', 'http://localhost:4200', 'https://audiophistic1.web.app'],
@@ -869,6 +871,182 @@ app.get('/eliminar_mi_blog/:id_blog', autorizacion_creador_contenido, (req: expr
                 return res.send({ error: err.message });
             });
     } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Crea una calificación a un Blog
+app.post('/crea_calificacion_blog/:id_blog', autorizacion_consumidor, (req, res) =>{
+    try{
+        let {id_origen, calificacion }: {id_origen: number, calificacion: number}= req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_origen && calificacion && token){
+            controlador.crear_calificacion_blog(token, id_origen, calificacion)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Modificar una calificacion a un Blog
+app.post('/modifica_calificacion_blog/:id_blog', autorizacion_consumidor, (req, res) => {
+    try{
+        let {id_calificacion, id_origen, calificacion }: {id_calificacion:number, id_origen: number, calificacion: number}= req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_origen && calificacion && token){
+            controlador.modificar_calificacion_blog(id_calificacion, token, id_origen, calificacion)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+
+// Crear comentario de un blog
+app.post('/crear_comentario_blog/:id_blog', autorizacion_consumidor, (req, res) =>{
+    try{
+        let {id_origen, comentario }: {id_origen: number, comentario: string}= req.body;
+        let token: string = (hay_auth(req, res) as string[])[1]; 
+        if (id_origen && comentario && token){
+            controlador.crear_comentario_blog(token, id_origen, comentario)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+
+//modificar comentario de un blog
+app.post('/crear_comentario_blog/:id_blog', autorizacion_consumidor, (req, res) =>{
+    try{
+        let {id_comentario, id_origen, comentario }: {id_comentario: number, id_origen: number, comentario: string}= req.body;
+        let token: string = (hay_auth(req, res) as string[])[1]; 
+        if (id_origen && comentario && token){
+            controlador.modificar_comentario_blog(id_comentario, token, id_origen, comentario)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+//Eliminar la comentario de un blog
+app.get('/eliminar_mi_comentario_blog/:id_comentario', autorizacion_consumidor, (req: express.Request, res) => {
+    try{
+        let {id_comentario}: {id_comentario:number}= req.body;
+        controlador.eliminar_comentario_blog(id_comentario)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+//Crear resena Producto
+app.post('/crear_resena_producto', autorizacion_consumidor, (req, res) =>{
+    try{
+        let {id_origen, calificacion }: {id_origen: number, calificacion: Objeto_Calificacion[]}= req.body;
+        let token: string = (hay_auth(req, res) as string[])[1]; 
+        if (id_origen && calificacion){
+            controlador.crear_resena_producto(id_origen, token, calificacion)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }
+        else{
+            return res.send({ error: "Los datos para la resena están incompletos" })
+        }
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Modificar resena Producto
+app.post('/crear_resena_producto', autorizacion_consumidor, (req, res) =>{
+    try{
+        let {id_resena, id_origen, calificacion }: {id_resena: number, id_origen: number, calificacion: Objeto_Calificacion[]}= req.body;
+        let token: string = (hay_auth(req, res) as string[])[1]; 
+        if (id_origen && calificacion){
+            controlador.modificar_resena_producto(id_resena, id_origen, token, calificacion)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }
+        else{
+            return res.send({ error: "Los datos para la resena están incompletos" })
+        }
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Eliminar resena producto
+app.get('/eliminar_resena_producto/:id_resena', autorizacion_consumidor, (req: express.Request, res) => {
+    try{
+        let {id_resena}: {id_resena:number}= req.body;
+        controlador.eliminar_resena_producto(id_resena)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Consultar resena producto
+app.get('/consultar_resena_producto/:id_resena', autorizacion_consumidor, (req: express.Request, res) => {
+    try{
+        let {id_resena}: {id_resena:number}= req.body;
+        controlador.consultar_resena_producto(id_resena)
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+
+    }catch (err: any) {
         return res.send({ error: err.message });
     }
 })

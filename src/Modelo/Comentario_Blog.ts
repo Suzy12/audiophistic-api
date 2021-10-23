@@ -2,8 +2,7 @@ import { Resena } from "./Resena";
 
 export interface Comentario_Blog extends Resena{
 
-    id_blog: number;
+    id_consumidor: number;
     comentario: string;
-    fecha: Date;
 
 }
