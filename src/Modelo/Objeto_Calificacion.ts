@@ -1,4 +1,5 @@
 export interface Objeto_Calificacion{
-    tipo_calificacion: number;
+    id_criterio: number;
+    nombre_criterio?: string;
     calificacion: number;
 }

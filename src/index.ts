@@ -876,18 +876,18 @@ app.get('/eliminar_mi_blog/:id_blog', autorizacion_creador_contenido, (req: expr
 })
 
 // Crea una calificación a un Blog
-app.post('/crea_calificacion_blog/:id_blog', autorizacion_consumidor, (req, res) =>{
-    try{
-        let {id_origen, calificacion }: {id_origen: number, calificacion: number}= req.body;
+app.post('/crear_calificacion_blog', autorizacion_consumidor, (req, res) => {
+    try {
+        let { id_origen, calificacion }: { id_origen: number, calificacion: number } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
-        if (id_origen && calificacion && token){
+        if (id_origen && calificacion && token) {
             controlador.crear_calificacion_blog(token, id_origen, calificacion)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
-        }else {
+        } else {
             return res.send({ error: "Los datos están incompletos" })
         }
 
@@ -896,19 +896,19 @@ app.post('/crea_calificacion_blog/:id_blog', autorizacion_consumidor, (req, res)
     }
 })
 
-// Modificar una calificacion a un Blog
-app.post('/modifica_calificacion_blog/:id_blog', autorizacion_consumidor, (req, res) => {
-    try{
-        let {id_calificacion, id_origen, calificacion }: {id_calificacion:number, id_origen: number, calificacion: number}= req.body;
+// Ver mi calificacion a un Blog
+app.get('/calificacion_blog/:id_origen', autorizacion_consumidor, (req, res) => {
+    try {
+        let id_origen: number = parseInt(req.params.id_origen);
         let token: string = (hay_auth(req, res) as string[])[1];
-        if (id_origen && calificacion && token){
-            controlador.modificar_calificacion_blog(id_calificacion, token, id_origen, calificacion)
+        if (id_origen && token) {
+            controlador.consultar_calificacion_blog(token, id_origen)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
-        }else {
+        } else {
             return res.send({ error: "Los datos están incompletos" })
         }
 
@@ -917,136 +917,159 @@ app.post('/modifica_calificacion_blog/:id_blog', autorizacion_consumidor, (req, 
     }
 })
 
-
 // Crear comentario de un blog
-app.post('/crear_comentario_blog/:id_blog', autorizacion_consumidor, (req, res) =>{
-    try{
-        let {id_origen, comentario }: {id_origen: number, comentario: string}= req.body;
-        let token: string = (hay_auth(req, res) as string[])[1]; 
-        if (id_origen && comentario && token){
+app.post('/crear_comentario_blog/', autorizacion_consumidor, (req, res) => {
+    try {
+        let { id_origen, comentario }: { id_origen: number, comentario: string } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_origen && comentario && token) {
             controlador.crear_comentario_blog(token, id_origen, comentario)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
-        }else {
+        } else {
             return res.send({ error: "Los datos están incompletos" })
         }
 
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
-
 //modificar comentario de un blog
-app.post('/crear_comentario_blog/:id_blog', autorizacion_consumidor, (req, res) =>{
-    try{
-        let {id_comentario, id_origen, comentario }: {id_comentario: number, id_origen: number, comentario: string}= req.body;
-        let token: string = (hay_auth(req, res) as string[])[1]; 
-        if (id_origen && comentario && token){
-            controlador.modificar_comentario_blog(id_comentario, token, id_origen, comentario)
+app.post('/modificar_comentario_blog', autorizacion_consumidor, (req, res) => {
+    try {
+        let { id_comentario, id_origen, comentario }: { id_comentario: number, id_origen: number, comentario: string } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_origen && comentario && token) {
+            controlador.modificar_comentario_blog(token, id_comentario, id_origen, comentario)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
-        }else {
+        } else {
             return res.send({ error: "Los datos están incompletos" })
         }
 
-    }catch (err: any) {
+    } catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+//consultar comentarios de un blog
+app.get('/comentarios_blog/:id_origen', (req, res) => {
+    try {
+        let id_origen: number = parseInt(req.params.id_origen);
+        let token: string | undefined = req.headers.authorization;
+        if (token) {
+            token = token.split(' ')[1]
+        }
+        if (id_origen) {
+            controlador.consultar_comentarios_blog(token, id_origen)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
+
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 //Eliminar la comentario de un blog
-app.get('/eliminar_mi_comentario_blog/:id_comentario', autorizacion_consumidor, (req: express.Request, res) => {
-    try{
-        let {id_comentario}: {id_comentario:number}= req.body;
-        controlador.eliminar_comentario_blog(id_comentario)
-            .then((resultado: any) => {
-                return res.send({ resultado });
-            }).catch((err: any) => {
-                return res.send({ error: err.message });
-            });
+app.get('/eliminar_comentario_blog/:id_comentario/:id_origen', autorizacion_consumidor, (req: express.Request, res) => {
+    try {
+        let id_comentario: number = parseInt(req.params.id_comentario);
+        let id_origen: number = parseInt(req.params.id_origen);
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_comentario && id_origen && token) {
+            controlador.eliminar_comentario_blog(token, id_comentario, id_origen)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
+        }
 
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 //Crear resena Producto
-app.post('/crear_resena_producto', autorizacion_consumidor, (req, res) =>{
-    try{
-        let {id_origen, calificacion }: {id_origen: number, calificacion: Objeto_Calificacion[]}= req.body;
-        let token: string = (hay_auth(req, res) as string[])[1]; 
-        if (id_origen && calificacion){
-            controlador.crear_resena_producto(id_origen, token, calificacion)
+app.post('/crear_resena_producto', autorizacion_consumidor, (req, res) => {
+    try {
+        let { id_origen, comentario, calificacion }:
+            { id_origen: number, comentario: string, calificacion: Objeto_Calificacion[] } = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_origen && calificacion) {
+            controlador.crear_resena_producto(token, id_origen, comentario, calificacion)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
         }
-        else{
+        else {
             return res.send({ error: "Los datos para la resena están incompletos" })
         }
-    }catch (err: any) {
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
-// Modificar resena Producto
-app.post('/crear_resena_producto', autorizacion_consumidor, (req, res) =>{
-    try{
-        let {id_resena, id_origen, calificacion }: {id_resena: number, id_origen: number, calificacion: Objeto_Calificacion[]}= req.body;
-        let token: string = (hay_auth(req, res) as string[])[1]; 
-        if (id_origen && calificacion){
-            controlador.modificar_resena_producto(id_resena, id_origen, token, calificacion)
+// Consultar resena producto
+//consultar comentarios de un blog
+app.get('/resenas_producto/:id_origen', (req, res) => {
+    try {
+        let id_origen: number = parseInt(req.params.id_origen);
+        let token: string | undefined = req.headers.authorization;
+        if (token) {
+            token = token.split(' ')[1]
+        }
+        if (id_origen) {
+            controlador.consultar_resenas_producto(token, id_origen)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
+        } else {
+            return res.send({ error: "Los datos están incompletos" })
         }
-        else{
-            return res.send({ error: "Los datos para la resena están incompletos" })
-        }
-    }catch (err: any) {
+
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })
 
 // Eliminar resena producto
 app.get('/eliminar_resena_producto/:id_resena', autorizacion_consumidor, (req: express.Request, res) => {
-    try{
-        let {id_resena}: {id_resena:number}= req.body;
-        controlador.eliminar_resena_producto(id_resena)
-            .then((resultado: any) => {
-                return res.send({ resultado });
-            }).catch((err: any) => {
-                return res.send({ error: err.message });
-            });
-
-    }catch (err: any) {
-        return res.send({ error: err.message });
-    }
-})
-
-// Consultar resena producto
-app.get('/consultar_resena_producto/:id_resena', autorizacion_consumidor, (req: express.Request, res) => {
-    try{
-        let {id_resena}: {id_resena:number}= req.body;
-        controlador.consultar_resena_producto(id_resena)
-            .then((resultado: any) => {
-                return res.send({ resultado });
-            }).catch((err: any) => {
-                return res.send({ error: err.message });
-            });
-
-    }catch (err: any) {
+    try {
+        let { id_origen,}:
+            { id_origen: number} = req.body;
+        let token: string = (hay_auth(req, res) as string[])[1];
+        if (id_origen) {
+            controlador.eliminar_resena_producto(token, id_origen)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }
+        else {
+            return res.send({ error: "Los datos para la resena están incompletos" })
+        }
+    } catch (err: any) {
         return res.send({ error: err.message });
     }
 })

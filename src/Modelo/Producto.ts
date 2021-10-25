@@ -5,6 +5,7 @@ export interface Producto {
     id_creador:number;
     nombre_creador: number;
     id_blog?:number;
+    nombre_blog?: string;
     titulo: string
     precio: number;
     tiempo_envio?: number;

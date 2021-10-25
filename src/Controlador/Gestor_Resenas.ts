@@ -1,6 +1,8 @@
 import { Resena } from "../Modelo/Resena";
 import DAO from "./DAO";
 import { Objeto_Calificacion } from "../Modelo/Objeto_Calificacion";
+import { Comentario_Blog } from "../Modelo/Comentario_Blog";
+import { Resenas_Producto } from "../Modelo/Resenas_Producto";
 
 export default class Gestor_Resenas{
 
@@ -11,69 +13,75 @@ export default class Gestor_Resenas{
     }
 
     // Crea la calificaicon de un blog
-    crear_calificacion_blog(id_consumidor:number, id_origen:number, calificación:number): Promise<Resena>{
+    crear_calificacion_blog(id_consumidor:number, id_origen:number, calificación:number): Promise<string>{
         return this.base_datos.crear_clasificación_blog(id_consumidor, id_origen, calificación)
-        .then((resultado: Resena) => {
+        .then((resultado: string) => {
             return resultado
         });
 
     }
 
-    // Modificar calificacion blog
-    modificar_calificacion_blog(id_calificacion: number, id_consumidor:number, id_origen:number, calificación:number): Promise<Resena>{
-        return this.base_datos.modificar_clasificación_blog(id_calificacion, id_consumidor, id_origen, calificación)
-        .then((resultado: Resena) => {
+    // Crea la calificaicon de un blog
+    consultar_calificacion_blog(id_consumidor:number, id_origen:number): Promise<number>{
+        return this.base_datos.consultar_calificacion_blog(id_consumidor, id_origen)
+        .then((resultado: number) => {
             return resultado
         });
+
     }
 
     // Crear un comentario para un blog
-    crear_comentario_blog(id_consumidor: number, id_origen:number, comentario: string): Promise<Resena>{
+    crear_comentario_blog(id_consumidor: number, id_origen:number, comentario: string): Promise<string>{
         return this.base_datos.crear_comentario_blog(id_consumidor, id_origen, comentario)
-        .then((resultado: Resena) => {
+        .then((resultado: string) => {
             return resultado
         });
     }
 
     // Modificar comentario de un blog
-
-    modificar_comentario_blog(id_comentario: number, id_consumidor: number, id_origen:number, comentario: string): Promise<Resena>{
-        return this.base_datos.modificar_comentario_blog(id_comentario, id_consumidor, id_origen, comentario)
-        .then((resultado: Resena) => {
+    modificar_comentario_blog(id_consumidor: number, id_comentario: number, id_origen:number, comentario: string): Promise<string>{
+        return this.base_datos.modificar_comentario_blog(id_consumidor, id_comentario, id_origen, comentario)
+        .then((resultado: string) => {
             return resultado
         });
     }
 
+    // Modificar comentario de un blog
+    consultar_comentarios_blog(id_consumidor: number|undefined , id_origen:number): Promise<Comentario_Blog[]>{
+        return this.base_datos.consultar_comentarios_blog(id_consumidor, id_origen)
+        .then((resultado: Comentario_Blog[]) => {
+            return resultado
+        });
+    }
 
     // Eliminar Comentario blog
-    eliminar_comentario_blog(id_comentario: number): Promise<string>{
-        return this.base_datos.eliminar_comentario_blog(id_comentario);
+    eliminar_comentario_blog(id_consumidor: number, id_comentario: number, id_origen: number): Promise<string>{
+        return this.base_datos.eliminar_comentario_blog(id_consumidor, id_comentario, id_origen);
     }
 
     // Crear la resena de un producto
-    async crear_resena_producto(id_origen: number, id_usuario: number, calificacion: Objeto_Calificacion[]): Promise<Resena>{
-        return this.base_datos.crear_resena_producto(id_origen, id_usuario, calificacion)
-        .then((resultado: Resena) => {
+    async crear_resena_producto(id_usuario: number, id_origen: number, comentario: string,
+        calificacion: Objeto_Calificacion[]): Promise<string>{
+        return this.base_datos.crear_resena_producto(id_usuario, id_origen, comentario, calificacion)
+        .then((resultado: string) => {
             return resultado
         });
     }
-    
-    // Modificar la resena de un producto
-    async modificar_resena_producto(id_resena: number, id_origen: number, id_usuario: number, calificacion: Objeto_Calificacion[]): Promise<Resena>{
-        return this.base_datos.modificar_resena_producto(id_resena, id_origen,id_usuario, calificacion)
-        .then((resultado: Resena) => {
+
+    // Consultar resena producto
+    consultar_resenas_producto(id_consumidor: number|undefined , id_origen:number): Promise<Resenas_Producto[]>{
+        return this.base_datos.consultar_resenas_producto(id_consumidor, id_origen)
+        .then((resultado: Resenas_Producto[]) => {
             return resultado
         });
     }
 
     // Eliminar resena de un producto
-    async eliminar_resena_producto(id_resena: number): Promise<Resena>{
-        return this.base_datos.eliminar_resena_producto(id_resena);
-    }
-
-    // Consultar resena producto
-    async consultar_resena_producto(id_resena: number): Promise<Resena>{
-        return this.base_datos.eliminar_resena_producto(id_resena);
+    async eliminar_resena_producto(id_consumidor: number , id_origen:number): Promise<string>{
+        return this.base_datos.eliminar_resena_producto(id_consumidor, id_origen)
+        .then((resultado: string) => {
+            return resultado
+        });
     }
 
 }

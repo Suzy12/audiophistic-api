@@ -23,6 +23,8 @@ import { Blog } from '../Modelo/Blog';
 import Gestor_Resenas from './Gestor_Resenas';
 import { Resena } from '../Modelo/Resena';
 import { Objeto_Calificacion } from '../Modelo/Objeto_Calificacion';
+import { Comentario_Blog } from '../Modelo/Comentario_Blog';
+import { Resenas_Producto } from '../Modelo/Resenas_Producto';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -402,55 +404,66 @@ export default class Controlador {
     }
 
     // Crear una calificacion a un blog
-    crear_calificacion_blog(token_usuario: string, id_origen: number, calificacion: number): Promise<Resena>{
+    crear_calificacion_blog(token_usuario: string, id_origen: number, calificacion: number): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token_usuario);
-        return this.gestor_resenas.crear_calificacion_blog(descifrado.id_usuario,id_origen, calificacion);
+        return this.gestor_resenas.crear_calificacion_blog(descifrado.id_usuario, id_origen, calificacion);
     }
 
-    // Modificar calificacion blog
-    modificar_calificacion_blog(id_calificacion:number, token_usuario: string, id_origen: number, calificacion: number): Promise<Resena>{
+    // Busca la calificacion de un blog de un usuario
+    consultar_calificacion_blog(token_usuario: string, id_origen: number): Promise<number> {
         let descifrado: Usuario = this.descifrar_token(token_usuario);
-        return this.gestor_resenas.modificar_calificacion_blog(id_calificacion, descifrado.id_usuario, id_origen, calificacion);
+        return this.gestor_resenas.consultar_calificacion_blog(descifrado.id_usuario, id_origen);
     }
 
     // Crear comentario blog
-    crear_comentario_blog(token: string, id_origen:number, comentario: string ): Promise<Resena>{
+    crear_comentario_blog(token: string, id_origen: number, comentario: string): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
         return this.gestor_resenas.crear_comentario_blog(descifrado.id_usuario, id_origen, comentario);
     }
 
     // Modiifcar comentario de un blog
-    modificar_comentario_blog(id_comentario: number, token: string, id_origen:number, comentario: string ): Promise<Resena>{
+    modificar_comentario_blog(token: string, id_comentario: number, id_origen: number, comentario: string): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_resenas.modificar_comentario_blog(id_comentario, descifrado.id_usuario, id_origen, comentario);
+        return this.gestor_resenas.modificar_comentario_blog(descifrado.id_usuario, id_comentario, id_origen, comentario);
     }
 
+    // Modifcar comentario de un blog
+    consultar_comentarios_blog(token: string | undefined, id_origen: number): Promise<Comentario_Blog[]> {
+        if (token) {
+            let descifrado: Usuario = this.descifrar_token(token);
+            return this.gestor_resenas.consultar_comentarios_blog(descifrado.id_usuario, id_origen);
+        } else {
+            return this.gestor_resenas.consultar_comentarios_blog(undefined, id_origen);
+        }
+    }
 
     //eliminar comentario blog
-    eliminar_comentario_blog(id_comentario: number):Promise<string>{
-        return this.gestor_resenas.eliminar_comentario_blog(id_comentario);
+    eliminar_comentario_blog(token: string, id_comentario: number, id_origen: number): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_resenas.eliminar_comentario_blog(descifrado.id_usuario, id_comentario, id_origen);
     }
 
     //Crear la resena de un producto
-    crear_resena_producto(id_origen: number, token:string, calificacion: Objeto_Calificacion[]): Promise<Resena>{
+    crear_resena_producto(token: string, id_origen: number, comentario: string,
+        calificacion: Objeto_Calificacion[]): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_resenas.crear_resena_producto(id_origen, descifrado.id_usuario, calificacion);
-    }
-
-    // Modificar la resena de un producto
-    modificar_resena_producto(id_resena: number, id_origen: number, token:string, calificacion: Objeto_Calificacion[]): Promise<Resena>{
-        let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_resenas.modificar_resena_producto(id_resena, id_origen, descifrado.id_usuario, calificacion);
-    }
-
-    // Eliminar resena producto
-    eliminar_resena_producto(id_resena: number):Promise<Resena>{
-        return this.gestor_resenas.eliminar_resena_producto(id_resena);
+        return this.gestor_resenas.crear_resena_producto(descifrado.id_usuario, id_origen, comentario, calificacion);
     }
 
     // consultar resena producto
-    consultar_resena_producto(id_resena: number):Promise<Resena>{
-        return this.gestor_resenas.consultar_resena_producto(id_resena);
+    consultar_resenas_producto(token: string | undefined, id_origen: number): Promise<Resenas_Producto[]> {
+        if (token) {
+            let descifrado: Usuario = this.descifrar_token(token);
+            return this.gestor_resenas.consultar_resenas_producto(descifrado.id_usuario, id_origen);
+        } else {
+            return this.gestor_resenas.consultar_resenas_producto(undefined, id_origen);
+        }
+    }
+
+    // Eliminar resena producto
+    eliminar_resena_producto(token: string, id_origen: number): Promise<string> {
+        let descifrado: Usuario = this.descifrar_token(token);
+        return this.gestor_resenas.eliminar_resena_producto(descifrado.id_usuario, id_origen);
     }
 
     // Pide al manejador de tokens que descifre el token
