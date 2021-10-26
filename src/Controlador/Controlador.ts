@@ -451,12 +451,14 @@ export default class Controlador {
     }
 
     // consultar resena producto
-    consultar_resenas_producto(token: string | undefined, id_origen: number): Promise<Resenas_Producto[]> {
+    consultar_resenas_producto(token: string | undefined, id_origen: number, cantidad_a_agregar: number, 
+        pagina: number): Promise<{ cantidad: number,
+        resenas:Resenas_Producto[]}> {
         if (token) {
             let descifrado: Usuario = this.descifrar_token(token);
-            return this.gestor_resenas.consultar_resenas_producto(descifrado.id_usuario, id_origen);
+            return this.gestor_resenas.consultar_resenas_producto(descifrado.id_usuario, id_origen, cantidad_a_agregar, pagina);
         } else {
-            return this.gestor_resenas.consultar_resenas_producto(undefined, id_origen);
+            return this.gestor_resenas.consultar_resenas_producto(undefined, id_origen, cantidad_a_agregar, pagina);
         }
     }
 

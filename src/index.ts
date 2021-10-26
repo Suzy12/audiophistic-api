@@ -1029,15 +1029,17 @@ app.post('/crear_resena_producto', autorizacion_consumidor, (req, res) => {
 
 // Consultar resena producto
 //consultar comentarios de un blog
-app.get('/resenas_producto/:id_origen', (req, res) => {
+app.get('/resenas_producto/:id_origen/:cantidad_a_agregar/:pagina', (req, res) => {
     try {
         let id_origen: number = parseInt(req.params.id_origen);
+        let cantidad_a_agregar: number = parseInt(req.params.cantidad_a_agregar);
+        let pagina: number = parseInt(req.params.pagina);
         let token: string | undefined = req.headers.authorization;
         if (token) {
             token = token.split(' ')[1]
         }
-        if (id_origen) {
-            controlador.consultar_resenas_producto(token, id_origen)
+        if (id_origen && cantidad_a_agregar && pagina) {
+            controlador.consultar_resenas_producto(token, id_origen, cantidad_a_agregar, pagina)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
@@ -1046,7 +1048,6 @@ app.get('/resenas_producto/:id_origen', (req, res) => {
         } else {
             return res.send({ error: "Los datos están incompletos" })
         }
-
     } catch (err: any) {
         return res.send({ error: err.message });
     }

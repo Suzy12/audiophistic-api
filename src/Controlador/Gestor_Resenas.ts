@@ -69,9 +69,12 @@ export default class Gestor_Resenas{
     }
 
     // Consultar resena producto
-    consultar_resenas_producto(id_consumidor: number|undefined , id_origen:number): Promise<Resenas_Producto[]>{
-        return this.base_datos.consultar_resenas_producto(id_consumidor, id_origen)
-        .then((resultado: Resenas_Producto[]) => {
+    consultar_resenas_producto(id_consumidor: number|undefined , id_origen:number, cantidad_a_agregar: number, 
+        pagina: number): Promise<{ cantidad: number,
+        resenas:Resenas_Producto[]}>{
+        return this.base_datos.consultar_resenas_producto(id_consumidor, id_origen, cantidad_a_agregar, pagina)
+        .then((resultado: { cantidad: number,
+            resenas:Resenas_Producto[]}) => {
             return resultado
         });
     }
