@@ -25,7 +25,6 @@ import { Resena } from '../Modelo/Resena';
 import { Objeto_Calificacion } from '../Modelo/Objeto_Calificacion';
 import { Comentario_Blog } from '../Modelo/Comentario_Blog';
 import { Resenas_Producto } from '../Modelo/Resenas_Producto';
-import Gestor_Busquedas from './Gestor_Busquedas';
 
 /* Se encarga de coordinar las funcionalidades 
    De la pagina web con sus clases respectivas*/
@@ -40,7 +39,6 @@ export default class Controlador {
     private gestor_pedidos: Gestor_Pedidos;
     private gestor_blogs: Gestor_Blogs;
     private gestor_resenas: Gestor_Resenas;
-    private gestor_busquedas: Gestor_Busquedas;
     //El numero de salts para el hash
     private salts = 10;
 
@@ -55,7 +53,6 @@ export default class Controlador {
         this.gestor_pedidos = new Gestor_Pedidos();
         this.gestor_blogs = new Gestor_Blogs();
         this.gestor_resenas = new Gestor_Resenas();
-        this.gestor_busquedas = new Gestor_Busquedas();
     }
 
     // Registra a un consumidor
@@ -473,51 +470,65 @@ export default class Controlador {
     }
 
     // Busqueda General
-    busqueda_general_creador(): Promise<{ imagen: string, nombre: string, ubicacion: string}>{
-        return this.gestor_busquedas.busqueda_general_creador();
+    busqueda_general_creador(): Promise<Usuario[]>{
+        return this.gestor_usuarios.busqueda_general_creador();
     }
 
     // buscar Parlantes
     buscar_parlantes(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]>{
-        return this.gestor_busquedas.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max);
+        return this.gestor_productos.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max);
     }
 
     // buscar Parlantes
     buscar_audifonos(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]>{
-        return this.gestor_busquedas.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max);
+        return this.gestor_productos.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max);
     }
 
     // Buscar almbumes
     buscar_albumes(titulo: string, presentaciones: string, genero: string, precio_min: number, precio_max:number):Promise<Producto[]>{
-        return this.gestor_busquedas.buscar_albumes(titulo, presentaciones, genero, precio_min, precio_max);
+        return this.gestor_productos.buscar_albumes(titulo, presentaciones, genero, precio_min, precio_max);
     }
 
     // Buscar Blogs
     buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]>{
-        return this.gestor_busquedas.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max);
+        return this.gestor_blogs.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max);
     }
 
-    // Buscar Marcas
-    buscar_marcas(): Promise<string[]>{
-        return this.gestor_busquedas.buscar_marcas();
+    // Buscar Marcas audifonos
+    buscar_marcas_audifonos(): Promise<string[]>{
+        return this.gestor_productos.buscar_marcas_audifonos();
     }
 
-    // Buscar tipos de conexiones
-    buscar_tipos_conexiones(): Promise<string[]>{
-        return this.gestor_busquedas.buscar_tipos_conexiones();
+    // Buscar Marcas parlantes
+    buscar_marcas_parlantes(): Promise<string[]>{
+        return this.gestor_productos.buscar_marcas_audifonos();
+    }
+
+
+    // Buscar tipos de conexiones de audifonos
+    buscar_tipos_conexiones_audifonos(): Promise<string[]>{
+        return this.gestor_productos.buscar_tipos_conexiones_audifonos();
+    }
+
+    // Buscar tipos de conexiones de parlantes
+    buscar_tipos_conexiones_parlantes(): Promise<string[]>{
+        return this.gestor_productos.buscar_tipos_conexiones_parlantes();
     }
 
     // Buscar presentaciones
-    buscar_presentaciones(): Promise<string[]>{
-        return this.gestor_busquedas.buscar_presentaciones();
+    buscar_presentacion(): Promise<string[]>{
+        return this.gestor_productos.buscar_presentacion();
     }
 
     // Buscar generos
     buscar_generos(): Promise<string[]>{
-        return this.gestor_busquedas.buscar_generos();
+        return this.gestor_productos.buscar_generos();
     }
 
-
+    //busqueda de todos los productos
+    async thumbnail_productos(): Promise<Producto[]>{
+        return this.gestor_productos.thumbnail_productos();
+    }
 
     // Pide al manejador de tokens que descifre el token
     private descifrar_token(token: string): Usuario {

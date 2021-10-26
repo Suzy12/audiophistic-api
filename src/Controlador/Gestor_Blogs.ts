@@ -84,4 +84,12 @@ export default class Gestor_Blogs {
         return this.base_datos.eliminar_mi_blog(id_blog, id_creador);
     }
 
+    // Busqueda de Blogs
+    buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]>{
+        return this.base_datos.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max)
+        .then((resultado: Blog[]) => {
+            return resultado
+        });
+    }
+
 }

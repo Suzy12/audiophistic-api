@@ -875,7 +875,7 @@ export default class DAO {
     }
 
     // Busqueda General
-    async busqueda_general_creador(): Promise<{ imagen: string, nombre: string, ubicacion: string}>{
+    async busqueda_general_creador(): Promise<Usuario[]>{
         try{
             let res = await this.cliente.query('select * from busqueda_general_creador()');
             if (res.rows[0]) {
@@ -949,12 +949,12 @@ export default class DAO {
         }
     }
 
-    // Busqueda de marcas
-    async buscar_marcas(): Promise<string[]>{
+    // Busqueda de marcas audifonos
+    async buscar_marcas_audifonos(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_marcas()');
+            let res = await this.cliente.query('select * from buscar_marcas_audifonos()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_marcas;
+                return res.rows[0].buscar_marcas_parlantes;
             } else {
                 throw new Error("No hay marcas");
             }
@@ -963,12 +963,40 @@ export default class DAO {
         } 
     }
 
-    // Busqueda de tipos de conexiones
-    async buscar_tipos_conexiones(): Promise<string[]>{
+    // Busqueda de marcas parlantes
+    async buscar_marcas_parlantes(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_tipos_conexiones()');
+            let res = await this.cliente.query('select * from buscar_marcas_parlantes()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_tipos_conexiones;
+                return res.rows[0].buscar_marcas_parlantes;
+            } else {
+                throw new Error("No hay marcas");
+            }
+        }catch (err){
+            throw err;
+        } 
+    }
+
+    // Busqueda de tipos de conexiones de audifonos
+    async buscar_tipos_conexiones_audifonos(): Promise<string[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_tipos_conexiones_audifonos()');
+            if (res.rows[0]) {
+                return res.rows[0].buscar_tipos_conexiones_audifonos;
+            } else {
+                throw new Error("No hay Tipos de conexiones");
+            }
+        }catch (err){
+            throw err;
+        } 
+    }
+
+    // Busqueda de tipos de conexiones de parlantes
+    async buscar_tipos_conexiones_parlantes(): Promise<string[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_tipos_conexiones_paralantes()');
+            if (res.rows[0]) {
+                return res.rows[0].buscar_tipos_conexiones_paralantes;
             } else {
                 throw new Error("No hay Tipos de conexiones");
             }
@@ -978,7 +1006,7 @@ export default class DAO {
     }
 
     // Busqueda de presentaciones
-    async buscar_presentaciones(): Promise<string[]>{
+    async buscar_presentacion(): Promise<string[]>{
         try{
             let res = await this.cliente.query('select * from buscar_presentaciones()');
             if (res.rows[0]) {
@@ -994,7 +1022,7 @@ export default class DAO {
     // Busqueda de Generos
     async buscar_generos(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_geneross()');
+            let res = await this.cliente.query('select * from buscar_generos()');
             if (res.rows[0]) {
                 return res.rows[0].buscar_generos;
             } else {
@@ -1003,6 +1031,21 @@ export default class DAO {
         }catch (err){
             throw err;
         } 
+    }
+
+    //busqueda de todos los productos
+    async thumbnail_productos(): Promise<Producto[]>{
+        try{
+            let res = await this.cliente.query('select * from thumbnail_productos()');
+            if (res.rows[0]) {
+                return res.rows[0].thumbnail_productos;
+            } else {
+                throw new Error("No hay productos");
+            }
+        }catch (err){
+            throw err;
+        } 
+
     }
 
 }

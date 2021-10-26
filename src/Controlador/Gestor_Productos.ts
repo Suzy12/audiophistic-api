@@ -99,4 +99,84 @@ export default class Gestor_Prodcuctos {
         return this.base_datos.eliminar_mi_producto(id_producto, id_creador);
 
     }
+
+    // Busqueda de Parlantes
+    buscar_parlantes(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]> {
+        return this.base_datos.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max)
+        .then((resultado: Producto[]) => {
+            return resultado
+        });
+    }
+
+    // Busqueda de Audifonos
+    buscar_audifonos(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]> {
+        return this.base_datos.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max)
+        .then((resultado: Producto[]) => {
+            return resultado
+        });
+    }
+
+    // Busqueda de Almbumes
+    buscar_albumes(titulo: string, presentaciones: string, genero: string, precio_min: number, precio_max:number):Promise<Producto[]> {
+        return this.base_datos.buscar_audifonos(titulo, presentaciones, genero, precio_min, precio_max)
+        .then((resultado: Producto[]) => {
+            return resultado
+        });
+    }
+
+    // Buscar marcas audifonos
+    buscar_marcas_audifonos(): Promise<string[]>{
+        return this.base_datos.buscar_marcas_audifonos()
+        .then((resultado: string[]) => {
+            return resultado
+        });
+    }
+
+    // Buscar marcas parlantes
+    buscar_marcas_parlantes(): Promise<string[]>{
+        return this.base_datos.buscar_marcas_parlantes()
+        .then((resultado: string[]) => {
+            return resultado
+        });
+    }
+
+    // Buscar Tipos de Conexiones de audifonos
+    buscar_tipos_conexiones_audifonos(): Promise<string[]>{
+        return this.base_datos.buscar_tipos_conexiones_audifonos()
+        .then((resultado: string[]) => {
+            return resultado
+        });
+    }
+
+    // Buscar Tipos de Conexiones de parlantes
+    buscar_tipos_conexiones_parlantes(): Promise<string[]>{
+        return this.base_datos.buscar_tipos_conexiones_parlantes()
+        .then((resultado: string[]) => {
+            return resultado
+        });
+    }
+
+    // Buscar Presentacion
+    buscar_presentacion(): Promise<string[]>{
+        return this.base_datos.buscar_presentacion()
+        .then((resultado: string[]) => {
+            return resultado
+        });
+    } 
+
+    // Buscar Generos
+    buscar_generos(): Promise<string[]>{
+        return this.base_datos.buscar_generos()
+        .then((resultado: string[]) => {
+            return resultado
+        });
+    }
+
+    //busqueda de todos los productos
+    async thumbnail_productos(): Promise<Producto[]>{
+        return this.base_datos.thumbnail_productos()
+        .then((resultado: Producto[]) => {
+            return resultado
+        });
+    }
 }
