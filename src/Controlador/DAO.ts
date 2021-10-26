@@ -796,9 +796,11 @@ export default class DAO {
     }
 
     //Consulta los somentarios de un blog
-    async consultar_comentarios_blog(id_consumidor: number|undefined, id_origen:number):Promise<Comentario_Blog[]> {
+    async consultar_comentarios_blog(id_consumidor: number|undefined, id_origen:number, cantidad_a_agregar: number,
+         pagina: number):Promise<Comentario_Blog[]> {
         try{
-            let res = await this.cliente.query('select * from consultar_comentarios_blog($1,$2)', [id_consumidor, id_origen]);
+            let res = await this.cliente.query('select * from consultar_comentarios_blog($1,$2,$3,$4)', 
+            [id_consumidor, id_origen, cantidad_a_agregar, pagina]);
             if (res.rows[0]){
                 return res.rows;
             }else{

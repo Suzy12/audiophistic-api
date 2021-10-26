@@ -428,12 +428,13 @@ export default class Controlador {
     }
 
     // Modifcar comentario de un blog
-    consultar_comentarios_blog(token: string | undefined, id_origen: number): Promise<Comentario_Blog[]> {
+    consultar_comentarios_blog(token: string | undefined, id_origen: number, cantidad_a_agregar: number, 
+        pagina: number): Promise<Comentario_Blog[]> {
         if (token) {
             let descifrado: Usuario = this.descifrar_token(token);
-            return this.gestor_resenas.consultar_comentarios_blog(descifrado.id_usuario, id_origen);
+            return this.gestor_resenas.consultar_comentarios_blog(descifrado.id_usuario, id_origen, cantidad_a_agregar, pagina);
         } else {
-            return this.gestor_resenas.consultar_comentarios_blog(undefined, id_origen);
+            return this.gestor_resenas.consultar_comentarios_blog(undefined, id_origen, cantidad_a_agregar, pagina);
         }
     }
 
