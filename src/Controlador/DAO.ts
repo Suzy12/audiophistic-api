@@ -874,6 +874,136 @@ export default class DAO {
         }
     }
 
+    // Busqueda General
+    async busqueda_general_creador(): Promise<{ imagen: string, nombre: string, ubicacion: string}>{
+        try{
+            let res = await this.cliente.query('select * from busqueda_general_creador()');
+            if (res.rows[0]) {
+                return res.rows[0].busqueda_general_creador;
+            } else {
+                throw new Error("No hay blogs");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+
+    // Busqueda de Parlantes
+    async buscar_parlantes(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]> {
+        try{
+            let res = await this.cliente.query('select * from buscar_parlantes($1,$2,$3,$4,$5)',
+            [titulo, marca, tipo_conexion, precio_min, precio_max]);
+            if (res.rows[0]) {
+                return res.rows[0].buscar_parlantes;
+            } else {
+                throw new Error("No se encontraron parlantes");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Busqueda de Audifonos
+    async buscar_audifonos(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]> {
+        try{
+            let res = await this.cliente.query('select * from buscar_audifonos($1,$2,$3,$4,$5)',
+            [titulo, marca, tipo_conexion, precio_min, precio_max]);
+            if (res.rows[0]) {
+                return res.rows[0].buscar_audifonos;
+            } else {
+                throw new Error("No se encontraron audifonos");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Busqueda de Albumes
+    async buscar_albumes(titulo: string, presentaciones: string, genero: string, precio_min: number, precio_max:number):Promise<Producto[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_audifonos($1,$2,$3,$4,$5)',
+            [titulo, presentaciones, genero, precio_min, precio_max]);
+            if (res.rows[0]) {
+                return res.rows[0].buscar_albumes;
+            } else {
+                throw new Error("No se encontraron albumes");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Busqueda de blogs
+    async buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_blogs($1,$2,$3,$4)',
+            [titulo, id_categoria, fecha_min, fecha_max]);
+            if (res.rows[0]) {
+                return res.rows[0].buscar_blogs;
+            } else {
+                throw new Error("No se encontraron blogs");
+            }
+        }catch (err){
+            throw err;
+        }
+    }
+
+    // Busqueda de marcas
+    async buscar_marcas(): Promise<string[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_marcas()');
+            if (res.rows[0]) {
+                return res.rows[0].buscar_marcas;
+            } else {
+                throw new Error("No hay marcas");
+            }
+        }catch (err){
+            throw err;
+        } 
+    }
+
+    // Busqueda de tipos de conexiones
+    async buscar_tipos_conexiones(): Promise<string[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_tipos_conexiones()');
+            if (res.rows[0]) {
+                return res.rows[0].buscar_tipos_conexiones;
+            } else {
+                throw new Error("No hay Tipos de conexiones");
+            }
+        }catch (err){
+            throw err;
+        } 
+    }
+
+    // Busqueda de presentaciones
+    async buscar_presentaciones(): Promise<string[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_presentaciones()');
+            if (res.rows[0]) {
+                return res.rows[0].buscar_presencationes;
+            } else {
+                throw new Error("No hay presentaciones");
+            }
+        }catch (err){
+            throw err;
+        } 
+    }
+
+    // Busqueda de Generos
+    async buscar_generos(): Promise<string[]>{
+        try{
+            let res = await this.cliente.query('select * from buscar_geneross()');
+            if (res.rows[0]) {
+                return res.rows[0].buscar_generos;
+            } else {
+                throw new Error("No hay Generos");
+            }
+        }catch (err){
+            throw err;
+        } 
+    }
 
 }
 

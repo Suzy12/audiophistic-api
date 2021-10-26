@@ -10,6 +10,7 @@ import { Carrito } from './Modelo/Carrito';
 import { Pedido } from './Modelo/Pedido';
 import { Direccion } from "./Modelo/Direccion";
 import { Objeto_Calificacion } from './Modelo/Objeto_Calificacion';
+import { Categoria } from './Modelo/Categoria';
 
 let opciones_cors = {
     origin: ['http://186.176.18.72', 'http://201.194.192.205',
@@ -1076,6 +1077,159 @@ app.get('/eliminar_resena_producto/:id_resena', autorizacion_consumidor, (req: e
         return res.send({ error: err.message });
     }
 })
+
+// Busqueda general
+app.get('/Busqueda_general', (req: express.Request, res) =>{
+    try{
+        controlador.busqueda_general_creador()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// buscar parlantes
+app.get('/Buscar_parlanrtes', (req: express.Request, res) =>{
+    try{
+        let {titulo, marca, tipo_conexion, precio_min, precio_max}:
+            {titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number} = req.body;
+        if(titulo){
+            controlador.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else{
+            return res.send({ error: "Se necesita de al menos un titulo" })
+        }
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Buscar Audifonos
+app.get('/Buscar_audifonos', (req: express.Request, res) =>{
+    try{
+        let {titulo, marca, tipo_conexion, precio_min, precio_max}:
+            {titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number} = req.body;
+        if(titulo){
+            controlador.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else{
+            return res.send({ error: "Se necesita de al menos un titulo" })
+        }
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Buscar Albumes
+app.get('/Buscar_albumes', (req: express.Request, res) =>{
+    try{
+        let {titulo, presentaciones, genero, precio_min, precio_max}:
+            {titulo: string, presentaciones: string, genero: string, precio_min: number, precio_max:number} = req.body;
+        if(titulo){
+            controlador.buscar_albumes(titulo, presentaciones, genero, precio_min, precio_max)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else{
+            return res.send({ error: "Se necesita de al menos un titulo" })
+        }
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Buscar Blogs
+app.get('/Buscar_Blogs', (req: express.Request, res) =>{
+    try{
+        let {titulo, id_categoria, fecha_min, fecha_max}:
+            {titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date} = req.body;
+        if(titulo){
+            controlador.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max)
+                .then((resultado: any) => {
+                    return res.send({ resultado });
+                }).catch((err: any) => {
+                    return res.send({ error: err.message });
+                });
+        }else{
+            return res.send({ error: "Se necesita de al menos un titulo" })
+        }
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Busqueda marcas
+app.get('/Buscar_marcas', (req: express.Request, res) =>{
+    try{
+        controlador.buscar_marcas()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Busqueda tipos conexiones
+app.get('/Buscar_tipos_conexiones', (req: express.Request, res) =>{
+    try{
+        controlador.buscar_tipos_conexiones()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Busqueda presentaciones
+app.get('/Buscar_presentaciones', (req: express.Request, res) =>{
+    try{
+        controlador.buscar_presentaciones()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Busqueda generos
+app.get('/Buscar_marcas', (req: express.Request, res) =>{
+    try{
+        controlador.buscar_generos()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+
 
 // Inicio de sesion, se comunica con el controlador login
 app.post('/validar_tipo_token', (req, res) => {
