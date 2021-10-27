@@ -48,9 +48,9 @@ export default class Gestor_Resenas{
 
     // Modificar comentario de un blog
     consultar_comentarios_blog(id_consumidor: number|undefined , id_origen:number, cantidad_a_agregar: number, 
-        pagina: number): Promise<Comentario_Blog[]>{
+        pagina: number): Promise<{comentarios: Comentario_Blog[], cantidad_total: number}>{
         return this.base_datos.consultar_comentarios_blog(id_consumidor, id_origen, cantidad_a_agregar, pagina)
-        .then((resultado: Comentario_Blog[]) => {
+        .then((resultado: {comentarios: Comentario_Blog[], cantidad_total: number}) => {
             return resultado
         });
     }

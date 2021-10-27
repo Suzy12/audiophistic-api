@@ -797,12 +797,12 @@ export default class DAO {
 
     //Consulta los somentarios de un blog
     async consultar_comentarios_blog(id_consumidor: number|undefined, id_origen:number, cantidad_a_agregar: number,
-         pagina: number):Promise<Comentario_Blog[]> {
+         pagina: number):Promise<{comentarios: Comentario_Blog[], cantidad_total: number}> {
         try{
             let res = await this.cliente.query('select * from consultar_comentarios_blog($1,$2,$3,$4)', 
             [id_consumidor, id_origen, cantidad_a_agregar, pagina]);
             if (res.rows[0]){
-                return res.rows;
+                return res.rows[0];
             }else{
                 throw new Error("No hay comentarios para este blog");
             }

@@ -1,3 +1,4 @@
+import { Objeto_Calificacion } from "./Objeto_Calificacion";
 import { Tipos_Producto } from "./Tipos_Producto";
 
 export interface Producto {
@@ -13,5 +14,9 @@ export interface Producto {
     fecha_lanzamiento?: number;
     enlace?: string;
     imagen? : string;
+    calificaion?: number;
     caracteristicas: Tipos_Producto;
+    resenas?: Objeto_Calificacion;
+    cantidad_resenas?: number;
+
 } 

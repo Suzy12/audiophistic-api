@@ -13,4 +13,6 @@ export interface Blog {
     contenido?: string;
     enlace?: string;
     productos?: Producto[];
+    calificacion?: number;
+    cantidad_calificaciones?: number;
 } 
