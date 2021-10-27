@@ -453,7 +453,7 @@ export default class Controlador {
 
     // consultar resena producto
     consultar_resenas_producto(token: string | undefined, id_origen: number, cantidad_a_agregar: number, 
-        pagina: number): Promise<{ cantidad: number,
+        pagina: number): Promise<{ cantidad_total: number,
         resenas:Resenas_Producto[]}> {
         if (token) {
             let descifrado: Usuario = this.descifrar_token(token);

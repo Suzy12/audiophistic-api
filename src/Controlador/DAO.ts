@@ -844,7 +844,7 @@ export default class DAO {
 
     // Consultar la resena de un producto
     async consultar_resenas_producto(id_consumidor: number|undefined, id_origen:number, cantidad_a_agregar: number, 
-        pagina: number):Promise<{ cantidad: number,
+        pagina: number):Promise<{ cantidad_total: number,
         resenas:Resenas_Producto[]}> {
         try{
             let res = await this.cliente.query('select * from consultar_resenas_producto($1,$2,$3,$4)', 
