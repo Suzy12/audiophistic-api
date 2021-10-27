@@ -4,6 +4,6 @@ import { Resena } from "./Resena";
 export interface Resenas_Producto extends Resena{
     comentario: string;
     fecha: Date;
-    criterios: Objeto_Calificacion[];
+    calificaciones: Objeto_Calificacion[];
 
 }

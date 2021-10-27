@@ -1057,10 +1057,9 @@ app.get('/resenas_producto/:id_origen/:cantidad_a_agregar/:pagina', (req, res) =
 })
 
 // Eliminar resena producto
-app.get('/eliminar_resena_producto/:id_resena', autorizacion_consumidor, (req: express.Request, res) => {
+app.get('/eliminar_resena_producto/:id_origen', autorizacion_consumidor, (req: express.Request, res) => {
     try {
-        let { id_origen,}:
-            { id_origen: number} = req.body;
+        let id_origen: number = parseInt(req.params.id_origen);
         let token: string = (hay_auth(req, res) as string[])[1];
         if (id_origen && token) {
             controlador.eliminar_resena_producto(token, id_origen)

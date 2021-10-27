@@ -62,8 +62,8 @@ export default class Gestor_Resenas{
 
     // Crear la resena de un producto
     async crear_resena_producto(id_usuario: number, id_origen: number, comentario: string,
-        calificacion: Objeto_Calificacion[]): Promise<string>{
-        return this.base_datos.crear_resena_producto(id_usuario, id_origen, comentario, calificacion)
+        calificaciones: Objeto_Calificacion[]): Promise<string>{
+        return this.base_datos.crear_resena_producto(id_usuario, id_origen, comentario, calificaciones)
         .then((resultado: string) => {
             return resultado
         });
