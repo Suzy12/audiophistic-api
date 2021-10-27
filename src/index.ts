@@ -1175,7 +1175,7 @@ app.get('/buscar_blogs', (req: express.Request, res) =>{
 // Busqueda marcas audifonos
 app.get('/marcas_audifonos', (req: express.Request, res) =>{
     try{
-        controlador.buscar_marcas_audifonos()
+        controlador.consultar_marcas_audifonos()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -1189,7 +1189,7 @@ app.get('/marcas_audifonos', (req: express.Request, res) =>{
 // Busqueda marcas parlantes
 app.get('/marcas_parlantes', (req: express.Request, res) =>{
     try{
-        controlador.buscar_marcas_parlantes()
+        controlador.consultar_marcas_parlantes()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -1203,7 +1203,7 @@ app.get('/marcas_parlantes', (req: express.Request, res) =>{
 // Busqueda tipos conexiones de audifonos
 app.get('/tipos_conexiones_audifonos', (req: express.Request, res) =>{
     try{
-        controlador.buscar_tipos_conexiones_audifonos()
+        controlador.consultar_tipos_conexiones_audifonos()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -1217,7 +1217,7 @@ app.get('/tipos_conexiones_audifonos', (req: express.Request, res) =>{
 // Busqueda tipos conexiones de audifonos
 app.get('/tipos_conexiones_parlantes', (req: express.Request, res) =>{
     try{
-        controlador.buscar_tipos_conexiones_parlantes()
+        controlador.consultar_tipos_conexiones_parlantes()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -1229,9 +1229,9 @@ app.get('/tipos_conexiones_parlantes', (req: express.Request, res) =>{
 })
 
 // Busqueda presentaciones
-app.get('/presentaciones', (req: express.Request, res) =>{
+app.get('/presentaciones_albumes', (req: express.Request, res) =>{
     try{
-        controlador.buscar_presentacion()
+        controlador.consultar_presentaciones_albumes()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -1243,9 +1243,9 @@ app.get('/presentaciones', (req: express.Request, res) =>{
 })
 
 // Busqueda generos
-app.get('/generos', (req: express.Request, res) =>{
+app.get('/generos_albumes', (req: express.Request, res) =>{
     try{
-        controlador.buscar_generos()
+        controlador.consultar_generos_albumes()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -1256,7 +1256,7 @@ app.get('/generos', (req: express.Request, res) =>{
     }
 })
 
-// Buscar productos
+// Buscar productos en general
 app.get('/thumbnail_productos', (req: express.Request, res) =>{
     try{
         controlador.thumbnail_productos()

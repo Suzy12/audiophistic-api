@@ -495,34 +495,34 @@ export default class Controlador {
     }
 
     // Buscar Marcas audifonos
-    buscar_marcas_audifonos(): Promise<string[]>{
-        return this.gestor_productos.buscar_marcas_audifonos();
+    consultar_marcas_audifonos(): Promise<string[]>{
+        return this.gestor_productos.consultar_marcas_audifonos();
     }
 
     // Buscar Marcas parlantes
-    buscar_marcas_parlantes(): Promise<string[]>{
-        return this.gestor_productos.buscar_marcas_audifonos();
+    consultar_marcas_parlantes(): Promise<string[]>{
+        return this.gestor_productos.consultar_marcas_audifonos();
     }
 
 
     // Buscar tipos de conexiones de audifonos
-    buscar_tipos_conexiones_audifonos(): Promise<string[]>{
-        return this.gestor_productos.buscar_tipos_conexiones_audifonos();
+    consultar_tipos_conexiones_audifonos(): Promise<string[]>{
+        return this.gestor_productos.consultar_tipos_conexiones_audifonos();
     }
 
     // Buscar tipos de conexiones de parlantes
-    buscar_tipos_conexiones_parlantes(): Promise<string[]>{
-        return this.gestor_productos.buscar_tipos_conexiones_parlantes();
+    consultar_tipos_conexiones_parlantes(): Promise<string[]>{
+        return this.gestor_productos.consultar_tipos_conexiones_parlantes();
     }
 
     // Buscar presentaciones
-    buscar_presentacion(): Promise<string[]>{
-        return this.gestor_productos.buscar_presentacion();
+    consultar_presentaciones_albumes(): Promise<string[]>{
+        return this.gestor_productos.consultar_presentaciones_albumes();
     }
 
     // Buscar generos
-    buscar_generos(): Promise<string[]>{
-        return this.gestor_productos.buscar_generos();
+    consultar_generos_albumes(): Promise<string[]>{
+        return this.gestor_productos.consultar_generos_albumes();
     }
 
     //busqueda de todos los productos

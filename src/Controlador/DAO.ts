@@ -950,11 +950,11 @@ export default class DAO {
     }
 
     // Busqueda de marcas audifonos
-    async buscar_marcas_audifonos(): Promise<string[]>{
+    async consultar_marcas_audifonos(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_marcas_audifonos()');
+            let res = await this.cliente.query('select * from consultar_marcas_audifonos()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_marcas_parlantes;
+                return res.rows;
             } else {
                 throw new Error("No hay marcas");
             }
@@ -964,11 +964,11 @@ export default class DAO {
     }
 
     // Busqueda de marcas parlantes
-    async buscar_marcas_parlantes(): Promise<string[]>{
+    async consultar_marcas_parlantes(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_marcas_parlantes()');
+            let res = await this.cliente.query('select * from consultar_marcas_parlantes()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_marcas_parlantes;
+                return res.rows;
             } else {
                 throw new Error("No hay marcas");
             }
@@ -978,11 +978,11 @@ export default class DAO {
     }
 
     // Busqueda de tipos de conexiones de audifonos
-    async buscar_tipos_conexiones_audifonos(): Promise<string[]>{
+    async consultar_tipos_conexiones_audifonos(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_tipos_conexiones_audifonos()');
+            let res = await this.cliente.query('select * from consultar_tipos_conexiones_audifonos()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_tipos_conexiones_audifonos;
+                return res.rows;
             } else {
                 throw new Error("No hay Tipos de conexiones");
             }
@@ -992,11 +992,11 @@ export default class DAO {
     }
 
     // Busqueda de tipos de conexiones de parlantes
-    async buscar_tipos_conexiones_parlantes(): Promise<string[]>{
+    async consultar_tipos_conexiones_parlantes(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_tipos_conexiones_paralantes()');
+            let res = await this.cliente.query('select * from consultar_tipos_conexiones_paralantes()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_tipos_conexiones_paralantes;
+                return res.rows;
             } else {
                 throw new Error("No hay Tipos de conexiones");
             }
@@ -1006,11 +1006,11 @@ export default class DAO {
     }
 
     // Busqueda de presentaciones
-    async buscar_presentacion(): Promise<string[]>{
+    async consultar_presentaciones_albumes(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_presentaciones()');
+            let res = await this.cliente.query('select * from consultar_presentaciones_albumes()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_presencationes;
+                return res.rows;
             } else {
                 throw new Error("No hay presentaciones");
             }
@@ -1020,11 +1020,11 @@ export default class DAO {
     }
 
     // Busqueda de Generos
-    async buscar_generos(): Promise<string[]>{
+    async consultar_generos_albumes(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from buscar_generos()');
+            let res = await this.cliente.query('select * from consultar_generos_albumes()');
             if (res.rows[0]) {
-                return res.rows[0].buscar_generos;
+                return res.rows;
             } else {
                 throw new Error("No hay Generos");
             }
@@ -1038,7 +1038,7 @@ export default class DAO {
         try{
             let res = await this.cliente.query('select * from thumbnail_productos()');
             if (res.rows[0]) {
-                return res.rows[0].thumbnail_productos;
+                return res.rows;
             } else {
                 throw new Error("No hay productos");
             }

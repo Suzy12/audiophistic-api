@@ -125,48 +125,48 @@ export default class Gestor_Prodcuctos {
     }
 
     // Buscar marcas audifonos
-    buscar_marcas_audifonos(): Promise<string[]>{
-        return this.base_datos.buscar_marcas_audifonos()
+    consultar_marcas_audifonos(): Promise<string[]>{
+        return this.base_datos.consultar_marcas_audifonos()
         .then((resultado: string[]) => {
             return resultado
         });
     }
 
     // Buscar marcas parlantes
-    buscar_marcas_parlantes(): Promise<string[]>{
-        return this.base_datos.buscar_marcas_parlantes()
+    consultar_marcas_parlantes(): Promise<string[]>{
+        return this.base_datos.consultar_marcas_parlantes()
         .then((resultado: string[]) => {
             return resultado
         });
     }
 
     // Buscar Tipos de Conexiones de audifonos
-    buscar_tipos_conexiones_audifonos(): Promise<string[]>{
-        return this.base_datos.buscar_tipos_conexiones_audifonos()
+    consultar_tipos_conexiones_audifonos(): Promise<string[]>{
+        return this.base_datos.consultar_tipos_conexiones_audifonos()
         .then((resultado: string[]) => {
             return resultado
         });
     }
 
     // Buscar Tipos de Conexiones de parlantes
-    buscar_tipos_conexiones_parlantes(): Promise<string[]>{
-        return this.base_datos.buscar_tipos_conexiones_parlantes()
+    consultar_tipos_conexiones_parlantes(): Promise<string[]>{
+        return this.base_datos.consultar_tipos_conexiones_parlantes()
         .then((resultado: string[]) => {
             return resultado
         });
     }
 
     // Buscar Presentacion
-    buscar_presentacion(): Promise<string[]>{
-        return this.base_datos.buscar_presentacion()
+    consultar_presentaciones_albumes(): Promise<string[]>{
+        return this.base_datos.consultar_presentaciones_albumes()
         .then((resultado: string[]) => {
             return resultado
         });
     } 
 
     // Buscar Generos
-    buscar_generos(): Promise<string[]>{
-        return this.base_datos.buscar_generos()
+    consultar_generos_albumes(): Promise<string[]>{
+        return this.base_datos.consultar_generos_albumes()
         .then((resultado: string[]) => {
             return resultado
         });
