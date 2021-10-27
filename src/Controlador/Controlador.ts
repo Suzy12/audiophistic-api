@@ -446,9 +446,9 @@ export default class Controlador {
 
     //Crear la resena de un producto
     crear_resena_producto(token: string, id_origen: number, comentario: string,
-        calificacion: Objeto_Calificacion[]): Promise<string> {
+        calificaciones: Objeto_Calificacion[]): Promise<string> {
         let descifrado: Usuario = this.descifrar_token(token);
-        return this.gestor_resenas.crear_resena_producto(descifrado.id_usuario, id_origen, comentario, calificacion);
+        return this.gestor_resenas.crear_resena_producto(descifrado.id_usuario, id_origen, comentario, calificaciones);
     }
 
     // consultar resena producto

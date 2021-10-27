@@ -828,10 +828,10 @@ export default class DAO {
 
     // Crear una resena del producto
     async crear_resena_producto(id_usuario: number, id_origen: number, comentario: string,
-        calificacion: Objeto_Calificacion[]): Promise<string>{
+        calificaciones: Objeto_Calificacion[]): Promise<string>{
         try {
             let res = await this.cliente.query('select * from crear_resena_producto($1,$2,$3,$4)',
-            [id_usuario, id_origen, comentario, calificacion]);
+            [id_usuario, id_origen, comentario, calificaciones]);
             if (res.rows[0]) {
                 return res.rows[0].crear_resena_producto;
             } else {

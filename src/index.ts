@@ -1011,11 +1011,11 @@ app.get('/eliminar_comentario_blog/:id_comentario/:id_origen', autorizacion_cons
 //Crear resena Producto
 app.post('/crear_resena_producto', autorizacion_consumidor, (req, res) => {
     try {
-        let { id_origen, comentario, calificacion }:
-            { id_origen: number, comentario: string, calificacion: Objeto_Calificacion[] } = req.body;
+        let { id_origen, comentario, calificaciones }:
+            { id_origen: number, comentario: string, calificaciones: Objeto_Calificacion[] } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
-        if (id_origen && calificacion && token) {
-            controlador.crear_resena_producto(token, id_origen, comentario, calificacion)
+        if (id_origen && calificaciones && token) {
+            controlador.crear_resena_producto(token, id_origen, comentario, calificaciones)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
