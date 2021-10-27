@@ -501,7 +501,7 @@ export default class Controlador {
 
     // Buscar Marcas parlantes
     consultar_marcas_parlantes(): Promise<string[]>{
-        return this.gestor_productos.consultar_marcas_audifonos();
+        return this.gestor_productos.consultar_marcas_parlantes();
     }
 
 

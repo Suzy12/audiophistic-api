@@ -888,7 +888,6 @@ export default class DAO {
         }
     }
 
-
     // Busqueda de Parlantes
     async buscar_parlantes(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]> {
         try{
@@ -994,7 +993,7 @@ export default class DAO {
     // Busqueda de tipos de conexiones de parlantes
     async consultar_tipos_conexiones_parlantes(): Promise<string[]>{
         try{
-            let res = await this.cliente.query('select * from consultar_tipos_conexiones_paralantes()');
+            let res = await this.cliente.query('select * from consultar_tipos_conexiones_parlantes()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
