@@ -428,8 +428,8 @@ export default class Controlador {
     }
 
     // Modifcar comentario de un blog
-    consultar_comentarios_blog(token: string | undefined, id_origen: number, cantidad_a_agregar: number, 
-        pagina: number): Promise<{comentarios: Comentario_Blog[], cantidad_total: number}> {
+    consultar_comentarios_blog(token: string | undefined, id_origen: number, cantidad_a_agregar: number,
+        pagina: number): Promise<{ comentarios: Comentario_Blog[], cantidad_total: number }> {
         if (token) {
             let descifrado: Usuario = this.descifrar_token(token);
             return this.gestor_resenas.consultar_comentarios_blog(descifrado.id_usuario, id_origen, cantidad_a_agregar, pagina);
@@ -452,9 +452,11 @@ export default class Controlador {
     }
 
     // consultar resena producto
-    consultar_resenas_producto(token: string | undefined, id_origen: number, cantidad_a_agregar: number, 
-        pagina: number): Promise<{ cantidad_total: number,
-        resenas:Resenas_Producto[]}> {
+    consultar_resenas_producto(token: string | undefined, id_origen: number, cantidad_a_agregar: number,
+        pagina: number): Promise<{
+            cantidad_total: number,
+            resenas: Resenas_Producto[]
+        }> {
         if (token) {
             let descifrado: Usuario = this.descifrar_token(token);
             return this.gestor_resenas.consultar_resenas_producto(descifrado.id_usuario, id_origen, cantidad_a_agregar, pagina);
@@ -470,63 +472,70 @@ export default class Controlador {
     }
 
     // Busqueda General
-    busqueda_general_creador(): Promise<Usuario[]>{
-        return this.gestor_usuarios.busqueda_general_creador();
+    consultar_creadores_contenido(): Promise<Usuario[]> {
+        return this.gestor_usuarios.consultar_creadores_contenido();
     }
 
     // buscar Parlantes
-    buscar_parlantes(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]>{
-        return this.gestor_productos.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max);
+    buscar_parlantes(titulo: string, marca: string | undefined, tipo_conexion: string | undefined,
+        precio_min: number | undefined, precio_max: number | undefined,
+        cantidad_a_buscar: number, pagina: number): Promise<{ productos: Producto[], cantidad_total: number }> {
+        return this.gestor_productos.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max,
+            cantidad_a_buscar, pagina);
     }
 
     // buscar Parlantes
-    buscar_audifonos(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]>{
-        return this.gestor_productos.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max);
+    buscar_audifonos(titulo: string, marca: string, tipo_conexion: string, precio_min: number,
+        precio_max: number, cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        return this.gestor_productos.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max,
+            cantidad_a_buscar, pagina);
     }
 
     // Buscar almbumes
-    buscar_albumes(titulo: string, presentaciones: string, genero: string, precio_min: number, precio_max:number):Promise<Producto[]>{
-        return this.gestor_productos.buscar_albumes(titulo, presentaciones, genero, precio_min, precio_max);
+    buscar_albumes(titulo: string, presentacion: string, genero: string, precio_min: number,
+        precio_max: number, cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        return this.gestor_productos.buscar_albumes(titulo, presentacion, genero, precio_min, precio_max,
+            cantidad_a_buscar, pagina);
     }
 
     // Buscar Blogs
-    buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]>{
+    buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]> {
         return this.gestor_blogs.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max);
     }
 
     // Buscar Marcas audifonos
-    consultar_marcas_audifonos(): Promise<string[]>{
+    consultar_marcas_audifonos(): Promise<string[]> {
         return this.gestor_productos.consultar_marcas_audifonos();
     }
 
     // Buscar Marcas parlantes
-    consultar_marcas_parlantes(): Promise<string[]>{
+    consultar_marcas_parlantes(): Promise<string[]> {
         return this.gestor_productos.consultar_marcas_parlantes();
     }
 
 
     // Buscar tipos de conexiones de audifonos
-    consultar_tipos_conexiones_audifonos(): Promise<string[]>{
+    consultar_tipos_conexiones_audifonos(): Promise<string[]> {
         return this.gestor_productos.consultar_tipos_conexiones_audifonos();
     }
 
     // Buscar tipos de conexiones de parlantes
-    consultar_tipos_conexiones_parlantes(): Promise<string[]>{
+    consultar_tipos_conexiones_parlantes(): Promise<string[]> {
         return this.gestor_productos.consultar_tipos_conexiones_parlantes();
     }
 
     // Buscar presentaciones
-    consultar_presentaciones_albumes(): Promise<string[]>{
+    consultar_presentaciones_albumes(): Promise<string[]> {
         return this.gestor_productos.consultar_presentaciones_albumes();
     }
 
     // Buscar generos
-    consultar_generos_albumes(): Promise<string[]>{
+    consultar_generos_albumes(): Promise<string[]> {
         return this.gestor_productos.consultar_generos_albumes();
     }
 
     //busqueda de todos los productos
-    async thumbnail_productos(): Promise<Producto[]>{
+    async thumbnail_productos(): Promise<Producto[]> {
         return this.gestor_productos.thumbnail_productos();
     }
 

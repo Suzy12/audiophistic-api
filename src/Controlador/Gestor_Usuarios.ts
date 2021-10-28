@@ -89,8 +89,8 @@ export default class Gestor_Usuarios {
     }
 
     // Busqueda General
-    busqueda_general_creador(): Promise<Usuario[]>{
-        return this.base_datos.busqueda_general_creador()
+    consultar_creadores_contenido(): Promise<Usuario[]>{
+        return this.base_datos.consultar_creadores_contenido()
         .then((resultado: Usuario[]) => {
             return resultado
         });

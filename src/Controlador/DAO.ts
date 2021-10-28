@@ -12,7 +12,7 @@ import { Pedido } from "../Modelo/Pedido";
 import { Direccion } from "../Modelo/Direccion";
 import { Blog } from "../Modelo/Blog";
 import { Resena } from "../Modelo/Resena";
-import {Objeto_Calificacion} from "../Modelo/Objeto_Calificacion";
+import { Objeto_Calificacion } from "../Modelo/Objeto_Calificacion";
 import { Comentario_Blog } from "../Modelo/Comentario_Blog";
 import { Resenas_Producto } from "../Modelo/Resenas_Producto";
 
@@ -324,8 +324,8 @@ export default class DAO {
     //Consulta los productos de un Creador de Contenido segun su ID
     async consultar_productos_sin_blog_creador(id_creador_contenido: number): Promise<Producto[]> {
         try {
-            let res = await this.cliente.query('select * from consultar_productos_sin_blog_creador($1)', 
-            [id_creador_contenido]);
+            let res = await this.cliente.query('select * from consultar_productos_sin_blog_creador($1)',
+                [id_creador_contenido]);
             if (res.rows[0]) {
                 return res.rows;
             } else {
@@ -503,8 +503,8 @@ export default class DAO {
     }
 
     // Realizar el Checkout
-    async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number, 
-        costo_envio: number, correo: string, direccion: string, canton: string, provincia: string, 
+    async realizar_checkout(id_usuario: number, carrito: Carrito[], monto_total: number, subtotal: number,
+        costo_envio: number, correo: string, direccion: string, canton: string, provincia: string,
         cedula: string, telefono: string, nombre_consumidor: string): Promise<number> {
         try {
             let res = await this.cliente.query('select * from realizar_checkout($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
@@ -521,12 +521,12 @@ export default class DAO {
     }
 
     // Realiza el pago, tiene un pedido como entrada
-    async realizar_pago(id_pedido: number, id_tipo: number, monto_total: number, subtotal: number, costo_envio: number, 
+    async realizar_pago(id_pedido: number, id_tipo: number, monto_total: number, subtotal: number, costo_envio: number,
         comprobante: string, direccion: string, canton: string, provincia: string, cedula: string,
         telefono: string, nombre_consumidor: string): Promise<string> {
         try {
             let res = await this.cliente.query('select * from realizar_pago($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
-                [id_pedido, id_tipo, monto_total, subtotal, costo_envio, comprobante, direccion, 
+                [id_pedido, id_tipo, monto_total, subtotal, costo_envio, comprobante, direccion,
                     canton, provincia, cedula, telefono, nombre_consumidor]);
             if (res.rows[0]) {
                 return res.rows[0].realizar_pago;
@@ -601,8 +601,8 @@ export default class DAO {
 
     // Crear Blog
     async crear_blog(id_creador: number, id_categoria: number, titulo: string, imagen: string,
-        etiquetas: string[], contenido: string, productos: number[]): Promise<Blog>{
-        try{
+        etiquetas: string[], contenido: string, productos: number[]): Promise<Blog> {
+        try {
             let res = await this.cliente.query('select * from crear_blog($1, $2, $3, $4, $5, $6, $7)',
                 [id_creador, id_categoria, titulo, imagen, etiquetas, contenido, productos]);
             if (res.rows[0]) {
@@ -610,30 +610,30 @@ export default class DAO {
             } else {
                 throw new Error("No se pudo crear el Blog");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Modificar un Blog
     async modificar_blog(id_creador: number, id_blog: number, id_categoria: number, titulo: string, imagen: string,
-        etiquetas: string[], contenido: string, productos: number[] ): Promise<Blog>{
-        try{
+        etiquetas: string[], contenido: string, productos: number[]): Promise<Blog> {
+        try {
             let res = await this.cliente.query('select * from modificar_blog($1, $2, $3, $4, $5, $6, $7, $8)',
-            [id_creador, id_blog, id_categoria, titulo, imagen, etiquetas, contenido, productos]);
-                if (res.rows[0]) {
-                    return res.rows[0].modificar_blog;
-                } else {
-                    throw new Error("No se pudo crear el Blog");
-                }
-        }catch (err){
+                [id_creador, id_blog, id_categoria, titulo, imagen, etiquetas, contenido, productos]);
+            if (res.rows[0]) {
+                return res.rows[0].modificar_blog;
+            } else {
+                throw new Error("No se pudo crear el Blog");
+            }
+        } catch (err) {
             throw err;
         }
     }
 
     // Consultar Blog
-    async consultar_blog(id_blog: number): Promise<Blog>{
-        try{
+    async consultar_blog(id_blog: number): Promise<Blog> {
+        try {
             let res = await this.cliente.query('select * from consultar_blog($1)', [id_blog]);
             if (res.rows[0]) {
                 return res.rows[0];
@@ -641,14 +641,14 @@ export default class DAO {
                 throw new Error("El Blog no existe o fue eliminado");
             }
 
-        } catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     //Consultar Blogs de un Creador en especifico
-    async consultar_blogs_por_creador(id_autor: number): Promise<Blog[]>{
-        try{
+    async consultar_blogs_por_creador(id_autor: number): Promise<Blog[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_blogs_por_creador($1)', [id_autor]);
             if (res.rows[0]) {
                 return res.rows;
@@ -656,28 +656,28 @@ export default class DAO {
                 throw new Error("El Autor no tiene blogs");
             }
 
-        } catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Consulta los blogs, mas su foto, de un Creador de Contenido segun su ID
-    async thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]>{
-        try{
+    async thumbnail_blogs_por_creador(id_creador_contenido: number): Promise<Blog[]> {
+        try {
             let res = await this.cliente.query('select * from thumbnail_blogs_por_creador($1)', [id_creador_contenido]);
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("El usuario no tiene blogs");
             }
-        }catch (err) {
+        } catch (err) {
             throw err;
         }
     }
 
     // Consulta todos los blogs
-    async consultar_blogs(): Promise<Blog[]>{
-        try{
+    async consultar_blogs(): Promise<Blog[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_blogs()');
             if (res.rows[0]) {
                 return res.rows;
@@ -685,14 +685,14 @@ export default class DAO {
                 throw new Error("No hay blogs");
             }
 
-        } catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Consulta todos los blogs
-    async consultar_thumbnail_blogs(): Promise<Blog[]>{
-        try{
+    async consultar_thumbnail_blogs(): Promise<Blog[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_thumbnail_blogs()');
             if (res.rows[0]) {
                 return res.rows;
@@ -700,7 +700,7 @@ export default class DAO {
                 throw new Error("No hay blogs");
             }
 
-        } catch (err){
+        } catch (err) {
             throw err;
         }
     }
@@ -720,330 +720,338 @@ export default class DAO {
     }
 
     // Cambia el estado de un producto del creador a inactivo
-    async eliminar_mi_blog(id_blog: number, id_creador: number): Promise<string>{
-        try{
+    async eliminar_mi_blog(id_blog: number, id_creador: number): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from eliminar_mi_blog($1, $2)',
                 [id_blog, id_creador]);
             if (res.rows[0]) {
-                    return res.rows[0].eliminar_mi_blog;
+                return res.rows[0].eliminar_mi_blog;
             } else {
-                    throw new Error("El blog  no pudo ser eliminado");
+                throw new Error("El blog  no pudo ser eliminado");
             }
-        }catch (err) {
+        } catch (err) {
             throw err;
         }
     }
 
     // Crear clasificación blog
-    async crear_clasificación_blog(id_consumidor:number, id_origen:number, calificación:number): Promise<string>{
-        try{
+    async crear_clasificación_blog(id_consumidor: number, id_origen: number, calificación: number): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from crear_calificacion_blog($1,$2,$3)', [id_consumidor, id_origen, calificación]);
-            if (res.rows[0]){
+            if (res.rows[0]) {
                 return res.rows[0].crear_calificacion_blog;
-            }else{
+            } else {
                 throw new Error("No se pudo crear la calificación");
             }
 
-        }catch (err){
+        } catch (err) {
             throw err;
         }
 
     }
 
     // Crear clasificación blog
-    async consultar_calificacion_blog(id_consumidor:number, id_origen:number): Promise<number>{
-        try{
+    async consultar_calificacion_blog(id_consumidor: number, id_origen: number): Promise<number> {
+        try {
             let res = await this.cliente.query('select * from consultar_calificacion_blog($1,$2)', [id_consumidor, id_origen]);
-            if (res.rows[0]){
+            if (res.rows[0]) {
                 return res.rows[0].consultar_calificacion_blog;
-            }else{
+            } else {
                 throw new Error("No hay una calificación del usuario");
             }
 
-        }catch (err){
+        } catch (err) {
             throw err;
         }
 
     }
 
     //Crear Comentario de un blog
-    async crear_comentario_blog(id_consumidor: number, id_origen:number, comentario: string):Promise<string> {
-        try{
+    async crear_comentario_blog(id_consumidor: number, id_origen: number, comentario: string): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from crear_comentario_blog($1,$2,$3)', [id_consumidor, id_origen, comentario]);
-            if (res.rows[0]){
+            if (res.rows[0]) {
                 return res.rows[0].crear_comentario_blog;
-            }else{
+            } else {
                 throw new Error("No se pudo crear el comentario");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     //Modifica el comentario de un blog
-    async modificar_comentario_blog(id_consumidor: number, id_comentario: number, id_origen:number, comentario: string):Promise<string> {
-        try{
+    async modificar_comentario_blog(id_consumidor: number, id_comentario: number, id_origen: number, comentario: string): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from modificar_comentario_blog($1,$2,$3,$4)',
-            [id_consumidor, id_comentario, id_origen, comentario]);
-            if (res.rows[0]){
+                [id_consumidor, id_comentario, id_origen, comentario]);
+            if (res.rows[0]) {
                 return res.rows[0].modificar_comentario_blog;
-            }else{
+            } else {
                 throw new Error("No se pudo modificar el comentario");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     //Consulta los somentarios de un blog
-    async consultar_comentarios_blog(id_consumidor: number|undefined, id_origen:number, cantidad_a_agregar: number,
-         pagina: number):Promise<{comentarios: Comentario_Blog[], cantidad_total: number}> {
-        try{
-            let res = await this.cliente.query('select * from consultar_comentarios_blog($1,$2,$3,$4)', 
-            [id_consumidor, id_origen, cantidad_a_agregar, pagina]);
-            if (res.rows[0]){
+    async consultar_comentarios_blog(id_consumidor: number | undefined, id_origen: number, cantidad_a_agregar: number,
+        pagina: number): Promise<{ comentarios: Comentario_Blog[], cantidad_total: number }> {
+        try {
+            let res = await this.cliente.query('select * from consultar_comentarios_blog($1,$2,$3,$4)',
+                [id_consumidor, id_origen, cantidad_a_agregar, pagina]);
+            if (res.rows[0]) {
                 return res.rows[0];
-            }else{
+            } else {
                 throw new Error("No hay comentarios para este blog");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Eliminar comentario de un blog
-    async eliminar_comentario_blog(id_consumidor: number, id_comentario: number, id_origen: number): Promise<string>{
-        try{
+    async eliminar_comentario_blog(id_consumidor: number, id_comentario: number, id_origen: number): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from eliminar_comentario_blog($1,$2,$3)',
-            [id_consumidor, id_comentario, id_origen]);
+                [id_consumidor, id_comentario, id_origen]);
             if (res.rows[0]) {
                 return res.rows[0].eliminar_comentario_blog;
-        } else {
+            } else {
                 throw new Error("El comentario del blog no pudo ser eliminado");
-        }
-        }catch (err){
+            }
+        } catch (err) {
             throw err;
         }
     }
 
     // Crear una resena del producto
     async crear_resena_producto(id_usuario: number, id_origen: number, comentario: string,
-        calificaciones: Objeto_Calificacion[]): Promise<string>{
+        calificaciones: Objeto_Calificacion[]): Promise<string> {
         try {
             let res = await this.cliente.query('select * from crear_resena_producto($1,$2,$3,$4)',
-            [id_usuario, id_origen, comentario, calificaciones]);
+                [id_usuario, id_origen, comentario, calificaciones]);
             if (res.rows[0]) {
                 return res.rows[0].crear_resena_producto;
             } else {
                 throw new Error("La reseña del producto no pudo ser creada");
-        }
-        }catch (err){
+            }
+        } catch (err) {
             throw err;
         }
     }
 
     // Consultar la resena de un producto
-    async consultar_resenas_producto(id_consumidor: number|undefined, id_origen:number, cantidad_a_agregar: number, 
-        pagina: number):Promise<{ cantidad_total: number,
-        resenas:Resenas_Producto[]}> {
-        try{
-            let res = await this.cliente.query('select * from consultar_resenas_producto($1,$2,$3,$4)', 
-            [id_consumidor, id_origen, cantidad_a_agregar, pagina]);
-            if (res.rows[0]){
+    async consultar_resenas_producto(id_consumidor: number | undefined, id_origen: number, cantidad_a_agregar: number,
+        pagina: number): Promise<{
+            cantidad_total: number,
+            resenas: Resenas_Producto[]
+        }> {
+        try {
+            let res = await this.cliente.query('select * from consultar_resenas_producto($1,$2,$3,$4)',
+                [id_consumidor, id_origen, cantidad_a_agregar, pagina]);
+            if (res.rows[0]) {
                 return res.rows[0];
-            }else{
+            } else {
                 throw new Error("No hay reseñas para este producto en la pagina " + pagina);
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Eliminar la resena de un producto
-    async eliminar_resena_producto (id_consumidor: number , id_origen:number): Promise<string>{
-        try{
+    async eliminar_resena_producto(id_consumidor: number, id_origen: number): Promise<string> {
+        try {
             let res = await this.cliente.query('select * from eliminar_resena_producto($1,$2)',
-            [id_consumidor, id_origen]);
+                [id_consumidor, id_origen]);
             if (res.rows[0]) {
                 return res.rows[0].eliminar_resena_producto;
             } else {
                 throw new Error("La reseña del producto no pudo ser eliminada");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Busqueda General
-    async busqueda_general_creador(): Promise<Usuario[]>{
-        try{
-            let res = await this.cliente.query('select * from busqueda_general_creador()');
+    async consultar_creadores_contenido(): Promise<Usuario[]> {
+        try {
+            let res = await this.cliente.query('select * from consultar_creadores_contenido()');
             if (res.rows[0]) {
-                return res.rows[0].busqueda_general_creador;
+                return res.rows;
             } else {
                 throw new Error("No hay blogs");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Busqueda de Parlantes
-    async buscar_parlantes(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]> {
-        try{
-            let res = await this.cliente.query('select * from buscar_parlantes($1,$2,$3,$4,$5)',
-            [titulo, marca, tipo_conexion, precio_min, precio_max]);
+    async buscar_parlantes(titulo: string, marca: string | undefined, tipo_conexion: string | undefined,
+        precio_min: number | undefined, precio_max: number | undefined,
+        cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        try {
+            let res = await this.cliente.query('select * from buscar_parlantes($1,$2,$3,$4,$5,$6,$7)',
+                [titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina]);
             if (res.rows[0]) {
-                return res.rows[0].buscar_parlantes;
+                return res.rows[0];
             } else {
                 throw new Error("No se encontraron parlantes");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Busqueda de Audifonos
-    async buscar_audifonos(titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number):Promise<Producto[]> {
-        try{
-            let res = await this.cliente.query('select * from buscar_audifonos($1,$2,$3,$4,$5)',
-            [titulo, marca, tipo_conexion, precio_min, precio_max]);
+    async buscar_audifonos(titulo: string, marca: string | undefined, tipo_conexion: string | undefined,
+        precio_min: number | undefined, precio_max: number | undefined,
+        cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        try {
+            let res = await this.cliente.query('select * from buscar_audifonos($1,$2,$3,$4,$5,$6,$7)',
+                [titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina]);
             if (res.rows[0]) {
-                return res.rows[0].buscar_audifonos;
+                return res.rows[0];
             } else {
                 throw new Error("No se encontraron audifonos");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Busqueda de Albumes
-    async buscar_albumes(titulo: string, presentaciones: string, genero: string, precio_min: number, precio_max:number):Promise<Producto[]>{
-        try{
-            let res = await this.cliente.query('select * from buscar_audifonos($1,$2,$3,$4,$5)',
-            [titulo, presentaciones, genero, precio_min, precio_max]);
+    async buscar_albumes(titulo: string, presentacion: string | undefined, genero: string | undefined,
+        precio_min: number | undefined, precio_max: number | undefined,
+        cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        try {
+            let res = await this.cliente.query('select * from buscar_albumes($1,$2,$3,$4,$5,$6,$7)',
+                [titulo, presentacion, genero, precio_min, precio_max, cantidad_a_buscar, pagina]);
             if (res.rows[0]) {
-                return res.rows[0].buscar_albumes;
+                return res.rows[0];
             } else {
                 throw new Error("No se encontraron albumes");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Busqueda de blogs
-    async buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]>{
-        try{
+    async buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]> {
+        try {
             let res = await this.cliente.query('select * from buscar_blogs($1,$2,$3,$4)',
-            [titulo, id_categoria, fecha_min, fecha_max]);
+                [titulo, id_categoria, fecha_min, fecha_max]);
             if (res.rows[0]) {
                 return res.rows[0].buscar_blogs;
             } else {
                 throw new Error("No se encontraron blogs");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
         }
     }
 
     // Busqueda de marcas audifonos
-    async consultar_marcas_audifonos(): Promise<string[]>{
-        try{
+    async consultar_marcas_audifonos(): Promise<string[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_marcas_audifonos()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("No hay marcas");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
-        } 
+        }
     }
 
     // Busqueda de marcas parlantes
-    async consultar_marcas_parlantes(): Promise<string[]>{
-        try{
+    async consultar_marcas_parlantes(): Promise<string[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_marcas_parlantes()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("No hay marcas");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
-        } 
+        }
     }
 
     // Busqueda de tipos de conexiones de audifonos
-    async consultar_tipos_conexiones_audifonos(): Promise<string[]>{
-        try{
+    async consultar_tipos_conexiones_audifonos(): Promise<string[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_tipos_conexiones_audifonos()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("No hay Tipos de conexiones");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
-        } 
+        }
     }
 
     // Busqueda de tipos de conexiones de parlantes
-    async consultar_tipos_conexiones_parlantes(): Promise<string[]>{
-        try{
+    async consultar_tipos_conexiones_parlantes(): Promise<string[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_tipos_conexiones_parlantes()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("No hay Tipos de conexiones");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
-        } 
+        }
     }
 
     // Busqueda de presentaciones
-    async consultar_presentaciones_albumes(): Promise<string[]>{
-        try{
+    async consultar_presentaciones_albumes(): Promise<string[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_presentaciones_albumes()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("No hay presentaciones");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
-        } 
+        }
     }
 
     // Busqueda de Generos
-    async consultar_generos_albumes(): Promise<string[]>{
-        try{
+    async consultar_generos_albumes(): Promise<string[]> {
+        try {
             let res = await this.cliente.query('select * from consultar_generos_albumes()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("No hay Generos");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
-        } 
+        }
     }
 
     //busqueda de todos los productos
-    async thumbnail_productos(): Promise<Producto[]>{
-        try{
+    async thumbnail_productos(): Promise<Producto[]> {
+        try {
             let res = await this.cliente.query('select * from thumbnail_productos()');
             if (res.rows[0]) {
                 return res.rows;
             } else {
                 throw new Error("No hay productos");
             }
-        }catch (err){
+        } catch (err) {
             throw err;
-        } 
+        }
 
     }
 

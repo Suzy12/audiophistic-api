@@ -1078,9 +1078,9 @@ app.get('/eliminar_resena_producto/:id_origen', autorizacion_consumidor, (req: e
 })
 
 // Busqueda general
-app.get('/creadores', (req: express.Request, res) =>{
+app.get('/creadores_contenido', (req: express.Request, res) =>{
     try{
-        controlador.busqueda_general_creador()
+        controlador.consultar_creadores_contenido()
             .then((resultado: any) => {
                 return res.send({ resultado });
             }).catch((err: any) => {
@@ -1095,17 +1095,18 @@ app.get('/creadores', (req: express.Request, res) =>{
 // buscar parlantes
 app.get('/buscar_parlantes', (req: express.Request, res) =>{
     try{
-        let {titulo, marca, tipo_conexion, precio_min, precio_max}:
-            {titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number} = req.body;
-        if(titulo){
-            controlador.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max)
+        let {titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina}:
+            {titulo: string, marca: string, tipo_conexion: string, precio_min: number, 
+                precio_max: number, cantidad_a_buscar: number, pagina: number} = req.body;
+        if(titulo != undefined && cantidad_a_buscar && pagina){
+            controlador.buscar_parlantes(titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
                     return res.send({ error: err.message });
                 });
         }else{
-            return res.send({ error: "Se necesita de al menos un titulo" })
+            return res.send({ error: "Se necesita de al menos un titulo y los datos de paginacion" })
         }
     }catch (err: any) {
         return res.send({ error: err.message });
@@ -1115,10 +1116,11 @@ app.get('/buscar_parlantes', (req: express.Request, res) =>{
 // Buscar Audifonos
 app.get('/buscar_audifonos', (req: express.Request, res) =>{
     try{
-        let {titulo, marca, tipo_conexion, precio_min, precio_max}:
-            {titulo: string, marca: string, tipo_conexion: string, precio_min: number, precio_max:number} = req.body;
-        if(titulo){
-            controlador.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max)
+        let {titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina}:
+            {titulo: string, marca: string, tipo_conexion: string, precio_min: number, 
+                precio_max: number, cantidad_a_buscar: number, pagina: number} = req.body;
+        if(titulo != undefined && cantidad_a_buscar && pagina){
+            controlador.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
@@ -1135,10 +1137,11 @@ app.get('/buscar_audifonos', (req: express.Request, res) =>{
 // Buscar Albumes
 app.get('/buscar_albumes', (req: express.Request, res) =>{
     try{
-        let {titulo, presentaciones, genero, precio_min, precio_max}:
-            {titulo: string, presentaciones: string, genero: string, precio_min: number, precio_max:number} = req.body;
-        if(titulo){
-            controlador.buscar_albumes(titulo, presentaciones, genero, precio_min, precio_max)
+        let {titulo, presentacion, genero, precio_min, precio_max, cantidad_a_buscar, pagina}:
+            {titulo: string, presentacion: string, genero: string, precio_min: number, 
+                precio_max:number, cantidad_a_buscar: number, pagina: number} = req.body;
+        if(titulo != undefined && cantidad_a_buscar && pagina){
+            controlador.buscar_albumes(titulo, presentacion, genero, precio_min, precio_max, cantidad_a_buscar, pagina)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {
