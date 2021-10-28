@@ -94,4 +94,12 @@ export default class Gestor_Blogs {
             });
     }
 
+    // Buscar limites inferiores y superiores de precios de parlantes
+    consultar_limites_fechas_blogs(): Promise<{limite_min: Date, limite_max: Date}>{
+        return this.base_datos.consultar_limites_fechas_blogs()
+            .then((resultado: {limite_min: Date, limite_max: Date}) => {
+                return resultado
+            });
+    }
+
 }

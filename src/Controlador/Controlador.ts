@@ -526,6 +526,16 @@ export default class Controlador {
         return this.gestor_productos.consultar_tipos_conexiones_parlantes();
     }
 
+    // Buscar limites inferiores y superiores de precios de audifonoc
+    consultar_limites_precios_audifonos(): Promise<{limite_min: number, limite_max: number}> {
+        return this.gestor_productos.consultar_limites_precios_audifonos();
+    }
+
+    // Buscar limites inferiores y superiores de precios de albumes
+    consultar_limites_precios_parlantes(): Promise<{limite_min: number, limite_max: number}> {
+        return this.gestor_productos.consultar_limites_precios_parlantes();
+    }
+
     // Buscar presentaciones
     consultar_presentaciones_albumes(): Promise<string[]> {
         return this.gestor_productos.consultar_presentaciones_albumes();
@@ -534,6 +544,16 @@ export default class Controlador {
     // Buscar generos
     consultar_generos_albumes(): Promise<string[]> {
         return this.gestor_productos.consultar_generos_albumes();
+    }
+
+    // Buscar limites inferiores y superiores de precios de albumes
+    consultar_limites_precios_albumes(): Promise<{limite_min: number, limite_max: number}> {
+        return this.gestor_productos.consultar_limites_precios_albumes();
+    }
+
+    // Buscar limites inferiores y superiores de fechas de blogs
+    consultar_limites_fechas_blogs(): Promise<{limite_min: Date, limite_max: Date}> {
+        return this.gestor_blogs.consultar_limites_fechas_blogs();
     }
 
     //busqueda de todos los productos

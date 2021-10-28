@@ -1014,6 +1014,34 @@ export default class DAO {
         }
     }
 
+    // Buscar limites inferiores y superiores de precios de audifonos
+    async consultar_limites_precios_audifonos(): Promise<{limite_min: number, limite_max: number}>{
+        try {
+            let res = await this.cliente.query('select * from consultar_limites_precios_audifonos()');
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("No se pudo obtener los límites");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Buscar limites inferiores y superiores de precios de parlantes
+    async consultar_limites_precios_parlantes(): Promise<{limite_min: number, limite_max: number}>{
+        try {
+            let res = await this.cliente.query('select * from consultar_limites_precios_parlantes()');
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("No se pudo obtener los límites");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Busqueda de presentaciones
     async consultar_presentaciones_albumes(): Promise<string[]> {
         try {
@@ -1036,6 +1064,34 @@ export default class DAO {
                 return res.rows;
             } else {
                 throw new Error("No hay Generos");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Buscar limites inferiores y superiores de precios de albumes
+    async consultar_limites_precios_albumes(): Promise<{limite_min: number, limite_max: number}>{
+        try {
+            let res = await this.cliente.query('select * from consultar_limites_precios_albumes()');
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("No se pudo obtener los límites");
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Buscar limites inferiores y superiores de precios de albumes
+    async consultar_limites_fechas_blogs(): Promise<{limite_min: Date, limite_max: Date}>{
+        try {
+            let res = await this.cliente.query('select * from consultar_limites_fechas_blogs()');
+            if (res.rows[0]) {
+                return res.rows[0];
+            } else {
+                throw new Error("No se pudo obtener los límites");
             }
         } catch (err) {
             throw err;

@@ -1093,7 +1093,7 @@ app.get('/creadores_contenido', (req: express.Request, res) =>{
 })
 
 // buscar parlantes
-app.get('/buscar_parlantes', (req: express.Request, res) =>{
+app.post('/buscar_parlantes', (req: express.Request, res) =>{
     try{
         let {titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina}:
             {titulo: string, marca: string, tipo_conexion: string, precio_min: number, 
@@ -1114,7 +1114,7 @@ app.get('/buscar_parlantes', (req: express.Request, res) =>{
 })
 
 // Buscar Audifonos
-app.get('/buscar_audifonos', (req: express.Request, res) =>{
+app.post('/buscar_audifonos', (req: express.Request, res) =>{
     try{
         let {titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina}:
             {titulo: string, marca: string, tipo_conexion: string, precio_min: number, 
@@ -1135,7 +1135,7 @@ app.get('/buscar_audifonos', (req: express.Request, res) =>{
 })
 
 // Buscar Albumes
-app.get('/buscar_albumes', (req: express.Request, res) =>{
+app.post('/buscar_albumes', (req: express.Request, res) =>{
     try{
         let {titulo, presentacion, genero, precio_min, precio_max, cantidad_a_buscar, pagina}:
             {titulo: string, presentacion: string, genero: string, precio_min: number, 
@@ -1156,7 +1156,7 @@ app.get('/buscar_albumes', (req: express.Request, res) =>{
 })
 
 // Buscar Blogs
-app.get('/buscar_blogs', (req: express.Request, res) =>{
+app.post('/buscar_blogs', (req: express.Request, res) =>{
     try{
         let {titulo, id_categoria, fecha_min, fecha_max, cantidad_a_buscar, pagina}:
             {titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date, 
@@ -1232,6 +1232,34 @@ app.get('/tipos_conexiones_parlantes', (req: express.Request, res) =>{
     }
 })
 
+// Buscar limites inferiores y superiores de precios de audifonos
+app.get('/limites_precios_audifonos', (req: express.Request, res) =>{
+    try{
+        controlador.consultar_limites_precios_audifonos()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Buscar limites inferiores y superiores de precios de parlantes
+app.get('/limites_precios_parlantes', (req: express.Request, res) =>{
+    try{
+        controlador.consultar_limites_precios_parlantes()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
 // Busqueda presentaciones
 app.get('/presentaciones_albumes', (req: express.Request, res) =>{
     try{
@@ -1260,6 +1288,34 @@ app.get('/generos_albumes', (req: express.Request, res) =>{
     }
 })
 
+// Buscar limites inferiores y superiores de precios de albumes
+app.get('/limites_precios_albumes', (req: express.Request, res) =>{
+    try{
+        controlador.consultar_limites_precios_albumes()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
+// Buscar limites inferiores y superiores de fechas de blogs
+app.get('/limites_fechas_blogs', (req: express.Request, res) =>{
+    try{
+        controlador.consultar_limites_fechas_blogs()
+            .then((resultado: any) => {
+                return res.send({ resultado });
+            }).catch((err: any) => {
+                return res.send({ error: err.message });
+            });
+    }catch (err: any) {
+        return res.send({ error: err.message });
+    }
+})
+
 // Buscar productos en general
 app.get('/thumbnail_productos', (req: express.Request, res) =>{
     try{
@@ -1273,8 +1329,6 @@ app.get('/thumbnail_productos', (req: express.Request, res) =>{
         return res.send({ error: err.message });
     }
 })
-
-
 
 // Inicio de sesion, se comunica con el controlador login
 app.post('/validar_tipo_token', (req, res) => {

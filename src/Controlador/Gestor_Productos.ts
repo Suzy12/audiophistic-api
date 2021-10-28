@@ -165,6 +165,22 @@ export default class Gestor_Prodcuctos {
             });
     }
 
+    // Buscar limites inferiores y superiores de precios de audifonos
+    consultar_limites_precios_audifonos(): Promise<{limite_min: number, limite_max: number}>{
+        return this.base_datos.consultar_limites_precios_audifonos()
+            .then((resultado: {limite_min: number, limite_max: number}) => {
+                return resultado
+            });
+    }
+
+    // Buscar limites inferiores y superiores de precios de parlantes
+    consultar_limites_precios_parlantes(): Promise<{limite_min: number, limite_max: number}>{
+        return this.base_datos.consultar_limites_precios_parlantes()
+            .then((resultado: {limite_min: number, limite_max: number}) => {
+                return resultado
+            });
+    }
+
     // Buscar Presentacion
     consultar_presentaciones_albumes(): Promise<string[]> {
         return this.base_datos.consultar_presentaciones_albumes()
@@ -181,8 +197,16 @@ export default class Gestor_Prodcuctos {
             });
     }
 
+    // Buscar limites inferiores y superiores de precios de albumes
+    consultar_limites_precios_albumes(): Promise<{limite_min: number, limite_max: number}>{
+        return this.base_datos.consultar_limites_precios_albumes()
+            .then((resultado: {limite_min: number, limite_max: number}) => {
+                return resultado
+            });
+    }
+
     //busqueda de todos los productos
-    async thumbnail_productos(): Promise<Producto[]> {
+    thumbnail_productos(): Promise<Producto[]> {
         return this.base_datos.thumbnail_productos()
             .then((resultado: Producto[]) => {
                 return resultado
