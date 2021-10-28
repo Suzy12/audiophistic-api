@@ -486,21 +486,23 @@ export default class Controlador {
 
     // buscar Parlantes
     buscar_audifonos(titulo: string, marca: string, tipo_conexion: string, precio_min: number,
-        precio_max: number, cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        precio_max: number, cantidad_a_buscar: number, pagina: number): Promise<{ productos: Producto[], cantidad_total: number }> {
         return this.gestor_productos.buscar_audifonos(titulo, marca, tipo_conexion, precio_min, precio_max,
             cantidad_a_buscar, pagina);
     }
 
     // Buscar almbumes
     buscar_albumes(titulo: string, presentacion: string, genero: string, precio_min: number,
-        precio_max: number, cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        precio_max: number, cantidad_a_buscar: number, pagina: number): Promise<{ productos: Producto[], cantidad_total: number }> {
         return this.gestor_productos.buscar_albumes(titulo, presentacion, genero, precio_min, precio_max,
             cantidad_a_buscar, pagina);
     }
 
     // Buscar Blogs
-    buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]> {
-        return this.gestor_blogs.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max);
+    buscar_blogs(titulo: string, id_categoria: number | undefined, fecha_min: Date | undefined,
+        fecha_max: Date | undefined, cantidad_a_buscar: number,
+        pagina: number): Promise<{ blogs: Blog[], cantidad_total: number }> {
+        return this.gestor_blogs.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max, cantidad_a_buscar, pagina);
     }
 
     // Buscar Marcas audifonos

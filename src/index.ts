@@ -1158,10 +1158,11 @@ app.get('/buscar_albumes', (req: express.Request, res) =>{
 // Buscar Blogs
 app.get('/buscar_blogs', (req: express.Request, res) =>{
     try{
-        let {titulo, id_categoria, fecha_min, fecha_max}:
-            {titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date} = req.body;
-        if(titulo){
-            controlador.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max)
+        let {titulo, id_categoria, fecha_min, fecha_max, cantidad_a_buscar, pagina}:
+            {titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date, 
+                cantidad_a_buscar: number, pagina: number} = req.body;
+        if(titulo != undefined && cantidad_a_buscar && pagina){
+            controlador.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max, cantidad_a_buscar, pagina)
                 .then((resultado: any) => {
                     return res.send({ resultado });
                 }).catch((err: any) => {

@@ -893,7 +893,7 @@ export default class DAO {
     // Busqueda de Parlantes
     async buscar_parlantes(titulo: string, marca: string | undefined, tipo_conexion: string | undefined,
         precio_min: number | undefined, precio_max: number | undefined,
-        cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        cantidad_a_buscar: number, pagina: number): Promise<{ productos: Producto[], cantidad_total: number }> {
         try {
             let res = await this.cliente.query('select * from buscar_parlantes($1,$2,$3,$4,$5,$6,$7)',
                 [titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina]);
@@ -910,7 +910,7 @@ export default class DAO {
     // Busqueda de Audifonos
     async buscar_audifonos(titulo: string, marca: string | undefined, tipo_conexion: string | undefined,
         precio_min: number | undefined, precio_max: number | undefined,
-        cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        cantidad_a_buscar: number, pagina: number): Promise<{ productos: Producto[], cantidad_total: number }> {
         try {
             let res = await this.cliente.query('select * from buscar_audifonos($1,$2,$3,$4,$5,$6,$7)',
                 [titulo, marca, tipo_conexion, precio_min, precio_max, cantidad_a_buscar, pagina]);
@@ -927,7 +927,7 @@ export default class DAO {
     // Busqueda de Albumes
     async buscar_albumes(titulo: string, presentacion: string | undefined, genero: string | undefined,
         precio_min: number | undefined, precio_max: number | undefined,
-        cantidad_a_buscar: number, pagina: number): Promise<{productos: Producto[], cantidad_total: number}> {
+        cantidad_a_buscar: number, pagina: number): Promise<{ productos: Producto[], cantidad_total: number }> {
         try {
             let res = await this.cliente.query('select * from buscar_albumes($1,$2,$3,$4,$5,$6,$7)',
                 [titulo, presentacion, genero, precio_min, precio_max, cantidad_a_buscar, pagina]);
@@ -942,12 +942,14 @@ export default class DAO {
     }
 
     // Busqueda de blogs
-    async buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]> {
+    async buscar_blogs(titulo: string, id_categoria: number | undefined, fecha_min: Date | undefined,
+        fecha_max: Date | undefined, cantidad_a_buscar: number, pagina: number):
+        Promise<{ blogs: Blog[], cantidad_total: number }> {
         try {
-            let res = await this.cliente.query('select * from buscar_blogs($1,$2,$3,$4)',
-                [titulo, id_categoria, fecha_min, fecha_max]);
+            let res = await this.cliente.query('select * from buscar_blogs($1,$2,$3,$4,$5,$6)',
+                [titulo, id_categoria, fecha_min, fecha_max, cantidad_a_buscar, pagina]);
             if (res.rows[0]) {
-                return res.rows[0].buscar_blogs;
+                return res.rows[0];
             } else {
                 throw new Error("No se encontraron blogs");
             }

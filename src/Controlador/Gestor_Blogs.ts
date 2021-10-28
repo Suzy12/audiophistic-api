@@ -24,7 +24,7 @@ export default class Gestor_Blogs {
     // modificar un blog
     modificar_blog(id_creador: number, id_blog: number, id_categoria: number, titulo: string, imagen: string,
         etiquetas: string[], contenido: string, productos: number[]): Promise<Blog> {
-        return this.base_datos.modificar_blog(id_creador, id_blog, id_categoria, titulo, imagen, 
+        return this.base_datos.modificar_blog(id_creador, id_blog, id_categoria, titulo, imagen,
             etiquetas, contenido, productos)
             .then((resultado: Blog) => {
                 return resultado
@@ -85,11 +85,13 @@ export default class Gestor_Blogs {
     }
 
     // Busqueda de Blogs
-    buscar_blogs(titulo: string, id_categoria: number, fecha_min: Date, fecha_max: Date): Promise<Blog[]>{
-        return this.base_datos.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max)
-        .then((resultado: Blog[]) => {
-            return resultado
-        });
+    buscar_blogs(titulo: string, id_categoria: number | undefined, fecha_min: Date | undefined,
+        fecha_max: Date | undefined, cantidad_a_buscar: number,
+        pagina: number): Promise<{ blogs: Blog[], cantidad_total: number }> {
+        return this.base_datos.buscar_blogs(titulo, id_categoria, fecha_min, fecha_max, cantidad_a_buscar, pagina)
+            .then((resultado: { blogs: Blog[], cantidad_total: number }) => {
+                return resultado
+            });
     }
 
 }
