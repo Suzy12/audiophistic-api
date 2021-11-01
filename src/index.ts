@@ -919,7 +919,7 @@ app.get('/calificacion_blog/:id_origen', autorizacion_consumidor, (req, res) => 
 })
 
 // Crear comentario de un blog
-app.post('/crear_comentario_blog/', autorizacion_consumidor, (req, res) => {
+app.post('/crear_comentario_blog', autorizacion_consumidor, (req, res) => {
     try {
         let { id_origen, comentario }: { id_origen: number, comentario: string } = req.body;
         let token: string = (hay_auth(req, res) as string[])[1];
