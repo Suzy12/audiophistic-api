@@ -20,13 +20,13 @@ export default class Controlador_Acceso {
 
     /* Verifica la combinación del correo con la contraseña
        Devuelve un token y el id del tipo del usuario en caso de ser correctos los datos*/
-    async verificar_contrasena(correo: string, contrasena: string): Promise<{ id_tipo: number, token: string }> {
+    async verificar_contrasena(correo: string, contrasena: string): Promise<{ id_tipo: number, nombre: string, token: string }> {
         correo = correo.toLowerCase();
         let datosUsuario: Usuario = await this.gestor_usuarios.verificar_usuario(correo);
         let misma_contrasena = await bcrypt.compare(contrasena, datosUsuario.contrasena as string);
         if (misma_contrasena) {
             return {
-                id_tipo: datosUsuario.caracteristicas!.id_tipo,
+                id_tipo: datosUsuario.caracteristicas!.id_tipo, nombre: datosUsuario.nombre,
                 ...this.crear_token(datosUsuario.id_usuario, datosUsuario.correo
                     , datosUsuario.caracteristicas!.id_tipo)
             };
